@@ -1,0 +1,45 @@
+.container {
+    position: relative;
+    width: 200px;
+    height: 20px;
+}
+  
+.box{
+    width: 200px;
+    height: 40px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    transition: box-shadow 0.1s ease-in-out;
+}
+
+.box a {
+    text-decoration: none;
+    color: white;
+    width: 200px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.shadow {
+    top: 0;
+    mix-blend-mode: color-dodge;
+}
+
+.left {
+    width: 150px;
+    margin-right: 50px;
+    border-left: 0.01rem solid var(--boxShadowColor); 
+    border-top: 0.01rem solid var(--boxShadowColor); 
+}
+
+.right {
+    width: 145px;
+    margin-left: 50px;
+    border-right: 0.15rem solid var(--boxShadowColor); 
+    border-bottom: 0.15rem solid var(--boxShadowColor); 
+}

@@ -1,0 +1,53 @@
+.button-container {
+    height: 70px;
+    text-align: start;
+    margin-bottom: 25px;
+}
+  
+.button-box{
+    height: 45px;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    transition: box-shadow 0.1s ease-in-out;
+}
+
+.button-box a {
+    text-decoration: none;
+    color: white;
+    width: 400px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 60px;
+}
+  
+.button-shadow {
+    mix-blend-mode: color-dodge;
+    width: 42.7em;
+}
+
+.button-left {
+    width: 38.5em;
+    border-left: 0.01rem solid var(--boxShadowColor); 
+    border-top: 0.01rem solid var(--boxShadowColor); 
+}
+
+.button-right {
+    width: 43em;
+    border-right: 0.15rem solid var(--boxShadowColor); 
+    border-bottom: 0.15rem solid var(--boxShadowColor); 
+}
+
+.button-box img, .dropdown-icon {
+    position: absolute;
+    height: 25px;
+    right: -13em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    color: var(--boxShadowColor);
+}

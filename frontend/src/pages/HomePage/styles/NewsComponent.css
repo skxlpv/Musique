@@ -1,0 +1,49 @@
+.news-container{
+    height: 400px;
+    width: 46em;
+
+    overflow: scroll;
+    overflow-x: hidden;
+    /* background-color: aqua; */
+}
+
+.news-content{
+    width: 98%;
+    display: flex;
+    font-size: 20px;
+    letter-spacing: 2px;
+    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    margin: 0 0px 40px 0;
+}
+
+.news-content a{
+    text-decoration: none;
+    color: white;
+    font-weight: 400;
+}
+
+.news-info .news-title {
+    margin-bottom: 0;
+}
+
+.news-info h5 {
+    color: gray;
+    margin: 10px 0 40px 0;
+}
+
+.news-container p{
+    font-weight: 100;
+    width: 95%;
+    font-size: 15px;
+    margin-top: 15px;
+    letter-spacing: normal;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.news-content img{
+    width: 250px;
+    margin-left: 10px;
+    border-radius: 10px;
+}

@@ -1,0 +1,161 @@
+/* Container for the entire form */
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+/* Form style */
+.registration-form form {
+    letter-spacing: normal;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Input container */
+.input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+/* Style for the input and handling autofill */
+.input-container input,
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    border: none;
+    border-bottom: 1px solid #ffffff;
+    outline: none;
+    background: none;
+    margin: 5px 0px 10px 0px;
+    font-size: 20px;
+    width: 100%;
+    -webkit-text-fill-color: rgb(255, 255, 255);
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    -webkit-font-feature-settings: 20px;
+    caret-color: rgba(255, 255, 255, 0.5); /* Set the cursor (caret) color */
+}
+
+/* Placeholder style */
+.input-container input::placeholder {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.input-container input:focus::placeholder {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-container label {
+    margin: 0 0 10px 30px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    font-style: italic;
+}
+
+/* Container for input fields and icons */
+.input-field-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Icon size and margin */
+.input-field-container img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Error container starts collapsed */
+.error-container {
+    width: 100%;
+    max-height: 0; /* Start with collapsed */
+    overflow: hidden; /* Hide overflowing content */
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 0; /* Hidden by default */
+    margin-left: 30px;
+}
+
+/* Active state for error container */
+.error-container.active {
+    max-height: 100px; /* Adjust if needed */
+    opacity: 1; /* Make the container visible */
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out 0.3s;
+}
+
+/* Error message inside the container */
+.error-container .error-message {
+    margin: 0;
+    color: rgba(255, 0, 0, 0.7);
+    transition: opacity 0.1s ease-in-out; /* Smooth opacity transition */
+    letter-spacing: normal;
+}
+
+/* Browser Compatibility Fixes */
+.input-container input,
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -moz-text-fill-color: rgb(255, 255, 255); /* Firefox */
+    -moz-box-shadow: 0 0 0px 1000px #000 inset; /* Firefox */
+    box-shadow: 0 0 0px 1000px #000 inset; /* Firefox */
+    caret-color: rgba(255, 255, 255, 0.5); /* Cursor color fix */
+}
+
+.input-container input::placeholder {
+    -webkit-transition: opacity 0.3s ease; /* WebKit browsers */
+    -moz-transition: opacity 0.3s ease; /* Firefox */
+    -o-transition: opacity 0.3s ease; /* Opera */
+    transition: opacity 0.3s ease;
+}
+
+.error-container {
+    -webkit-transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* WebKit browsers */
+    -moz-transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Firefox */
+    -o-transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Opera */
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.register-button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.register-button {
+    width: 100%;
+    border-radius: 10px;
+    color: white;
+    outline: 1.5px solid white;
+    height: 50px;
+    background-color: black;
+
+    font-size: 1em;
+    letter-spacing: 0.5em;
+
+    margin: 20px 0 0 0;
+}
+
+.register-button:hover {
+    background-color: rgb(5, 5, 5);
+}
+
+.register-button:active {
+    scale: 0.99;
+}
+
+.submit-status-container{ 
+    /* background-color:; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    margin-top: 20px;
+    font-size: 1em;
+    letter-spacing: 0.5em;
+}
