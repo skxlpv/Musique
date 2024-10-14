@@ -1,55 +1,112 @@
-/* Container for the entire form */
+.flex-center-all-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: row;
+}
+
+.flex-center-all-column{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.registration-container-padding{
+    padding-left: 210px;
+    padding-right: 210px;
+}
+
 .registration-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-}
+    border-top: 2px solid #B9B7FF;
+    background-image: 
+        linear-gradient(#B9B7FF, #000000),
+        linear-gradient(#B9B7FF, #000000)
+    ;
+    background-size:2px 100%;
+    background-position:0 0, 100% 0;
+    background-repeat:no-repeat;
 
-/* Form style */
-.registration-form form {
-    letter-spacing: normal;
-    display: flex;
+
     width: 100%;
-    justify-content: center;
-    flex-direction: column;
+    height: 570px;
+    border-radius: 20px;
 }
 
-/* Input container */
-.input-container {
+.register-container-text{
+    width: 50%;
+    height: 150px;
+}
+
+.register-container-text img{
+    width: 30px;
+}
+
+.register-container-text h4 {
+    margin: 0;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.register-container-text h5{
+    letter-spacing: 0.3em;
+}
+
+.register-container-inputs {
+    width: 50%;
+    height: 290px;
+    margin-top: 50px;
+}
+
+.register-container-inputs form{
+    width: 80%;
+    margin-right: 90px;
+    margin-top: 30px;
+}
+
+.register-container-inputs .input-field-container {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
-    position: relative;
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
 }
 
-/* Style for the input and handling autofill */
-.input-container input,
+.register-container-inputs .input-container input,
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
     border: none;
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
     outline: none;
     background: none;
     margin: 5px 0px 10px 0px;
     font-size: 20px;
     width: 100%;
     -webkit-text-fill-color: rgb(255, 255, 255);
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    -webkit-box-shadow: 0 0 0px 1000px #000000 inset;
     -webkit-font-feature-settings: 20px;
-    caret-color: rgba(255, 255, 255, 0.5); /* Set the cursor (caret) color */
+    caret-color: rgba(255, 255, 255, 0.5);
+    padding-bottom: 5px;
 }
 
-/* Placeholder style */
 .input-container input::placeholder {
     opacity: 0.7;
     transition: opacity 0.3s ease;
+    color: #717171;
+    letter-spacing: 0.3em;
+    font-size: 16px;
+    padding-left: 5px;
 }
 
 .input-container input:focus::placeholder {
     opacity: 0;
     transition: opacity 0.3s ease;
+    color: #717171;
+    letter-spacing: 0.3em;
+    font-size: 16px;
+    padding-left: 5px;
 }
 
 .input-container label {
@@ -60,102 +117,47 @@ input:-webkit-autofill:focus {
     font-style: italic;
 }
 
-/* Container for input fields and icons */
-.input-field-container {
-    display: flex;
-    align-items: center;
-}
-
-/* Icon size and margin */
 .input-field-container img {
-    width: 20px;
+    width: 25px;
+    height: 25px;
     margin-right: 10px;
+    outline: none;
 }
 
-/* Error container starts collapsed */
 .error-container {
-    width: 100%;
-    max-height: 0; /* Start with collapsed */
-    overflow: hidden; /* Hide overflowing content */
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    opacity: 0; /* Hidden by default */
-    margin-left: 30px;
+    margin: 0px;
+    height: 30px;
 }
 
-/* Active state for error container */
-.error-container.active {
-    max-height: 100px; /* Adjust if needed */
-    opacity: 1; /* Make the container visible */
-    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out 0.3s;
-}
-
-/* Error message inside the container */
 .error-container .error-message {
-    margin: 0;
-    color: rgba(255, 0, 0, 0.7);
-    transition: opacity 0.1s ease-in-out; /* Smooth opacity transition */
+    color: rgb(190, 0, 0);
     letter-spacing: normal;
-}
-
-/* Browser Compatibility Fixes */
-.input-container input,
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus {
-    -moz-text-fill-color: rgb(255, 255, 255); /* Firefox */
-    -moz-box-shadow: 0 0 0px 1000px #000 inset; /* Firefox */
-    box-shadow: 0 0 0px 1000px #000 inset; /* Firefox */
-    caret-color: rgba(255, 255, 255, 0.5); /* Cursor color fix */
-}
-
-.input-container input::placeholder {
-    -webkit-transition: opacity 0.3s ease; /* WebKit browsers */
-    -moz-transition: opacity 0.3s ease; /* Firefox */
-    -o-transition: opacity 0.3s ease; /* Opera */
-    transition: opacity 0.3s ease;
-}
-
-.error-container {
-    -webkit-transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* WebKit browsers */
-    -moz-transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Firefox */
-    -o-transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Opera */
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.register-button-container {
     display: flex;
-    justify-content: center;
+    margin: 0;
 }
 
-.register-button {
-    width: 100%;
-    border-radius: 10px;
-    color: white;
-    outline: 1.5px solid white;
-    height: 50px;
-    background-color: black;
-
-    font-size: 1em;
-    letter-spacing: 0.5em;
-
-    margin: 20px 0 0 0;
-}
-
-.register-button:hover {
-    background-color: rgb(5, 5, 5);
-}
-
-.register-button:active {
-    scale: 0.99;
-}
-
-.submit-status-container{ 
-    /* background-color:; */
+.registration-navigation-container{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 100px;
-    margin-top: 20px;
-    font-size: 1em;
-    letter-spacing: 0.5em;
+    height: 50px;
+}
+
+.registration-navigation-container .container {
+    margin-right: 50px;
+}
+
+.register-container-inputs .already-registered-label{
+    letter-spacing: 0.2em;
+    color: #717171;
+    /* letter-spacing: normal; */
+    margin-bottom: 5px;
+    display: flex;
+    align-content: center;
+}
+
+.show-password-image {
+    position: absolute;
+    right: 500px;
+    transform: translateY(-50%);
 }

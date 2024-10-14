@@ -17,25 +17,25 @@ export const Header = () => {
                 <HeaderButton 
                 buttonTitle={"DICTIONARY"}
                 boxShadowColor={"#55FF00"}
-                shadowIntensity={15}
+                shadowIntensity={10}
                 pageLink={"/"}
                 />
                 <HeaderButton 
                 buttonTitle={"LEARN"}
                 boxShadowColor={"#004DFF"}
-                shadowIntensity={15}
+                shadowIntensity={10}
                 pageLink={"/"}
                 />
                 <HeaderButton 
                 buttonTitle={"DISCOVER"}
                 boxShadowColor={"#FFFFFF"}
-                shadowIntensity={15}
+                shadowIntensity={10}
                 pageLink={"/"}
                 />
                 <HeaderButton 
                 buttonTitle={"REGISTER"}
                 boxShadowColor={"#E6AFFF"}
-                shadowIntensity={15}
+                shadowIntensity={10}
                 pageLink={"/registration"}
                 />
                 <li><img src={user_profile} alt="user_profile_icon"></img></li>

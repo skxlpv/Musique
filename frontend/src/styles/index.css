@@ -9,11 +9,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: 0.5rem;
 
-  background-image: url('../assets/grain_bg.png');
-  background-size: cover;
   background-repeat: repeat;
   background-position: fixed;
-  /* cursor: none; */
 }
 
 body {

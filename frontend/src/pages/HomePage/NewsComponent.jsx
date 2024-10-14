@@ -4,14 +4,13 @@ import "./styles/NewsComponent.css"
 const NewsComponent = () => {
   const [news, setNews] = useState([]);
   const apiKey = process.env.REACT_APP_NEWS_API_KEY;
-  const url = 'billboard.com';
+  const domain = 'billboard.com';
+  const url = `https://newsapi.org/v2/everything?domains=${domain}&apiKey=${apiKey}`
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(
-          `https://newsapi.org/v2/everything?domains=${url}&apiKey=${apiKey}`
-        );
+        const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
           const filteredNews = data.articles.filter(
@@ -19,7 +18,8 @@ const NewsComponent = () => {
           );
           setNews(filteredNews);
         } else {
-          console.error('Error fetching news:', response.statusText);
+            console.log(url)
+            console.error('Error fetching news:', response.statusText);
         }
       } catch (error) {
         console.error('Error fetching news:', error);

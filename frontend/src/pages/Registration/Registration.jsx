@@ -1,182 +1,116 @@
-    import "../Registration/Registration.css"
-    import { useForm } from "react-hook-form";
-    import userIcon from "./assets/user-icon.png";
-    import emailIcon from "./assets/email-icon.png";
-    import passwordIcon from "./assets/password-icon.png";
-    import { useState, useEffect } from 'react';
-    import axios from "axios"
+import React, { useState } from "react";
+import "./Registration.css";
+import google_logo from "../Registration/assets/google-logo.png";
+import userIcon from "./assets/user-icon.png";
+import emailIcon from "./assets/email-icon.png";
+import passwordIcon from "./assets/password-icon.png";
+import eyeIcon from "./assets/eyeIcon.png";
+import { useForm } from "react-hook-form";
+import onSubmit from "../../utils/register_submit";
+import { InputField } from "./components/InputField";
+import { HeaderButton } from "../../components/HeaderButton/HeaderButton";
 
-    /* 
-    TODO:
-    1. Add a function to check if the email is already in use
-    2. Add a function to check if the password is strong enough
-    3. 
-    */
+export const Registration = () => {
+  const form = useForm();
+  const { register, formState: { errors }, watch, handleSubmit } = form;
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    passwordConfirmation: false,
+  });
 
-    export const Registration = () => {
-        const form = useForm();
-        const [submitStatus, setSubmitStatus] = useState(null);
-        const { register, formState: { errors }, watch, handleSubmit } = form;
+  const togglePasswordVisibility = (isVisible, field) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: isVisible,
+    }));
+  };
 
-        const [errorHeight, setErrorHeight] = useState({
-            username: 0,
-            email: 0,
-            password: 0,
-            passwordConfirmation: 0
-        });
+  return (
+    <div className="content-container flex-center-all-row registration-container-padding">
+      <div className="registration-form flex-center-all-row">
+        <div className="register-container-text flex-center-all-column">
+          <h4>REGISTER</h4>
+          <h5 style={{ color: "gray" }}>Welcome to MUSIQUE</h5>
+          <a href="google.com">
+            <img alt="google-auth" src={google_logo}></img>
+          </a>
+        </div>
 
-        const onSubmit = async (data) => {
-            await axios.post("https://66fbdd4f8583ac93b40d8a14.mockapi.io/api/v1/users/create", {...data})
-            .then((response) => { 
-                setSubmitStatus(response.status);
-                console.log(response);
-            })
-            .catch((error) => {
-                setSubmitStatus(error.response.status);
-                console.error(error)
-            })
-        };
+        <div className="register-container-inputs flex-center-all-column">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <InputField
+              id="username"
+              placeholder="Username..."
+              register={register}
+              validation={{ required: "Username is required" }}
+              img={userIcon}
+              error={errors.username}
+            />
 
-        useEffect(() => {
-            setErrorHeight({
-                username: errors.username ? 50 : 0,
-                email: errors.email ? 50 : 0,
-                password: errors.password ? 50 : 0,
-                passwordConfirmation: errors.passwordConfirmation ? 50 : 0
-            });
-        }, [errors]);
+            <InputField
+              id="email"
+              type="email"
+              placeholder="Email..."
+              register={register}
+              validation={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Email should contain @ symbol",
+                },
+              }}
+              img={emailIcon}
+              error={errors.email}
+            />
 
-        return (
-            <div className="content-container">
-                <div className="registration-form">
-                    <h1 className="title">Registration Form</h1>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        {/* USERNAME */}
-                        <div className="input-container">
-                            <div className="input-field-container">
-                                <img alt="user-icon" src={userIcon}></img>
-                                <input 
-                                    type="text" 
-                                    id="username" 
-                                    placeholder="Your username..." 
-                                    {...register("username", { required: "Username is required" })} />
-                            </div>
-                            <div
-                                className="error-container"
-                                style={{
-                                    maxHeight: `${errorHeight.username}px`,
-                                    opacity: errors.username ? 1 : 0
-                                }}
-                            >
-                                <h5 role="alert" className="error-message">
-                                    {errors.username?.message}
-                                </h5>
-                            </div>
-                        </div>
+            <InputField
+              id="password"
+              type={showPassword.password ? "text" : "password"}
+              placeholder="Password..."
+              register={register}
+              validation={{
+                required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password should be 8 characters long",
+                },
+              }}
+              img={passwordIcon}
+              showPasswordImg={eyeIcon}
+              togglePasswordVisibility={togglePasswordVisibility}
+              error={errors.password}
+            />
 
-                        {/* EMAIL */}
-                        <div className="input-container">
-                            <div className="input-field-container">
-                                <img alt="email-icon" src={emailIcon}></img>
-                                <input 
-                                    type="text" 
-                                    id="email" 
-                                    placeholder="Your email..." 
-                                    {...register("email", { 
-                                        required: "Email is required",
-                                        pattern: {
-                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                            message: "Email should contain @ symbol"
-                                        }
-                                
-                                    })}
-                                />
-                            </div>
-                            <div
-                                className="error-container"
-                                style={{
-                                    maxHeight: `${errorHeight.email}px`,
-                                    opacity: errors.email ? 1 : 0
-                                }}
-                            >
-                                <h5 role="alert" className="error-message">
-                                    {errors.email?.message}
-                                </h5>
-                            </div>
-                        </div>
+            <InputField
+              id="passwordConfirmation"
+              type={showPassword.passwordConfirmation ? "text" : "password"}
+              placeholder="Confirm password..."
+              register={register}
+              validation={{
+                required: "Password confirmation is required",
+                minLength: {
+                  value: 8,
+                  message: "Password should be 8 characters long",
+                },
+                validate: (value) =>
+                  value === watch("password") || "Passwords do not match",
+              }}
+              img={passwordIcon}
+              showPasswordImg={eyeIcon}
+              togglePasswordVisibility={togglePasswordVisibility}
+              error={errors.passwordConfirmation}
+            />
 
-                        {/* PASSWORD */}
-                        <div className="input-container">
-                            <div className="input-field-container">
-                                <img alt="password-icon" src={passwordIcon}></img>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    placeholder="Your password..." 
-                                    {...register("password", {
-                                        required: "Password is required",
-                                        minLength: {
-                                            value: 8,
-                                            message: "Password should be 8 characters long"
-                                        }
-                                    })} 
-                                />
-                            </div>
-                            <div
-                                className="error-container"
-                                style={{
-                                    maxHeight: `${errorHeight.password}px`,
-                                    opacity: errors.password ? 1 : 0
-                                }}
-                            >
-                                <h5 role="alert" className="error-message">
-                                    {errors.password?.message}
-                                </h5>
-                            </div>
-                        </div>
-
-                        {/* PASSWORD CONFIRMATION */}
-                        <div className="input-container">
-                            <div className="input-field-container">
-                                <img alt="password-icon" src={passwordIcon}></img>
-                                <input 
-                                    type="password" 
-                                    id="passwordConfirmation" 
-                                    placeholder="Confirm password" 
-                                    {...register("passwordConfirmation", {
-                                        required: "Password confirmation is required",
-                                        minLength: {
-                                            value: 8,
-                                            message: "Password should be 8 characters long"
-                                        },
-                                        validate: (value) => value === watch("password") || "Passwords do not match"
-                                    })} 
-                                />
-                            </div>
-                            <div
-                                className="error-container"
-                                style={{
-                                    maxHeight: `${errorHeight.passwordConfirmation}px`,
-                                    opacity: errors.passwordConfirmation ? 1 : 0
-                                }}
-                            >
-                                <h5 role="alert" className="error-message">
-                                    {errors.passwordConfirmation?.message}
-                                </h5>
-                            </div>
-                        </div>
-                        
-                        {/* SUBMIT */}
-                        <div className="register-button-container">
-                            <button type="submit" className="register-button">REGISTER</button>
-                        </div>
-
-                        <div className="submit-status-container" style={{"color": `${submitStatus === 201 ?  "greenyellow" : "orangered"}`}}>
-
-                            {submitStatus === 201 ? "Form has been submitted" : submitStatus === null? "" : "The error has occured while submitting the form"}
-                        </div>
-                    </form>
-                </div>
-            </div>
-        );
-    };
+            <HeaderButton
+              buttonTitle={"REGISTER"}
+              boxShadowColor={"#004DFF"}
+              shadowIntensity={10}
+              isSubmit={true}
+              onClick={handleSubmit}
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
