@@ -14,17 +14,12 @@
     text-align: center;
 }
 
-.registration-container-padding{
+.auth-container-padding{
     padding-left: 210px;
     padding-right: 210px;
 }
 
-.registration-form {
-    border-top: 2px solid #B9B7FF;
-    background-image: 
-        linear-gradient(#B9B7FF, #000000),
-        linear-gradient(#B9B7FF, #000000)
-    ;
+.auth-form {
     background-size:2px 100%;
     background-position:0 0, 100% 0;
     background-repeat:no-repeat;
@@ -33,47 +28,41 @@
     width: 100%;
     height: 570px;
     border-radius: 20px;
+
+    padding-left: 100px;
+    padding-right: 100px;
 }
 
-.register-container-text{
+.auth-container-text{
     width: 50%;
     height: 150px;
 }
 
-.register-container-text img{
-    width: 30px;
-}
-
-.register-container-text h4 {
-    margin: 0;
+.auth-container-text h4 {
+    margin: 0 0 0 15px;
     padding: 0;
-    margin-left: 15px;
 }
 
-.register-container-text h5{
+.auth-container-text h5{
     letter-spacing: 0.3em;
 }
 
-.register-container-inputs {
+.auth-container-inputs {
     width: 50%;
-    height: 290px;
-    margin-top: 50px;
+    margin-top: 5%;
 }
 
-.register-container-inputs form{
+.auth-container-inputs form{
     width: 80%;
-    margin-right: 90px;
-    margin-top: 30px;
 }
 
-.register-container-inputs .input-field-container {
+.auth-container-inputs .input-field-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 90%;
 }
 
-.register-container-inputs .input-container input,
+.auth-container-inputs .input-container input,
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
@@ -109,14 +98,6 @@ input:-webkit-autofill:focus {
     padding-left: 5px;
 }
 
-.input-container label {
-    margin: 0 0 10px 30px;
-    font-size: 20px;
-    color: rgb(255, 255, 255);
-    font-weight: 500;
-    font-style: italic;
-}
-
 .input-field-container img {
     width: 25px;
     height: 25px;
@@ -127,6 +108,7 @@ input:-webkit-autofill:focus {
 .error-container {
     margin: 0px;
     height: 30px;
+    width: 90%;
 }
 
 .error-container .error-message {
@@ -136,28 +118,57 @@ input:-webkit-autofill:focus {
     margin: 0;
 }
 
-.registration-navigation-container{
+.auth-navigation-container{
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 50px;
 }
 
-.registration-navigation-container .container {
-    margin-right: 50px;
-}
-
-.register-container-inputs .already-registered-label{
+.auth-container-inputs .already-authed-label{
     letter-spacing: 0.2em;
     color: #717171;
-    /* letter-spacing: normal; */
     margin-bottom: 5px;
     display: flex;
     align-content: center;
 }
 
+.auth-container-inputs .already-authed-label a{
+    text-decoration: none;
+    color: #717171;
+}
+
+.auth-container-inputs .already-authed-label a:hover{
+    text-decoration: none;
+    color: #717171;
+    border-bottom: 1px solid white;
+}
+
 .show-password-image {
-    position: absolute;
+    position: inherit;
     right: 500px;
     transform: translateY(-50%);
+}
+
+/* CSS for page transitions */
+.page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+}
+
+.page-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-exit-active {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
 }

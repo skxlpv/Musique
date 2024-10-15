@@ -36,7 +36,7 @@ export const Header = () => {
                 buttonTitle={"REGISTER"}
                 boxShadowColor={"#E6AFFF"}
                 shadowIntensity={10}
-                pageLink={"/registration"}
+                pageLink={"/auth/register"}
                 />
                 <li><img src={user_profile} alt="user_profile_icon"></img></li>
             </ul>
