@@ -27,17 +27,10 @@ export const Registration = () => {
     };
 
     return (
-    <div className="auth-form flex-center-all-row" style={
-        {
-            backgroundImage: `
-                linear-gradient(#B9B7FF, #000000),
-                linear-gradient(#B9B7FF, #000000)
-            `,
-            borderTop: `2px solid #B9B7FF`
-        }}>
+    <div className="auth-form flex-center-all-row">
         <div className="auth-container-text flex-center-all-column">
             <h4>REGISTER</h4>
-            <h5 style={{ color: "gray" }}>Welcome to MUSIQUE</h5>
+            <h5>Welcome to MUSIQUE</h5>
             <a href="google.com"><img alt="google-auth" src={google_logo}></img></a>
         </div>
 
@@ -97,8 +90,7 @@ export const Registration = () => {
                     value: 8,
                     message: "Password should be 8 characters long",
                     },
-                    validate: (value) =>
-                    value === watch("password") || "Passwords do not match",
+                    validate: (value) => value === watch("password") || "Passwords do not match",
                 }}
                 img={passwordIcon}
                 showPasswordImg={eyeIcon}

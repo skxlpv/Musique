@@ -27,14 +27,7 @@ export const Login = () => {
       };
 
     return (
-        <div className="auth-form flex-center-all-row" style={
-            {
-                backgroundImage: `
-                    linear-gradient(#E9BAFF, #000000),
-                    linear-gradient(#E9BAFF, #000000)
-                `,
-                borderTop: `2px solid #E9BAFF`
-            }}>
+        <div className="auth-form flex-center-all-row">
             <div className="auth-container-inputs flex-center-all-column">
                 <form onSubmit={handleSubmit(onSubmit)}>
                 <InputField
@@ -83,7 +76,7 @@ export const Login = () => {
 
             <div className="auth-container-text flex-center-all-column">
                 <h4>LOGIN</h4>
-                <h5 style={{ color: "gray" }}>Great to see you again!</h5>
+                <h5>Great to see you again!</h5>
                 <a href="google.com">
                     <img alt="google-auth" src={google_logo}></img>
                 </a>
