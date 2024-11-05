@@ -1,0 +1,3 @@
+.list-item-hover {
+    @apply duration-75 hover:border-b-white hover:border-b-2 text-gray-300 h-8
+}

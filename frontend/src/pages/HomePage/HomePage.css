@@ -1,0 +1,7 @@
+.box{
+    @apply rounded-lg p-6 flex justify-center h-80 items-center
+}
+
+.h-112 {
+    height: 36rem;
+}
