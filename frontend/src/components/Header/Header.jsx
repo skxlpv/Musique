@@ -1,46 +1,36 @@
 import React from "react"
-import user_profile from "../../assets/user.png"
 import "../Header/Header.css"
-import { HeaderButton } from "../HeaderButton/HeaderButton"
-import { Link } from "react-router-dom"
+import mainLogo from "../../assets/logo.ico"
+import userAccountIcon from "../../assets/user-account-icon.png"
 
 export const Header = () => {
   return (
-    <div className='header-div'>
-        <header>
-            <p className='logo'>
-                <Link to="/">
-                    MUSIQUE
-                </Link>
-            </p>
-            <ul>
-                <HeaderButton 
-                buttonTitle={"DICTIONARY"}
-                boxShadowColor={"#55FF00"}
-                shadowIntensity={10}
-                pageLink={"/"}
-                />
-                <HeaderButton 
-                buttonTitle={"LEARN"}
-                boxShadowColor={"#004DFF"}
-                shadowIntensity={10}
-                pageLink={"/"}
-                />
-                <HeaderButton 
-                buttonTitle={"DISCOVER"}
-                boxShadowColor={"#FFFFFF"}
-                shadowIntensity={10}
-                pageLink={"/"}
-                />
-                <HeaderButton 
-                buttonTitle={"REGISTER"}
-                boxShadowColor={"#E6AFFF"}
-                shadowIntensity={10}
-                pageLink={"/auth/register"}
-                />
-                <li><img src={user_profile} alt="user_profile_icon"></img></li>
-            </ul>
-        </header>
+    <div className="flex items-center justify-center px-16 h-28 text-center">
+        <img src={mainLogo} alt="main-logo" 
+        className="h-16 absolute left-14 top-6 rounded-full">
+        </img>
+        <a className="cursor-default" href="/">
+            <h1 className="text-4xl mr-16 tracking-widest h-12">
+                Musique
+            </h1>
+        </a>
+        <ul className="flex justify-between gap-8 text-xl p-0">
+            <li className="list-item-hover">
+                <a className="cursor-default" href="/">Dictionary</a>
+            </li>
+            <li className="list-item-hover">
+                <a className="cursor-default" href="/">Learn</a>
+            </li>
+            <li className="list-item-hover">
+                <a className="cursor-default" href="/">Analyze</a>
+            </li>
+            <li className="list-item-hover">
+                <a className="cursor-default" href="/auth">Register</a>
+            </li>
+        </ul>
+        <img src={userAccountIcon} alt="main-logo" 
+        className="h-10 absolute right-16 top-10 rounded-full">
+        </img>
     </div>
   )
 }

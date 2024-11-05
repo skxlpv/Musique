@@ -2,17 +2,18 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Registration } from "./Registration/Registration";
 import { Login } from "./Login/Login";
-import "./AuthPage.css";
+import "./AuthPage.css"
 
 export const AuthPage = () => {
     return (
-        <div className="content-container flex-center-all-row auth-container-padding">
-            <Routes>
-                <Route path="register" element={<Registration />} />
-                <Route path="login" element={<Login />} />
-                <Route path="/" element={<Navigate to="login" replace />} />
-                <Route path="*" element={<Navigate to="login" replace />} />
-            </Routes>
+        <div className="w-4/6 flex justify-center">
+            <div className="container flex justify-center min-h-authpage-expanded min-h-authpage-expanded">
+                <Routes>
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Registration />} />
+                    <Route path="/" element={<Navigate to="register" replace />} />
+                </Routes>
+            </div>
         </div>
     );
 };
