@@ -1,0 +1,3 @@
+.button-card{
+    @apply bg-neutral-950 px-6 rounded-lg h-9 flex items-center
+}

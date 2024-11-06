@@ -10,9 +10,8 @@ function App() {
             <div className='bg-white'>
                 <div className='bg-black w-full h-full flex flex-col'>
                     <Header />
-                    <hr className='border-white' />
 
-                    <div className="flex-1 items-center flex flex-col px-48 pt-20 text-xl mb-40">
+                    <div className="flex-1 items-center flex flex-col px-48 pt-20 text-xl mt-24">
                         <Routes>
                             <Route element={<HomePage />} path='/' exact />
                             <Route element={<AuthPage />} path='/auth/*' />

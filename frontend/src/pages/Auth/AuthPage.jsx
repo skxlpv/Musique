@@ -6,7 +6,7 @@ import "./AuthPage.css"
 
 export const AuthPage = () => {
     return (
-        <div className="w-4/6 flex justify-center">
+        <div className="w-4/6 h-lvh flex justify-center">
             <div className="container flex justify-center min-h-authpage-expanded min-h-authpage-expanded">
                 <Routes>
                     <Route path="login" element={<Login />} />
