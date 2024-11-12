@@ -1,14 +1,10 @@
 from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
-from django.http import JsonResponse
-from django.shortcuts import render
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import LoginSerializer
 import logging
 from api.v1.users.serializers import RegisterSerializer
 from ..users.models import CustomUser
@@ -62,10 +58,3 @@ class LogoutUserView(APIView):
         response.delete_cookie('auth_token')
         logger.info("User logged out successfully.")
         return response
-
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def check_auth(request):
-    if request.user.is_authenticated:
-        return JsonResponse({'isAuthenticated': True})
-    return JsonResponse({'isAuthenticated': False}, status=401)
