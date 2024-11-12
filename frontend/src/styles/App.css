@@ -1,3 +1,7 @@
 .tracking-ultrawide {
     letter-spacing: 0.3em;
 }
+
+.text-header {
+    @apply text-8xl flex text-center h-fit py-10
+}

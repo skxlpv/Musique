@@ -1,3 +1,4 @@
 .button-card{
-    @apply bg-neutral-950 px-6 rounded-lg h-9 flex items-center
+    @apply hover:bg-neutral-950 px-4 rounded-full h-10 flex items-center
+    duration-75 hover:text-white text-zinc-400 w-fit
 }
