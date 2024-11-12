@@ -3,16 +3,16 @@ import Cookies from "js-cookie";
 
 const onSubmit = async (data) => {
     try {
-        delete data.passwordConfirmation    
         const csrfToken = Cookies.get('csrftoken');
-        const response = await axios.post("http://localhost:8000/api/v1/registration/", data, {
+        const response = await axios.post("http://localhost:8000/api/v1/register/", data, {
             headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
             }
         });
 
       console.log(response);
+      console.log(data.password);
     } catch (error) {
       console.error(error);
     }

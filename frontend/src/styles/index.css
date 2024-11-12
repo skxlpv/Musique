@@ -1,13 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Bebas Neue Pro';
+    src: local('Bebas Neue Pro'), url("../assets/fonts/BebasNeuePro/BebasNeuePro-SemiExpBold.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.min-h-46 {
+    min-height: 46rem;
+}
+
+*, *:hover {
+    cursor: url("../assets/pointer.cur"), default;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
+  font-family: "Bebas Neue Pro", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0.5rem;
 
   background-repeat: repeat;
   background-position: fixed;
@@ -19,8 +34,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 /* Slider ////////////////////////////////////////////////////////////////////////////*/

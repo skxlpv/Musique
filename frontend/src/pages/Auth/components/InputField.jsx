@@ -10,8 +10,8 @@ export const InputField = ({
   error,
 }) => {
   return (
-    <div className="input-container">
-      <div className="input-field-container">
+    <div>
+      <div>
         <img src={img} alt={`${id}-icon`} />
         <input
           type={type}
@@ -20,7 +20,7 @@ export const InputField = ({
           {...register(id, validation)}
         />
       </div>
-      <div className="error-container">
+      <div>
         <h5 role="alert" className="error-message">
           {error?.message}
         </h5>
