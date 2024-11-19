@@ -1,0 +1,21 @@
+import { atom } from "recoil";
+
+export const rootNoteState = atom({
+    key: "rootNoteState",
+    default: ""
+})
+
+export const chordQualityState = atom({
+    key: "chordQuality",
+    default: ""
+})
+
+export const chordExtensionState = atom({
+    key: "chordExtensionState",
+    default: ""
+})
+
+export const chordsDataState = atom({
+    key: "chordsDataState",
+    default: null,
+});

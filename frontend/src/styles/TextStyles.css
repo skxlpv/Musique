@@ -1,3 +1,7 @@
 .medium-header {
-    @apply text-6xl mt-10 mb-20
+    @apply text-6xl mt-10
+}
+
+.text-header {
+    @apply text-8xl flex text-center h-fit py-10
 }

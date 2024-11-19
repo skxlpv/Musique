@@ -10,8 +10,6 @@ const onSubmit = async (data) => {
             'X-CSRFToken': csrfToken,
             }
         });
-
-        console.log(response);
     } catch (error) {
       console.error(error);
     }

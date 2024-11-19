@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import onSubmit from "../../../utils/register_submit";
+import onSubmit from "../../../utils/register";
 import "../Registration/Registration.css";
 import { Link } from "react-router-dom";
 import favicov from "../../.././assets/logo.ico";
@@ -10,17 +9,17 @@ import appleLogo from "../assets/apple-logo.png";
 
 export const Registration = () => {
     const {register, formState: { errors }, handleSubmit, watch, } = useForm();
-    const [showPassword, setShowPassword] = useState({
-        password: false,
-        passwordConfirmation: false,
-    });
+    // const [showPassword, setShowPassword] = useState({
+    //     password: false,
+    //     passwordConfirmation: false,
+    // });
 
-    const togglePasswordVisibility = (isVisible, field) => {
-        setShowPassword((prev) => ({
-            ...prev,
-            [field]: isVisible,
-        }));
-    };
+    // const togglePasswordVisibility = (isVisible, field) => {
+    //     setShowPassword((prev) => ({
+    //         ...prev,
+    //         [field]: isVisible,
+    //     }));
+    // };
 
     return (
         <div className="flex">
@@ -55,7 +54,7 @@ export const Registration = () => {
                     <input
                         className="input-field"
                         placeholder="Password"
-                        type={showPassword.password ? "text" : "password"}
+                        // type={showPassword.password ? "text" : "password"}
                         {...register("password", { 
                             required: "Password is required",
                             minLength: {
@@ -71,7 +70,7 @@ export const Registration = () => {
                     <input
                         className="input-field"
                         placeholder="Confirm Password"
-                        type={showPassword.passwordConfirmation ? "text" : "password"}
+                        // type={showPassword.passwordConfirmation ? "text" : "password"}
                         {...register("passwordConfirmation", {
                             required: "Please confirm your password",
                             validate: (value) =>

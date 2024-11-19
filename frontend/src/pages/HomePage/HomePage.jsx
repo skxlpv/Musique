@@ -2,7 +2,7 @@ import React from "react";
 import "../HomePage/HomePage.css";
 import { Link } from "react-router-dom";
 import "../../styles/TextStyles.css";
-import { instrumentsObject, resoursesObject } from "./textObjects";
+import { instrumentsObject } from "./textObjects";
 
 export const HomePage = () => {
 
@@ -26,20 +26,6 @@ export const HomePage = () => {
             </ul>
         );
     };
-
-    const renderResourses = () => {
-        return(
-            <ul className="flex flex-col items-start gap-4">
-                {Object.keys(resoursesObject).map((key) => {
-                    return(
-                        <li className="text-5xl" key={key}>
-                            {key}
-                        </li>
-                    )
-                })}
-            </ul>
-        )
-    }
 
     return (
         <>

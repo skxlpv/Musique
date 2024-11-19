@@ -4,12 +4,15 @@ import { HomePage } from "./pages/HomePage/HomePage"
 import { AuthPage } from "./pages/Auth/AuthPage"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { DictionaryPage } from './pages/DictionaryPage/DictionaryPage';
+import { RecoilRoot } from 'recoil';
+  
 
 function App() {
     return (
         <Router>
             <div className='bg-white'>
                 <div className='bg-black w-full h-full flex flex-col'>
+                    <RecoilRoot>
                     <Header />
 
                     <div className="flex-1 items-center flex flex-col px-60 pt-20 text-xl mt-24 !scroll-smooth">
@@ -19,6 +22,7 @@ function App() {
                             <Route element={<DictionaryPage />} path='/dictionary' />
                         </Routes>
                     </div>
+                    </RecoilRoot>
                 </div>
             </div>
         </Router>
