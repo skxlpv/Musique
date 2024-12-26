@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.handlers.modwsgi import check_password
 from rest_framework import serializers
 
+from api.v1.apiv1.models import FileModel
 from api.v1.users.models import CustomUser
 
 
@@ -35,3 +36,9 @@ class LoginSerializer(serializers.Serializer):
 
         data['user'] = user
         return data
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileModel
+        fields = ['file', 'uploaded_at', 'user', 'type']

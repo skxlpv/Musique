@@ -4,7 +4,7 @@ import axios from "axios";
 import {
 chordExtensionList,
 chordQualityObject,
-} from "../HomePage/textObjects";
+} from "../../utils/textObjects";
 import { Button } from "../../components/Button/Button";
 import { rootNoteState, chordQualityState, chordExtensionState, chordsDataState } from "../../recoil/atoms";
 import { useRecoilState } from "recoil";
@@ -157,10 +157,12 @@ export const DictionaryPage = () => {
             chordExtension &&
             data &&
             data
-                .filter((object) => object.name === `${rootNote} ${chordExtension}`)
+                .filter((object) => object.name === `${rootNote} ${chordExtension}` && object.alternative === 1)
                 .map((object) => (
                 <div className="flex flex-col text-center" key={object.id}>
+                    <h1 className="medium-header">Basic Chord</h1>
                     <GuitarChord chord={object} />
+                    <h1 className="medium-header">Show More</h1>
                 </div>
                 ))}
         </div>

@@ -1,11 +1,12 @@
 import React from "react"
 import "../Header/Header.css"
 import { SubHeader } from "../SubHeader/SubHeader"
+import {headerPageNamesObject} from "../../utils/subHeaderTextObjects"
 
 export const Header = () => {
   return (
-    <div className="mb-16">
-        <div className="flex w-full items-center shadow-md shadow-neutral-950 bg-black px-16 h-20 fixed z-1">
+    <div className="mb-24">
+        <div className="flex w-full items-center shadow-md shadow-neutral-950 bg-black px-16 h-28 fixed z-1">
             <div className="flex w-1/3">
                 <ul className="flex gap-8 text-xl">
                     <li className="list-item-hover">
@@ -24,22 +25,25 @@ export const Header = () => {
             </div>
 
             <div className="w-1/3 flex justify-center">
-                <a className="cursor-default" href="/">
+                <a href="/">
                     <div className="group relative h-12 flex items-center justify-center">
                         <h1 className="absolute text-4xl tracking-widest transition-all duration-1000
                         group-hover:-translate-x-2 group-hover:-translate-y-0.5 
                         group-hover:text-blue-900">
-                        Musique
+                        МУР
                         </h1>
                         <h1 className="absolute text-4xl tracking-widest transition-all duration-1000 
                         group-hover:translate-x-2 group-hover:translate-y-0.5 
                         group-hover:text-red-900">
-                        Musique
+                        МУР
                         </h1>
                         <h1 className="absolute text-4xl tracking-widest 
                         transition-all duration-500">
-                        Musique
+                        МУР
                         </h1>
+                    </div>
+                    <div>
+                        <p>Artistic Universal Resourse</p>
                     </div>
                 </a>
             </div>
@@ -62,7 +66,10 @@ export const Header = () => {
             </div>
         </div>
 
-        <SubHeader/>
+        <SubHeader
+        additionalStyle={"z-0 absolute top-28"}
+        object={headerPageNamesObject}
+        />
     </div>
   )
 }

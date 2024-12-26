@@ -1,11 +1,14 @@
 import './styles/App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import routesObject from './utils/routes_data'
+
 import { Header } from "./components/Header/Header";
 import { HomePage } from "./pages/HomePage/HomePage"
 import { AuthPage } from "./pages/Auth/AuthPage"
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { DictionaryPage } from './pages/DictionaryPage/DictionaryPage';
-import { RecoilRoot } from 'recoil';
-  
+import { ArtistsPage } from './pages/ArtistsPage/ArtistsPage';
+import { UploadFile } from './pages/ArtistsPage/UploadFile'
 
 function App() {
     return (
@@ -13,15 +16,19 @@ function App() {
             <div className='bg-white'>
                 <div className='bg-black w-full h-full flex flex-col'>
                     <RecoilRoot>
-                    <Header />
+                        <Header />
 
-                    <div className="flex-1 items-center flex flex-col px-60 pt-20 text-xl mt-24 !scroll-smooth">
-                        <Routes>
-                            <Route element={<HomePage />} path='/' exact />
-                            <Route element={<AuthPage />} path='/auth/*' />
-                            <Route element={<DictionaryPage />} path='/dictionary' />
-                        </Routes>
-                    </div>
+                        <div className="flex-1 items-center flex flex-col px-60 pt-20 text-xl mt-24 !scroll-smooth">
+                            <Routes>
+                                <Route element={<HomePage />} path={routesObject.HomePage} exact />
+                                <Route element={<AuthPage />} path={routesObject.AuthPage} />
+                                <Route element={<DictionaryPage />} path={routesObject.DictionaryPage} />
+
+                                {/* SUBHEADER PAGES */}
+                                <Route element={<ArtistsPage />} path={routesObject.ArtistsPage} />
+                                <Route element={<UploadFile />} path={routesObject.UploadArtistsFile} />
+                            </Routes>
+                        </div>
                     </RecoilRoot>
                 </div>
             </div>

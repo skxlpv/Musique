@@ -1,24 +1,19 @@
+import { Link } from "react-router-dom";
 import "../SubHeader/SubHeader.css"
 
-export const SubHeader = () => {
+export const SubHeader = ({additionalStyle, object}) => {
     return (
-        <div className="flex w-full items-center justify-center absolute top-20 h-24 z-0">
+        <div className={`flex w-full items-center justify-center h-24 ${additionalStyle}`}>
             <ul className="gap-4 text-xl flex flex-row items-center">
-                <li className="button-card">
-                    <a className="cursor-default" href="/">🎨Artists Page</a>
-                </li>
-                <li className="button-card">
-                    <a className="cursor-default" href="/">🎵Musicians Page</a>
-                </li>
-                <li className="button-card">
-                    <a className="cursor-default" href="/">🎭Theatre Artists Page</a>
-                </li>
-                <li className="button-card">
-                    <a className="cursor-default" href="/auth">📝Writers Page</a>
-                </li>
-                <li className="button-card">
-                    <a className="cursor-default" href="/auth">🧶Craftspeople Page</a>
-                </li>
+                {Object.keys(object).map((item) => {
+                    return(
+                        <li className="button-card">
+                            <Link to={object[item].link}>
+                                <a className="cursor-default" href="/">{object[item].name}</a>
+                            </Link>
+                        </li>
+                    )
+                })}
             </ul>
         </div>
     );

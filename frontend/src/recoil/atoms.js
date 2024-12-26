@@ -19,3 +19,8 @@ export const chordsDataState = atom({
     key: "chordsDataState",
     default: null,
 });
+
+export const fileState = atom({
+    key: "fileState",
+    default: null,
+})

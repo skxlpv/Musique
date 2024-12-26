@@ -9,19 +9,17 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://192.168.1.101",
-]
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -36,8 +34,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'api.v1.apiv1',
     'api.v1.users',
     'api.v1.dictionary',
+    'api.v1.pages',
+    'api.v1.files',
 
     'rest_framework',
     'corsheaders',
