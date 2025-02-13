@@ -43,7 +43,7 @@ export const Header = () => {
                         </h1>
                     </div>
                     <div>
-                        <p>Artistic Universal Resourse</p>
+                        <p>Мистецький Універсальний Ресурс</p>
                     </div>
                 </a>
             </div>

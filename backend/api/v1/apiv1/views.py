@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import logging
 from api.v1.users.serializers import RegisterSerializer
+from ..files.models import FileModel
 from ..users.models import CustomUser
 from django.contrib.auth.tokens import default_token_generator
 
@@ -59,18 +60,3 @@ class LogoutUserView(APIView):
         response.delete_cookie('auth_token')
         logger.info("User logged out successfully.")
         return response
-
-
-class FileUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = (AllowAny,)
-
-    def post(self, request, *args, **kwargs):
-        file = request.FILES['file'] if "file" in request.data else None
-
-        if file is not None:
-            FileModel.objects.create(
-                user=CustomUser.objects.get(username="skxlpv"),
-                file=file,
-            )
-            return Response({"message": "File uploaded successfully!"}, status=201)

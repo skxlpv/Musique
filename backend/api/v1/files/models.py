@@ -1,15 +1,22 @@
 from django.db import models
 from datetime import datetime
 import os
-from api.v1.users.models import CustomUser
 from api.v1.utils.model_choices import GENRE_CHOICES, LITERATURE_TYPE_CHOICES, INSTRUMENT_CHOICES
+
 
 def get_upload_path(instance, filename):
     today = datetime.now()
-    username = instance.user.username
-    return os.path.join(f"{today.year}", f"{today.month}", username, filename)
+    file_title = instance.title if instance.title else filename.split('.')[0]
+    extension = filename.split('.')[-1]
+    return os.path.join(f"{today.year}", f"{today.month}", f"{file_title}.{extension}")
 
 #__________________________________UTIL MODELS___________________________________
+class Subgenre(models.Model):
+    subgenre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.subgenre
+
 class MusicianInstruments(models.Model):
     instrument_name = models.CharField(max_length=100, unique=True)
 
@@ -34,12 +41,6 @@ class WriterLiteratureType(models.Model):
     def __str__(self):
         return self.literature_type
 
-class Subgenre(models.Model):
-    subgenre = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.subgenre
-
 class WriterGenreTypes(models.Model):
     genre = models.CharField(max_length=100)
     subgenres = models.ManyToManyField(Subgenre)
@@ -59,8 +60,7 @@ class WriterGenreTypes(models.Model):
 class FileModel(models.Model):
     file = models.FileField(upload_to=get_upload_path, unique=True)
     filename = models.CharField(max_length=255, unique=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    authors = models.ManyToManyField(CustomUser, related_name="%(app_label)s_%(class)s_authors")
+    #authors = models.ManyToManyField(CustomUser, related_name="%(app_label)s_%(class)s_authors")
     title = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.CharField(max_length=100)
@@ -74,12 +74,13 @@ class FileModel(models.Model):
         ordering = ['-uploaded_at']
 
     def __str__(self):
-        return f"{self.title} by {', '.join([author.username for author in self.authors.all()])}"
+        return f"{self.title}"
+        #by {', '.join([author.username for author in self.authors.all()])}")
 
-    def __init__(self, *args, **kwargs):
-        model_name = self.__class__.__name__.lower()
-        self._meta.get_field('authors').related_name = f"{model_name}_authors"
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     model_name = self.__class__.__name__.lower()
+    #     self._meta.get_field('authors').related_name = f"{model_name}_authors"
+    #     super().__init__(*args, **kwargs)
 
 class ArtistFileModel(FileModel):
     style = models.CharField(max_length=100)
@@ -89,11 +90,19 @@ class ArtistFileModel(FileModel):
     height_cm = models.PositiveIntegerField(default=0)
     width_cm = models.PositiveIntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        if self.title:
+            self.filename = f"{self.title.replace(' ', '_')}.{self.file.name.split('.')[-1]}"
+        else:
+            self.filename = os.path.basename(self.file.name)
+
+        super(ArtistFileModel, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ['-style']
 
     def __str__(self):
-        return f"{self.title} by {self.authors.all()}"
+        return f"{self.title}"
 
 class WriterFileModel(FileModel):
     genre = models.ManyToManyField(WriterGenreTypes)
