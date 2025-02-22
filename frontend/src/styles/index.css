@@ -39,6 +39,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+p {
+    @apply text-zinc-400 mb-2
+}
+
+h1 {
+    @apply mb-2
+}
+
 /* Slider ////////////////////////////////////////////////////////////////////////////*/
 ::-webkit-scrollbar {
     width: 5px;

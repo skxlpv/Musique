@@ -96,7 +96,7 @@ export const Registration = () => {
                     <img className="h-12 rounded-full" src={facebookLogo} alt="logo-facebook" />
                     <img className="h-12 rounded-full" src={appleLogo} alt="logo-apple" />
                 </div>
-                <h1>Welcome to Musique!</h1>
+                <h1>Welcome to МУР!</h1>
                 <Link to="/auth/login">
                     <h1 className="text-gray-400 italic">Already Registered?</h1>
                 </Link>

@@ -6,7 +6,7 @@ import {headerPageNamesObject} from "../../utils/subHeaderTextObjects"
 export const Header = () => {
   return (
     <div className="mb-24">
-        <div className="flex w-full items-center shadow-md shadow-neutral-950 bg-black px-16 h-28 fixed z-1">
+        <div className="flex w-full items-center shadow-md shadow-neutral-950 bg-black px-16 h-28 fixed z-10">
             <div className="flex w-1/3">
                 <ul className="flex gap-8 text-xl">
                     <li className="list-item-hover">
@@ -60,7 +60,7 @@ export const Header = () => {
                         <a className="cursor-default" href="/">Contacts</a>
                     </li>
                     <li className="list-item-hover">
-                        <a className="cursor-default" href="/auth">My Profile</a>
+                        <a className="cursor-default" href="/profile">My Profile</a>
                     </li>
                 </ul>
             </div>

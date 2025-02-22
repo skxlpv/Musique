@@ -6,6 +6,7 @@ import routesObject from './utils/routes_data'
 import { Header } from "./components/Header/Header";
 import { HomePage } from "./pages/HomePage/HomePage"
 import { AuthPage } from "./pages/Auth/AuthPage"
+import { MyProfile } from './pages/MyProfile/MyProfile';
 import { DictionaryPage } from './pages/DictionaryPage/DictionaryPage';
 import { ArtistsPage } from './pages/ArtistsPage/ArtistsPage';
 import { UploadFile } from './pages/ArtistsPage/UploadFile'
@@ -22,6 +23,7 @@ function App() {
                             <Routes>
                                 <Route element={<HomePage />} path={routesObject.HomePage} exact />
                                 <Route element={<AuthPage />} path={routesObject.AuthPage} />
+                                <Route element={<MyProfile />} path={routesObject.MyProfile} />
                                 <Route element={<DictionaryPage />} path={routesObject.DictionaryPage} />
 
                                 {/* SUBHEADER PAGES */}
