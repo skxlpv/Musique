@@ -1,10 +1,12 @@
 import { useLocation } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth"; // Your useAuth hook
+import { useAuth } from "../../hooks/useAuth";
+import { SubHeader } from "../SubHeader/SubHeader";
+import { headerPageNamesObject } from "../../utils/subHeaderTextObjects"
 
 export const Header = () => {
     const { auth, loading } = useAuth();
     const location = useLocation();
-    const loggedInState = location.state?.loggedIn; // Retrieve the state passed during navigation
+    const loggedInState = location.state?.loggedIn;
 
     return (
         <div className="mb-24">
@@ -74,6 +76,10 @@ export const Header = () => {
                     </ul>
                 </div>
             </div>
+            <SubHeader
+            additionalStyle={"z-0 absolute top-28"}
+            object={headerPageNamesObject}
+            />
         </div>
     );
 };
