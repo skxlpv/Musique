@@ -4,7 +4,7 @@ import "../../styles/TextStyles.css";
 
 export const HomePage = () => {
     return (
-        <>
+        <div>
             <div className="w-full flex justify-center">
                 <h1 className="text-header">
                     Everything.
@@ -14,6 +14,6 @@ export const HomePage = () => {
             <div className="container w-full p-10 min-h-screen text-center">
                 <h1 className="medium-header"><i>More coming!</i></h1>
             </div>
-        </>
+        </div>
     );
 };
