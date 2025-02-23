@@ -1,106 +1,59 @@
-import { useForm } from "react-hook-form";
-import onSubmit from "../../../utils/register";
+import axios from "axios";
 import "../Registration/Registration.css";
-import { Link } from "react-router-dom";
-import favicov from "../../.././assets/logo.ico";
-import googleLogo from "../assets/google-logo.png";
-import facebookLogo from "../assets/facebook-logo.png";
-import appleLogo from "../assets/apple-logo.png";
+import { useForm } from "react-hook-form";
 
 export const Registration = () => {
-    const {register, formState: { errors }, handleSubmit, watch, } = useForm();
-    // const [showPassword, setShowPassword] = useState({
-    //     password: false,
-    //     passwordConfirmation: false,
-    // });
+    const {register, handleSubmit, formState: {errors}} = useForm();
+    const onErrors = (errors) => {console.log(errors)};
 
-    // const togglePasswordVisibility = (isVisible, field) => {
-    //     setShowPassword((prev) => ({
-    //         ...prev,
-    //         [field]: isVisible,
-    //     }));
-    // };
+    const handleRegistration = async (data) => {
+        const response = await axios({
+            method: "POST",
+            data: {
+                username: data.username,
+                email: data.email,
+                password: data.password
+            },
+            withCredentials: true,
+            url: "http://127.0.0.1:8000/api/v1/register/"
+        })
+        return response
+    }
 
-    return (
-        <div className="flex">
-            <div className="outline-1 outline text-center py-14 w-4/6">
-                <h1 className="text-8xl mb-10 mt-6">Sign Up</h1>
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col px-36">
-                    <input
-                        className="input-field"
-                        placeholder="Username"
-                        {...register("username", { required: "Username is required" })}
-                    />
-                    {errors.username && (
-                        <p className="text-red-500 text-sm">{errors.username.message}</p>
-                    )}
+    const registerRequirements = {
+        username: {
+            required: "Username is required",
+        },
+        email: {
+            required: "Email is required",
+            pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "invalid email address"
+            }        
+        },
+        password: {
+            required: "Password is required",
+            minLength: {
+                value: 8,
+                message: "Password must have at least 8 characters"
+            }
+        }
+    }
 
-                    <input
-                        className="input-field"
-                        placeholder="Email"
-                        type="email"
-                        {...register("email", { 
-                            required: "Email is required",
-                            pattern: {
-                                value: /^\S+@\S+$/i,
-                                message: "Invalid email format",
-                            }
-                        })}
-                    />
-                    {errors.email && (
-                        <p className="text-red-500 text-sm">{errors.email.message}</p>
-                    )}
+    return(
+        <div>
+            <form className="flex flex-col gap-4 text-black" onSubmit={handleSubmit(handleRegistration, onErrors)}>
+                <input type="text" name="username" {...register('username', registerRequirements.username)} />
+                {errors?.username && <p className="text-white italic">{errors.username.message}</p>}
 
-                    <input
-                        className="input-field"
-                        placeholder="Password"
-                        // type={showPassword.password ? "text" : "password"}
-                        {...register("password", { 
-                            required: "Password is required",
-                            minLength: {
-                                value: 6,
-                                message: "Password must be at least 6 characters",
-                            },
-                        })}
-                    />
-                    {errors.password && (
-                        <p className="text-red-500 text-sm">{errors.password.message}</p>
-                    )}
+                <input type="email" name="email" {...register('email', registerRequirements.email)} />
+                {errors?.email && <p className="text-white italic">{errors.email.message}</p>}
 
-                    <input
-                        className="input-field"
-                        placeholder="Confirm Password"
-                        // type={showPassword.passwordConfirmation ? "text" : "password"}
-                        {...register("passwordConfirmation", {
-                            required: "Please confirm your password",
-                            validate: (value) =>
-                                value === watch("password") || "Passwords do not match",
-                        })}
-                    />
-                    {errors.passwordConfirmation && (
-                        <p className="text-red-500 text-sm">{errors.passwordConfirmation.message}</p>
-                    )}
+                <input type="password" name="password" {...register('password', registerRequirements.password)} />
+                {errors?.password && <p className="text-white italic">{errors.password.message}</p>}
 
-                    <button type="submit" className="outline my-5 p-2">
-                        Register
-                    </button>
-                </form>
-            </div>
-
-            <div className="outline-1 outline w-2/6 flex flex-col justify-center items-center">
-                <div className="flex flex-col justify-center items-center">
-                    <img className="h-36 outline rounded-full" src={favicov} alt="logo-photo" />
-                </div>
-                <div className="my-5 flex justify-center gap-4">
-                    <img className="h-12 rounded-full" src={googleLogo} alt="logo-google" />
-                    <img className="h-12 rounded-full" src={facebookLogo} alt="logo-facebook" />
-                    <img className="h-12 rounded-full" src={appleLogo} alt="logo-apple" />
-                </div>
-                <h1>Welcome to Musique!</h1>
-                <Link to="/auth/login">
-                    <h1 className="text-gray-400 italic">Already Registered?</h1>
-                </Link>
-            </div>
+                <button className="text-white" type="submit">Register</button>
+            </form>
         </div>
-    );
+    )
 };

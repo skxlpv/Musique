@@ -1,31 +1,25 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
-
-from api.v1.users.models import CustomUser
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    passwordConfirmation = serializers.CharField(write_only=True)
-
     class Meta:
-        model = CustomUser
-        fields = ['username', 'email', 'password', 'passwordConfirmation']
+        model = get_user_model()
+        fields = ['id', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['passwordConfirmation']:
-            raise serializers.ValidationError({"password": "Passwords do not match."})
-        return attrs
-
     def create(self, validated_data):
-        validated_data.pop('passwordConfirmation')
-        user = CustomUser.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        return user
+        username = validated_data['username']
+        email = validated_data['email']
+        password = validated_data['password']
+
+        user = get_user_model()
+        new_user = user.objects.create(email=email, username=username)
+        new_user.set_password(password)
+        new_user.save()
+        return new_user
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
+        model = get_user_model()
         fields = ['id', 'username', 'email']

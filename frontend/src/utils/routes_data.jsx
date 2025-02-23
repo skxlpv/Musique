@@ -2,6 +2,7 @@ const routesObject = {
     //BASE
     HomePage: "/",
     AuthPage: "/auth/*",
+    MyProfile: "/profile",
 
     //FEATURES
     DictionaryPage: "/dictionary",
