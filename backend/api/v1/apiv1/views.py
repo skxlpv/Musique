@@ -1,62 +1,71 @@
-from django.contrib.auth import login
-from django.contrib.auth.hashers import check_password
+import logging
+from django.contrib.auth import login, authenticate, logout
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import logging
+from rest_framework_simplejwt.tokens import RefreshToken
 from api.v1.users.serializers import RegisterSerializer
-from ..files.models import FileModel
 from ..users.models import CustomUser
-from django.contrib.auth.tokens import default_token_generator
 
-logger = logging.getLogger(__name__)
+def get_user_token(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 class RegisterUserView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        logger.info(f"Received data: {request.data}")
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": f"User {serializer.data['username']} has been created successfully!"},
-                            status=status.HTTP_201_CREATED)
+            user = serializer.save()
+            tokens = get_user_token(user)
+            response = Response({
+                "message": f"User {serializer.data['username']} has been created successfully!",
+                "token": tokens,
+            }, status=status.HTTP_201_CREATED)
+            response.set_cookie('access_token', tokens['access'], httponly=True, samesite='Lax')
+            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, samesite='Lax')
+            return response
         raise ValidationError(serializer.errors)
 
 class LoginUserView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        user = CustomUser.objects.filter(username=request.data['username']).first()
+        username = request.data.get('username')
+        password = request.data.get('password')
 
-        if user and check_password(request.data['password'], user.password):
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
             login(request, user)
-
-            # Generate a token and set as an HTTPOnly cookie
-            token = default_token_generator.make_token(user)
-            response = Response({"message": "Login successful!"}, status=status.HTTP_200_OK)
-            response.set_cookie(
-                key='auth_token',
-                value=token,
-                httponly=True,
-                secure=True,
-                samesite='Lax',
-                max_age = 1800
-            )
-
-            logger.info(f"User {user.username} logged in successfully.")
+            tokens = get_user_token(user)
+            response = Response({
+                'refresh': tokens['refresh'],
+                'access': tokens['access'],
+            }, status=status.HTTP_200_OK)
+            print(response.data)
+            response.set_cookie('access_token', tokens['access'], httponly=True, samesite='Lax')
+            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, samesite='Lax')
             return response
-
-        return Response({"error": "Invalid username or password"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"message": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutUserView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        response = Response({"message": "Logout successful!"}, status=status.HTTP_200_OK)
-        response.delete_cookie('auth_token')
-        logger.info("User logged out successfully.")
-        return response
+        if request.user.is_authenticated:
+            logout(request)
+            response = Response({"message": "Logout successful!"}, status=status.HTTP_200_OK)
+            response.delete_cookie('access_token', path='/', domain=request.get_host())
+            response.delete_cookie('refresh_token', path='/', domain=request.get_host())
+            return response
+        else:
+            return Response({"message": "You are not logged in."}, status=status.HTTP_400_BAD_REQUEST)
