@@ -29,8 +29,8 @@ class RegisterUserView(APIView):
                 "message": f"User {serializer.data['username']} has been created successfully!",
                 "token": tokens,
             }, status=status.HTTP_201_CREATED)
-            response.set_cookie('access_token', tokens['access'], httponly=True, samesite='Lax')
-            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, samesite='Lax')
+            response.set_cookie('access_token', tokens['access'], httponly=True, secure=True, samesite='None')
+            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, secure=True, samesite='None')
             return response
         raise ValidationError(serializer.errors)
 
@@ -51,8 +51,8 @@ class LoginUserView(APIView):
                 'access': tokens['access'],
             }, status=status.HTTP_200_OK)
             print(response.data)
-            response.set_cookie('access_token', tokens['access'], httponly=True, samesite='Lax')
-            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, samesite='Lax')
+            response.set_cookie('access_token', tokens['access'], httponly=True, secure=True, samesite='None')
+            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, secure=True, samesite='None')
             return response
         else:
             return Response({"message": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
@@ -69,3 +69,13 @@ class LogoutUserView(APIView):
             return response
         else:
             return Response({"message": "You are not logged in."}, status=status.HTTP_400_BAD_REQUEST)
+
+class CheckAuthView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({
+            "isAuthenticated": True,
+            "username": request.user.username,
+            "email": request.user.email,
+        }, status=200)
