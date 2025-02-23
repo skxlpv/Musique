@@ -14,25 +14,25 @@ import { UploadFile } from './pages/ArtistsPage/UploadFile';
 function App() {
     return (
         <RecoilRoot>
-                <Router>
-                    <div className='bg-white'>
-                        <div className='bg-black w-full h-full flex flex-col'>
-                            <Header />
-                            <div className="flex-1 items-center flex flex-col px-60 pt-20 text-xl mt-24 !scroll-smooth">
-                                <Routes>
-                                    <Route element={<HomePage />} path={routesObject.HomePage} exact />
-                                    <Route element={<AuthPage />} path={routesObject.AuthPage} />
-                                    <Route element={<MyProfile />} path={routesObject.MyProfile} />
-                                    <Route element={<DictionaryPage />} path={routesObject.DictionaryPage} />
+            <Router>
+                <div className='bg-white'>
+                    <div className='bg-black w-full h-full flex flex-col'>
+                        <Header />
+                        <div className="flex-1 items-center flex flex-col px-60 pt-20 text-xl mt-24 !scroll-smooth">
+                            <Routes>
+                                <Route element={<HomePage />} path={routesObject.HomePage} exact />
+                                <Route element={<AuthPage />} path={routesObject.AuthPage} />
+                                <Route element={<MyProfile />} path={routesObject.MyProfile} />
+                                <Route element={<DictionaryPage />} path={routesObject.DictionaryPage} />
 
-                                    {/* SUBHEADER PAGES */}
-                                    <Route element={<ArtistsPage />} path={routesObject.ArtistsPage} />
-                                    <Route element={<UploadFile />} path={routesObject.UploadArtistsFile} />
-                                </Routes>
-                            </div>
+                                {/* SUBHEADER PAGES */}
+                                <Route element={<ArtistsPage />} path={routesObject.ArtistsPage} />
+                                <Route element={<UploadFile />} path={routesObject.UploadArtistsFile} />
+                            </Routes>
                         </div>
                     </div>
-                </Router>
+                </div>
+            </Router>
         </RecoilRoot>
     );
 }

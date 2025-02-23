@@ -24,3 +24,12 @@ export const fileState = atom({
     key: "fileState",
     default: null,
 })
+
+export const authState = atom({
+    key: "authState",
+    default: { 
+        isAuthenticated: false, 
+        username: null,
+        email: null
+    },
+});
