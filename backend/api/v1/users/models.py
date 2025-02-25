@@ -1,47 +1,44 @@
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.apps import apps
 
-# Create your models here.
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The email field must be set')
-        if not username:
-            raise ValueError('The username field must be set')
-
+            raise ValueError("Users must have an email address")
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, **extra_fields)
-
-
-
         user.set_password(password)
         user.save(using=self._db)
+
+        user_profile_model = apps.get_model("user_profile", "UserProfile")
+        user_profile_model.objects.create(user=user)
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
         return self.create_user(username, email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    groups = models.ManyToManyField(
+        "auth.Group",
+        related_name="customuser_groups",
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        "auth.Permission",
+        related_name="customuser_permissions",
+        blank=True
+    )
 
     objects = CustomUserManager()
 
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
+
     def __str__(self):
-        return f"{self.username}"
+        return self.username

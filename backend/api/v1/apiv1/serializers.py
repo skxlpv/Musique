@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.handlers.modwsgi import check_password
 from rest_framework import serializers
 
-from api.v1.apiv1.models import FileModel
+from api.v1.files.models import FileModel
 from api.v1.users.models import CustomUser
 
 

@@ -1,11 +1,13 @@
 import logging
 from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
+from django.middleware.csrf import get_token
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from api.v1.users.serializers import RegisterSerializer
 from ..users.models import CustomUser
@@ -40,22 +42,28 @@ class LoginUserView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             tokens = get_user_token(user)
+
             response = Response({
                 'refresh': tokens['refresh'],
                 'access': tokens['access'],
             }, status=status.HTTP_200_OK)
-            print(response.data)
+
+            # Set authentication cookies
             response.set_cookie('access_token', tokens['access'], httponly=True, secure=True, samesite='None')
             response.set_cookie('refresh_token', tokens['refresh'], httponly=True, secure=True, samesite='None')
+
+            # Set CSRF token in cookie
+            csrf_token = get_token(request)
+            response.set_cookie('csrftoken', csrf_token, secure=True, samesite='Lax')
+
             return response
-        else:
-            return Response({"message": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutUserView(APIView):
     permission_classes = [AllowAny]

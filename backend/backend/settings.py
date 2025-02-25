@@ -18,7 +18,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ALLOWED_HOSTS = ["*"]
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = "users.CustomUser"
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -34,18 +34,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
 
     'api.v1.apiv1',
     'api.v1.users',
     'api.v1.dictionary',
     'api.v1.pages',
     'api.v1.files',
-
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'corsheaders',
-
-    "phonenumber_field",
+    'api.v1.user_profile'
 ]
 
 MIDDLEWARE = [
@@ -60,16 +58,18 @@ MIDDLEWARE = [
 ]
 
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
+CSRF_COOKIE_SAMESITE = 'None'
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
-    "http://127.0.0.1:3001",
+    "http://localhost:3000",
 ]
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

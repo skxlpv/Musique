@@ -1,8 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from datetime import datetime
 import os
 from api.v1.utils.model_choices import GENRE_CHOICES, LITERATURE_TYPE_CHOICES, INSTRUMENT_CHOICES
 
+user = get_user_model()
 
 def get_upload_path(instance, filename):
     today = datetime.now()
@@ -60,7 +62,7 @@ class WriterGenreTypes(models.Model):
 class FileModel(models.Model):
     file = models.FileField(upload_to=get_upload_path, unique=True)
     filename = models.CharField(max_length=255, unique=True)
-    #authors = models.ManyToManyField(CustomUser, related_name="%(app_label)s_%(class)s_authors")
+    authors = models.ManyToManyField(user, related_name="%(app_label)s_%(class)s_authors")
     title = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.CharField(max_length=100)
@@ -74,13 +76,12 @@ class FileModel(models.Model):
         ordering = ['-uploaded_at']
 
     def __str__(self):
-        return f"{self.title}"
-        #by {', '.join([author.username for author in self.authors.all()])}")
+        return f"{self.title} by {', '.join([author.username for author in self.authors.all()])}"
 
-    # def __init__(self, *args, **kwargs):
-    #     model_name = self.__class__.__name__.lower()
-    #     self._meta.get_field('authors').related_name = f"{model_name}_authors"
-    #     super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        model_name = self.__class__.__name__.lower()
+        self._meta.get_field('authors').related_name = f"{model_name}_authors"
+        super().__init__(*args, **kwargs)
 
 class ArtistFileModel(FileModel):
     style = models.CharField(max_length=100)
