@@ -47,6 +47,17 @@ h1 {
     @apply mb-2
 }
 
+.icon{
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+}
+
+.small-icon{
+    width: 15px;
+    height: 15px;
+}
+
 /* Slider ////////////////////////////////////////////////////////////////////////////*/
 ::-webkit-scrollbar {
     width: 5px;
