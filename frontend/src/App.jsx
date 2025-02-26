@@ -10,6 +10,8 @@ import { MyProfile } from './pages/MyProfile/MyProfile';
 import { DictionaryPage } from './pages/DictionaryPage/DictionaryPage';
 import { ArtistsPage } from './pages/ArtistsPage/ArtistsPage';
 import { UploadFile } from './pages/ArtistsPage/UploadFile';
+import { AuthProvider } from './contexts/useAuth';
+import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 
 function App() {
     return (
@@ -19,16 +21,19 @@ function App() {
                     <div className='bg-black w-full h-full flex flex-col'>
                         <Header />
                         <div className="flex-1 items-center flex flex-col px-60 pt-20 text-xl mt-24 !scroll-smooth">
-                            <Routes>
-                                <Route element={<HomePage />} path={routesObject.HomePage} exact />
-                                <Route element={<AuthPage />} path={routesObject.AuthPage} />
-                                <Route element={<MyProfile />} path={routesObject.MyProfile} />
-                                <Route element={<DictionaryPage />} path={routesObject.DictionaryPage} />
+                            <AuthProvider>
+                                <Routes>
+                                    <Route element={<AuthPage />} path={routesObject.AuthPage} />
 
-                                {/* SUBHEADER PAGES */}
-                                <Route element={<ArtistsPage />} path={routesObject.ArtistsPage} />
-                                <Route element={<UploadFile />} path={routesObject.UploadArtistsFile} />
-                            </Routes>
+                                    <Route element={<PrivateRoute><HomePage /></PrivateRoute>} path={routesObject.HomePage} exact />
+                                    <Route element={<PrivateRoute><MyProfile /></PrivateRoute>} path={routesObject.MyProfile} />
+                                    <Route element={<PrivateRoute><DictionaryPage /></PrivateRoute>} path={routesObject.DictionaryPage} />
+
+                                    {/* SUBHEADER PAGES */}
+                                    <Route element={<PrivateRoute><ArtistsPage /></PrivateRoute>} path={routesObject.ArtistsPage} />
+                                    <Route element={<PrivateRoute><UploadFile /></PrivateRoute>} path={routesObject.UploadArtistsFile} />
+                                </Routes>
+                            </AuthProvider>
                         </div>
                     </div>
                 </div>

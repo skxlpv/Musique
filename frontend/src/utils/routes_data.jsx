@@ -8,7 +8,7 @@ const routesObject = {
     DictionaryPage: "/dictionary",
 
     //PAGES
-    ArtistsPage: "/artists/",
+    ArtistsPage: "/artists",
 
     //UPLOAD FILE
     UploadArtistsFile: "/artists/upload"
