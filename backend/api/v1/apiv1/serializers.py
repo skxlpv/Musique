@@ -1,10 +1,25 @@
 # serializers.py
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.handlers.modwsgi import check_password
 from rest_framework import serializers
 
 from api.v1.files.models import FileModel
 from api.v1.users.models import CustomUser
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = CustomUser(
+            username=validated_data['username'],
+            email=validated_data['email'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 
 class LoginSerializer(serializers.Serializer):

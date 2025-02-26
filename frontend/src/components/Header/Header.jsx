@@ -1,12 +1,19 @@
-import { useLocation } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { headerPageNamesObject } from "../../utils/subHeaderTextObjects"
+import { logout } from "../../utils/api";
 
 export const Header = () => {
-    const { auth, loading } = useAuth();
     const location = useLocation();
     const loggedInState = location.state?.loggedIn;
+    const nav = useNavigate();
+
+    const handleLogout = async () => {
+        const success = await logout();
+        if (success){
+            nav("auth/login")
+        }
+    }
 
     return (
         <div className="mb-24">
@@ -61,17 +68,8 @@ export const Header = () => {
                         <li className="list-item-hover">
                             <a className="cursor-default" href="/">Contacts</a>
                         </li>
-                        {/* Conditional rendering based on authentication state */}
-                        <li className="list-item-hover">
-                            {loading ? (
-                                <span>My Profile</span>
-                            ) : (
-                                auth?.isAuthenticated || loggedInState ? (
-                                    <a className="cursor-default" href="/profile">My Profile</a>
-                                ) : (
-                                    <a className="cursor-default" href="/auth/login">Login</a>
-                                )
-                            )}
+                        <li>
+                            <a className="text-red-500" onClick={handleLogout}>Logout</a>
                         </li>
                     </ul>
                 </div>

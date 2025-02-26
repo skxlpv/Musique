@@ -1,24 +1,33 @@
-import axios from "axios";
+import { register_user } from "../../../utils/api";
 import "../Registration/Registration.css";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const Registration = () => {
-    const {register, handleSubmit, formState: {errors}} = useForm();
-    const onErrors = (errors) => {console.log(errors)};
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [registrationError, setRegistrationError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleRegistration = async (data) => {
-        const response = await axios({
-            method: "POST",
-            data: {
-                username: data.username,
-                email: data.email,
-                password: data.password
-            },
-            withCredentials: true,
-            url: "http://127.0.0.1:8000/api/v1/register/"
-        })
-        return response
-    }
+        setIsLoading(true);
+        setRegistrationError("");
+        
+        try {
+            const response = await register_user(data);
+            if (response) {
+                navigate('/auth/login');
+            } else {
+                setRegistrationError("Registration failed. User may already exist.");
+            }
+        } catch (error) {
+            setRegistrationError("An error occurred during registration.");
+            console.error("Registration error:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const registerRequirements = {
         username: {
@@ -28,7 +37,7 @@ export const Registration = () => {
             required: "Email is required",
             pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "invalid email address"
+                message: "Invalid email address"
             }        
         },
         password: {
@@ -38,22 +47,48 @@ export const Registration = () => {
                 message: "Password must have at least 8 characters"
             }
         }
-    }
+    };
 
-    return(
+    return (
         <div>
-            <form className="flex flex-col gap-4 text-black" onSubmit={handleSubmit(handleRegistration, onErrors)}>
-                <input type="text" name="username" {...register('username', registerRequirements.username)} />
-                {errors?.username && <p className="text-white italic">{errors.username.message}</p>}
+            <form className="flex flex-col gap-4 text-black" onSubmit={handleSubmit(handleRegistration)}>
+                <input 
+                    type="text" 
+                    placeholder="Username"
+                    className="p-2 rounded" 
+                    {...register('username', registerRequirements.username)} 
+                    disabled={isLoading}
+                />
+                {errors?.username && <p className="text-red-500">{errors.username.message}</p>}
 
-                <input type="email" name="email" {...register('email', registerRequirements.email)} />
-                {errors?.email && <p className="text-white italic">{errors.email.message}</p>}
+                <input 
+                    type="email" 
+                    placeholder="Email"
+                    className="p-2 rounded" 
+                    {...register('email', registerRequirements.email)} 
+                    disabled={isLoading}
+                />
+                {errors?.email && <p className="text-red-500">{errors.email.message}</p>}
 
-                <input type="password" name="password" {...register('password', registerRequirements.password)} />
-                {errors?.password && <p className="text-white italic">{errors.password.message}</p>}
+                <input 
+                    type="password" 
+                    placeholder="Password"
+                    className="p-2 rounded" 
+                    {...register('password', registerRequirements.password)} 
+                    disabled={isLoading}
+                />
+                {errors?.password && <p className="text-red-500">{errors.password.message}</p>}
 
-                <button className="text-white" type="submit">Register</button>
+                {registrationError && <p className="text-red-500">{registrationError}</p>}
+
+                <button 
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-gray-400" 
+                    type="submit"
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Registering..." : "Register"}
+                </button>
             </form>
         </div>
-    )
+    );
 };

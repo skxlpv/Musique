@@ -12,8 +12,9 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
 
-        user_profile_model = apps.get_model("user_profile", "UserProfile")
-        user_profile_model.objects.create(user=user)
+        UserProfile = apps.get_model('user_profile', 'UserProfile')
+        user_profile_model = UserProfile.objects.create(user=user)
+        user_profile_model.save()
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):

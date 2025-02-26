@@ -3,87 +3,102 @@ from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
-from api.v1.users.serializers import RegisterSerializer
-from ..users.models import CustomUser
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-def get_user_token(user):
-    refresh = RefreshToken.for_user(user)
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
+from api.v1.apiv1.serializers import RegisterSerializer
+from backend import settings
 
-class RegisterUserView(APIView):
-    permission_classes = [AllowAny]
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            tokens = response.data
 
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            tokens = get_user_token(user)
-            response = Response({
-                "message": f"User {serializer.data['username']} has been created successfully!",
-                "token": tokens,
-            }, status=status.HTTP_201_CREATED)
-            response.set_cookie('access_token', tokens['access'], httponly=True, secure=True, samesite='None')
-            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, secure=True, samesite='None')
-            return response
-        raise ValidationError(serializer.errors)
+            access_token = tokens['access']
+            refresh_token = tokens['refresh']
 
-class LoginUserView(APIView):
-    permission_classes = [AllowAny]
+            res = Response()
 
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(request, username=username, password=password)
+            res.data = {"success": True}
 
-        if user is not None:
-            login(request, user)
-            tokens = get_user_token(user)
+            res.set_cookie(
+                key='access_token',
+                value=access_token,
+                httponly=True,
+                secure=True,
+                samesite='None',
+                path='/'
+            )
+            res.set_cookie(
+                key='refresh_token',
+                value=refresh_token,
+                httponly=True,
+                secure=True,
+                samesite='None',
+                path='/'
+            )
 
-            response = Response({
-                'refresh': tokens['refresh'],
-                'access': tokens['access'],
-            }, status=status.HTTP_200_OK)
+            return res
+        except Exception as e:
+            return Response({"success": False, "error": e})
 
-            # Set authentication cookies
-            response.set_cookie('access_token', tokens['access'], httponly=True, secure=True, samesite='None')
-            response.set_cookie('refresh_token', tokens['refresh'], httponly=True, secure=True, samesite='None')
+class CustomRefreshToken(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.COOKIES['refresh_token']
 
-            # Set CSRF token in cookie
-            csrf_token = get_token(request)
-            response.set_cookie('csrftoken', csrf_token, secure=True, samesite='Lax')
+            request.data['refresh'] = refresh_token
 
-            return response
+            response = super().post(request, *args, **kwargs)
 
-        return Response({"message": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            tokens = response.data
+            access_token = tokens['access']
 
-class LogoutUserView(APIView):
-    permission_classes = [AllowAny]
+            res = Response()
 
-    def post(self, request):
-        if request.user.is_authenticated:
-            logout(request)
-            response = Response({"message": "Logout successful!"}, status=status.HTTP_200_OK)
-            response.delete_cookie('access_token', path='/', domain=request.get_host())
-            response.delete_cookie('refresh_token', path='/', domain=request.get_host())
-            return response
-        else:
-            return Response({"message": "You are not logged in."}, status=status.HTTP_400_BAD_REQUEST)
+            res.data = {"refreshed": True}
 
-class CheckAuthView(APIView):
-    permission_classes = [IsAuthenticated]
+            res.set_cookie(
+                key='access_token',
+                value=access_token,
+                httponly=True,
+                secure=True,
+                samesite='None',
+                path='/'
+            )
 
-    def get(self, request):
-        return Response({
-            "isAuthenticated": True,
-            "username": request.user.username,
-            "email": request.user.email,
-        }, status=200)
+            return res
+        except:
+            return Response({"refreshed": False})
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register(request):
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def logout(request):
+    try:
+        res = Response()
+        res.data = {"success": True}
+        res.delete_cookie('access_token', path='/', samesite='None')
+        res.delete_cookie('refresh_token', path='/', samesite='None')
+        return res
+    except:
+        return Response({"success": False})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def is_authenticated(request):
+    return Response({"authenticated": True})

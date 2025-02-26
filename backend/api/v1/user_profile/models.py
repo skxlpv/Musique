@@ -2,7 +2,6 @@ from django.conf import settings
 from django.db import models
 
 from api.v1.files.models import FileModel
-from api.v1.users.models import CustomUser
 
 # Create your models here.
 class UserProfile(models.Model):

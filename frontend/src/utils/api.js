@@ -1,12 +1,124 @@
 import axios from "axios";
 
+const BASE_URL = "http://127.0.0.1:8000/api/";
+const REFRESH_URL = `${BASE_URL}token/refresh/`;
+const LOGIN_URL = `${BASE_URL}token/`;
+const LOGOUT_URL = `${BASE_URL}v1/logout/`;
+const REGISTER_URL = `${BASE_URL}v1/register/`;
+const CHECK_AUTH_ROUTE = `${BASE_URL}v1/check_auth/`;
+const AUTH_URL = `${BASE_URL}v1/check_auth/`;
+
+function getCsrfToken() {
+  const cookieValue = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('csrftoken='))
+    ?.split('=')[1];
+  return cookieValue;
+}
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: BASE_URL,
+  withCredentials: true,
+  xsrfCookieName: 'csrftoken',
+  xsrfHeaderName: 'X-CSRFToken',
 });
 
-api.defaults.xsrfCookieName = "csrftoken";
-api.defaults.xsrfHeaderName = "X-CSRFToken";
-api.defaults.withXSRFToken = true;
-api.defaults.withCredentials = true;
+api.interceptors.request.use(config => {
+  if (config.method !== 'get') {
+    const csrfToken = getCsrfToken();
+    if (csrfToken) {
+      config.headers['X-CSRFToken'] = csrfToken;
+    }
+  }
+  return config;
+});
+
+export const call_refresh = async (error, func) => {
+  if (error.response && error.response.status === 401) {
+    const tokenRefreshed = await refresh_token();
+    if (tokenRefreshed) {
+      const retryResponse = await func();
+      return retryResponse.data;
+    }
+  }
+  return null;
+};
+
+export const refresh_token = async () => {
+  try {
+    const response = await api.post(REFRESH_URL, {});
+    return response.data.refreshed;
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    return false;
+  }
+};
+
+export const login = async (username, password) => {
+  try {
+    const response = await api.post(LOGIN_URL, {
+      username: username, 
+      password: password
+    });
+    
+    if (response.data && response.data.success) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Login API error:", error);
+    return false;
+  }
+};
+
+export const logout = async () => {
+  try {
+    await api.post(LOGOUT_URL, {});
+    return true;
+  } catch (error) {
+    console.error("Logout error:", error);
+    return false;
+  }
+};
+
+export const register_user = async (data) => {
+  try {
+    const response = await api.post(REGISTER_URL, {
+      username: data.username,
+      email: data.email,
+      password: data.password
+    });
+    
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Registration error:", error);
+    if (error.response && error.response.data) {
+      console.error("Error details:", error.response.data);
+    }
+    return false;
+  }
+};
+
+export const check_auth = async () => {
+  try {
+    const response = await api.get(CHECK_AUTH_ROUTE);
+    return response.data;
+  } catch (error) {
+    return call_refresh(error, () => api.get(CHECK_AUTH_ROUTE));
+  }
+};
+
+export const is_authenticated = async () => {
+  try {
+    await api.post(AUTH_URL, {});
+    return true;
+  } catch (error) {
+    console.error("Auth check error:", error);
+    return false;
+  }
+};
 
 export default api;

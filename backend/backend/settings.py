@@ -57,13 +57,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SECURE = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-CSRF_COOKIE_SAMESITE = 'None'
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CSRF_COOKIE_HTTPONLY = False  # JavaScript needs to access CSRF cookie
+CSRF_COOKIE_SECURE = True  # Only send over HTTPS
+CSRF_COOKIE_SAMESITE = 'Lax'  # Restrict CSRF cookie to same site
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
@@ -108,7 +114,7 @@ DATABASES = {
 # REST API
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'api.v1.apiv1.authentication.CookiesJWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.BasePagination',
