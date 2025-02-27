@@ -25,7 +25,7 @@ function App() {
                                 <Routes>
                                     <Route element={<AuthPage />} path={routesObject.AuthPage} />
 
-                                    <Route element={<PrivateRoute><HomePage /></PrivateRoute>} path={routesObject.HomePage} exact />
+                                    <Route element={<HomePage />} path={routesObject.HomePage} exact />
                                     <Route element={<PrivateRoute><MyProfile /></PrivateRoute>} path={routesObject.MyProfile} />
                                     <Route element={<PrivateRoute><DictionaryPage /></PrivateRoute>} path={routesObject.DictionaryPage} />
 
