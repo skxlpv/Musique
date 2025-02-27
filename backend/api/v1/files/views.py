@@ -1,28 +1,60 @@
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+# views.py
+from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import ValidationError
+from .models import FileModel, MusicFileModel, ImageFileModel, DocumentFileModel
+from .serializers import FileModelSerializer, MusicFileModelSerializer, ImageFileModelSerializer, DocumentFileModelSerializer
 
-from api.v1.files.models import ArtistFileModel
-from api.v1.files.serializers import ArtistFileUploadSerializer
+user = get_user_model()
 
-
-# Create your views here.
-class ArtistFileView(APIView):
+class FileUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = (AllowAny,)
-
-    def get(self, request):
-        queryset = ArtistFileModel.objects.all()
-        serializer = ArtistFileUploadSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        file_serializer = ArtistFileUploadSerializer(data=request.data)
+        try:
+            file = request.data.get('file')
+            if not file:
+                raise ValidationError("No file was provided.")
 
-        if file_serializer.is_valid():
-            file_serializer.save()
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Determine file type based on extension
+            ext = file.name.split('.')[-1].lower()
+            if ext in ['mp3', 'wav']:
+                serializer_class = MusicFileModelSerializer
+                model_class = MusicFileModel
+            elif ext in ['jpg', 'jpeg', 'png', 'gif']:
+                serializer_class = ImageFileModelSerializer
+                model_class = ImageFileModel
+            elif ext in ['pdf', 'doc', 'docx']:
+                serializer_class = DocumentFileModelSerializer
+                model_class = DocumentFileModel
+            else:
+                serializer_class = FileModelSerializer
+                model_class = FileModel
+
+            # Create a dictionary of all fields from the request data
+            data = request.data.dict()  # Convert MultiValueDict to a regular dict
+            data['file'] = file
+            data['author'] = user.objects.get(pk=request.user.id)
+            data['is_downloadable'] = data['is_downloadable'].capitalize()
+
+            # Remove fields that are not part of the model
+            model_fields = [f.name for f in model_class._meta.get_fields()]
+            filtered_data = {k: v for k, v in data.items() if k in model_fields}
+
+            # Create and save the file model
+            file_model = model_class(**filtered_data)
+            file_model.save()
+
+            # Serialize the response
+            serializer = serializer_class(file_model)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except ValidationError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": "An error occurred during file upload.", "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
