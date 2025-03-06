@@ -1,11 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { headerPageNamesObject } from "../../utils/subHeaderTextObjects"
 import { logout } from "../../utils/api";
+import routesObject from "../../utils/routes_data";
 
 export const Header = () => {
-    const location = useLocation();
-    const loggedInState = location.state?.loggedIn;
     const nav = useNavigate();
 
     const handleLogout = async () => {
@@ -60,7 +59,7 @@ export const Header = () => {
                 <div className="w-1/3">
                     <ul className="flex gap-8 text-xl p-0 justify-end">
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/">Add Work</a>
+                            <a className="cursor-default" href={routesObject.upload_file}>Add Work</a>
                         </li>
                         <li className="list-item-hover">
                             <a className="cursor-default" href="/">About</a>
@@ -69,7 +68,7 @@ export const Header = () => {
                             <a className="cursor-default" href="/">Contacts</a>
                         </li>
                         <li>
-                            <a className="text-red-500" onClick={handleLogout}>Logout</a>
+                            <button className="text-red-500 h-4" onClick={handleLogout}>Logout</button>
                         </li>
                     </ul>
                 </div>

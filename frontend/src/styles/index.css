@@ -58,6 +58,20 @@ h1 {
     height: 15px;
 }
 
+input{
+    @apply bg-transparent text-white outline-none border-b-2 mb-4
+}
+
+textarea{
+    @apply bg-transparent outline-none border-b-2 mb-5 whitespace-normal overflow-x-hidden break-words
+}
+
+.checkbox{
+    @apply appearance-none w-6 h-6 checked:!bg-white !bg-black checked:border-2
+    !rounded-full border-2 shrink-0 mr-2
+    flex justify-center transition-all duration-300
+}
+
 /* Slider ////////////////////////////////////////////////////////////////////////////*/
 ::-webkit-scrollbar {
     width: 5px;

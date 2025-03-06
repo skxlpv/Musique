@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "../../utils/api"
+import { useNavigate } from "react-router-dom";
+import routesObject from "../../utils/routes_data"
 
 export const UploadFile = () => {
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit } = useForm();
   const [file, setFile] = useState(null);
   const [fileType, setFileType] = useState(null);
+  const nav = useNavigate();
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -18,8 +21,6 @@ export const UploadFile = () => {
         setFileType('image');
       } else if (['pdf', 'doc', 'docx'].includes(ext)) {
         setFileType('document');
-      } else {
-        setFileType('other');
       }
     }
   };
@@ -51,7 +52,15 @@ export const UploadFile = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("File uploaded successfully");
+      
+      if (fileType === "audio"){
+        nav(routesObject.musicians_page)  
+      } else if (fileType === "image"){
+        nav(routesObject.artists_page)
+      } else if (fileType === "document"){
+        nav(routesObject.writers_page)
+      }
+      
     } catch (err) {
       console.error(err);
       alert("File upload failed");
@@ -59,17 +68,39 @@ export const UploadFile = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col text-black">
-      <input type="file" onChange={handleFileChange} required />
+    <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col items-center w-full">
+      {!file ? 
+      <div className="flex flex-col items-center m-5">
+        <label htmlFor="file-upload" className="medium-header pb-10 button-card-5xl outline-dashed outline-white">Upload</label>
+        <input 
+          id="file-upload"
+          className="hidden" 
+          type="file" 
+          onChange={handleFileChange} 
+          required 
+        />
+      </div>
+      :
+      <div className="flex flex-col items-center m-5">
+        <label htmlFor="file-upload" className="button-card-5xl outline-dashed outline-white overflow-hidden">{file.name}</label>
+        <input 
+          id="file-upload"
+          className="hidden" 
+          type="file" 
+          onChange={handleFileChange} 
+          required 
+        />
+      </div>
+      }
       {file && (
-        <>
+        <div className="flex flex-col px-20 w-1/2">
+          <h1 className="small-header !mt-2 !mb-4">General Information</h1>
           <input {...register("title")} placeholder="Title" required />
-          <textarea {...register("description")} placeholder="Description" />
+          <input {...register("description")} placeholder="Description" />
           <input {...register("category")} placeholder="Category" required />
-          <input type="checkbox" {...register("is_downloadable")} /> Is Downloadable
-
           {fileType === 'audio' && (
             <>
+              <h1 className="small-header !mt-2 !mb-4">Arrangement Details</h1>
               <input {...register("genre")} placeholder="Genre" required />
               <input {...register("bpm")} placeholder="BPM" required />
             </>
@@ -77,22 +108,32 @@ export const UploadFile = () => {
 
           {fileType === 'image' && (
             <>
+              <h1 className="small-header !mt-2 !mb-4">Artwork Details</h1>
               <input {...register("style")} placeholder="Style" required />
               <input {...register("medium")} placeholder="Medium" required />
-              <input {...register("height_px")} placeholder="Height (px)" required />
-              <input {...register("width_px")} placeholder="Width (px)" required />
+              <input type="number" {...register("height_px")} placeholder="Height (px)" required />
+              <input type="number" {...register("width_px")} placeholder="Width (px)" required />
             </>
           )}
 
           {fileType === 'document' && (
             <>
+              <h1 className="small-header !pt-0 !mt-2 !mb-4">Writing Information</h1>
               <input {...register("word_count")} placeholder="Word Count" required />
               <input {...register("language")} placeholder="Language" required />
             </>
           )}
-
-          <button type="submit">Upload</button>
-        </>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between">
+              <input id="is_downloadable" type="checkbox" {...register("is_downloadable")} 
+              className="checkbox"/>
+              <label htmlFor="is_downloadable">File Can Be Downloaded</label>
+            </div>
+            <div>
+              <button className="button-card" type="submit">Upload</button>
+            </div>
+          </div>
+        </div>
       )}
     </form>
   );

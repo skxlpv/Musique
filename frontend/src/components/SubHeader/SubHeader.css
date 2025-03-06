@@ -2,3 +2,8 @@
     @apply hover:bg-neutral-950 px-4 rounded-full h-10 flex items-center
     duration-75 hover:text-white text-zinc-400 w-fit
 }
+
+.button-card-5xl{
+    @apply hover:bg-neutral-950 rounded-full h-14 px-10 flex justify-center items-center
+    duration-75 hover:text-white text-zinc-400 w-96 text-center
+}
