@@ -1,4 +1,4 @@
-import { BrowseDocuments } from "../../components/BrowseDocuments/BrowseDocuments"
+import { BrowseDocuments } from "../../../dictionary/components/BrowseDocuments/BrowseDocuments"
 
 export const ArtistsPage = () => {
     return(

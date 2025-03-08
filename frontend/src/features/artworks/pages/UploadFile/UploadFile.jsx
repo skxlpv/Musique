@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import api from "../../utils/api"
+import api from "../../../../utils/api"
 import { useNavigate } from "react-router-dom";
-import routesObject from "../../utils/routes_data"
+import { routes } from "../../../../routes";
 
 export const UploadFile = () => {
   const { register, handleSubmit } = useForm();
@@ -54,11 +54,11 @@ export const UploadFile = () => {
       });
       
       if (fileType === "audio"){
-        nav(routesObject.musicians_page)  
+        nav(routes.musicians_page.url)  
       } else if (fileType === "image"){
-        nav(routesObject.artists_page)
+        nav(routes.artists_page.url)
       } else if (fileType === "document"){
-        nav(routesObject.writers_page)
+        nav(routes.writers_page.url)
       }
       
     } catch (err) {

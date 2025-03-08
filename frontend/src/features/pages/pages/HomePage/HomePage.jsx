@@ -1,6 +1,6 @@
 import React from "react";
-import "../HomePage/HomePage.css";
-import "../../styles/TextStyles.css";
+import "./HomePage.css";
+import "../../../../styles/TextStyles.css";
 
 export const HomePage = () => {
     return (

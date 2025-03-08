@@ -4,9 +4,9 @@ import axios from "axios";
 import {
 chordExtensionList,
 chordQualityObject,
-} from "../../utils/textObjects";
+} from "../../../../utils/textObjects";
 import { Button } from "../../components/Button/Button";
-import { rootNoteState, chordQualityState, chordExtensionState, chordsDataState } from "../../recoil/atoms";
+import { rootNoteState, chordQualityState, chordExtensionState, chordsDataState } from "../../../../recoil/atoms";
 import { useRecoilState } from "recoil";
 
 export const DictionaryPage = () => {
