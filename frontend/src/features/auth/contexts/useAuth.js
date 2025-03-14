@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { is_authenticated, login as apiLogin, logout as apiLogout } from "../utils/api";
+import { is_authenticated, login as apiLogin, logout as apiLogout } from "../../../utils/api";
 
 const AuthContext = createContext();
 
@@ -7,7 +7,6 @@ export const AuthProvider = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // Check authentication status
     const checkAuth = async () => { 
         setLoading(true);
         try {
@@ -20,7 +19,6 @@ export const AuthProvider = ({children}) => {
         }
     };
 
-    // Login function
     const login = async (username, password) => {
         try {
             const success = await apiLogin(username, password);
@@ -35,7 +33,6 @@ export const AuthProvider = ({children}) => {
         }
     };
 
-    // Logout function
     const logout = async () => {
         try {
             const success = await apiLogout();
@@ -49,7 +46,6 @@ export const AuthProvider = ({children}) => {
         }
     };
 
-    // Check authentication when component mounts
     useEffect(() => {
         checkAuth();
     }, []);

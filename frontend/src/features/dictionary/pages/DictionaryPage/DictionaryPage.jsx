@@ -4,9 +4,9 @@ import axios from "axios";
 import {
 chordExtensionList,
 chordQualityObject,
-} from "../../utils/textObjects";
+} from "../../../../utils/textObjects";
 import { Button } from "../../components/Button/Button";
-import { rootNoteState, chordQualityState, chordExtensionState, chordsDataState } from "../../recoil/atoms";
+import { rootNoteState, chordQualityState, chordExtensionState, chordsDataState } from "../../../../recoil/atoms";
 import { useRecoilState } from "recoil";
 
 export const DictionaryPage = () => {
@@ -68,12 +68,12 @@ export const DictionaryPage = () => {
     return (
         <div className="place-items-center">
         <div className="flex items-center w-fit mx-10">
-            <h1 className="text-header">DICTIONARY</h1>
+            <h1 className="medium-header">Dictionary</h1>
         </div>
 
         <div className="flex flex-col text-center mb-10">
             <div className="flex flex-col items-center">
-            <h1 className="medium-header">Delve Into The Chord</h1>
+            <h1>Delve Into The Chord</h1>
             </div>
             <div className="flex flex-row flex-wrap justify-center gap-2 mt-20">
             {rootNotesList.map((note) => {

@@ -1,11 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { headerPageNamesObject } from "../../utils/subHeaderTextObjects"
 import { logout } from "../../utils/api";
+import { routes } from "../../routes";
 
 export const Header = () => {
-    const location = useLocation();
-    const loggedInState = location.state?.loggedIn;
     const nav = useNavigate();
 
     const handleLogout = async () => {
@@ -22,16 +21,16 @@ export const Header = () => {
                 <div className="flex w-1/3">
                     <ul className="flex gap-8 text-xl">
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/dictionary">Dictionary</a>
+                            <a className="cursor-default" href={routes.dictionary_page.url}>Dictionary</a>
                         </li>
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/">Learn</a>
+                            <a className="cursor-default" href={routes.home_page.url}>Learn</a>
                         </li>
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/">Analyze</a>
+                            <a className="cursor-default" href={routes.home_page.url}>Analyze</a>
                         </li>
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/auth">Discover</a>
+                            <a className="cursor-default" href={routes.home_page.url}>Discover</a>
                         </li>
                     </ul>
                 </div>
@@ -60,16 +59,16 @@ export const Header = () => {
                 <div className="w-1/3">
                     <ul className="flex gap-8 text-xl p-0 justify-end">
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/">Add Work</a>
+                            <a className="cursor-default" href={routes.upload_file.url}>Add Work</a>
                         </li>
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/">About</a>
+                            <a className="cursor-default" href={routes.home_page.url}>About</a>
                         </li>
                         <li className="list-item-hover">
-                            <a className="cursor-default" href="/">Contacts</a>
+                            <a className="cursor-default" href={routes.home_page.url}>Contacts</a>
                         </li>
                         <li>
-                            <a className="text-red-500" onClick={handleLogout}>Logout</a>
+                            <button className="text-red-500 h-4" onClick={handleLogout}>Logout</button>
                         </li>
                     </ul>
                 </div>

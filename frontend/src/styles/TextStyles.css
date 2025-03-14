@@ -1,5 +1,9 @@
+.small-header {
+    @apply text-4xl mt-10 pt-10
+}
+
 .medium-header {
-    @apply text-6xl mt-10
+    @apply text-6xl mt-10 pt-10
 }
 
 .text-header {

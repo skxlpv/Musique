@@ -1,5 +1,5 @@
-import { register_user } from "../../../utils/api";
-import "../Registration/Registration.css";
+import { register_user } from "../../../../../utils/api";
+import "./Registration.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";

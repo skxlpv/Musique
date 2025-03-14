@@ -24,7 +24,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
-
     groups = models.ManyToManyField(
         "auth.Group",
         related_name="customuser_groups",

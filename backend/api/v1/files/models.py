@@ -1,10 +1,14 @@
+# models.py
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from datetime import datetime
 import os
-from api.v1.utils.model_choices import GENRE_CHOICES, LITERATURE_TYPE_CHOICES, INSTRUMENT_CHOICES
+import shutil
+from django.conf import settings
 
 user = get_user_model()
+
 
 def get_upload_path(instance, filename):
     today = datetime.now()
@@ -12,120 +16,109 @@ def get_upload_path(instance, filename):
     extension = filename.split('.')[-1]
     return os.path.join(f"{today.year}", f"{today.month}", f"{file_title}.{extension}")
 
-#__________________________________UTIL MODELS___________________________________
-class Subgenre(models.Model):
-    subgenre = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.subgenre
+def get_archive_path(file_path):
+    # Create the archive path
+    archive_path = os.path.join('archive', file_path)
+    return archive_path
 
-class MusicianInstruments(models.Model):
-    instrument_name = models.CharField(max_length=100, unique=True)
 
-    @classmethod
-    def populate_instruments(cls):
-        for value, label in INSTRUMENT_CHOICES:
-            if not cls.objects.filter(instrument_name=value).exists():
-                cls.objects.create(instrument_name=value)
-
-    def __str__(self):
-        return self.instrument_name
-
-class WriterLiteratureType(models.Model):
-    literature_type = models.CharField(max_length=100)
-
-    @classmethod
-    def populate_literature_types(cls):
-        for value, label in LITERATURE_TYPE_CHOICES:
-            if not cls.objects.filter(literature_type=value).exists():
-                cls.objects.create(literature_type=value)
-
-    def __str__(self):
-        return self.literature_type
-
-class WriterGenreTypes(models.Model):
-    genre = models.CharField(max_length=100)
-    subgenres = models.ManyToManyField(Subgenre)
-
-    @classmethod
-    def populate_genre_types(cls):
-        for genre_name, subgenre_list in GENRE_CHOICES:
-            genre_obj, _ = cls.objects.get_or_create(genre=genre_name)
-            for subgenre_value, _ in subgenre_list:
-                subgenre_obj, _ = Subgenre.objects.get_or_create(subgenre=subgenre_value)
-                genre_obj.subgenres.add(subgenre_obj)
-
-    def __str__(self):
-        return self.genre
-
-#____________________________________MODELS______________________________________
 class FileModel(models.Model):
-    file = models.FileField(upload_to=get_upload_path, unique=True)
-    filename = models.CharField(max_length=255, unique=True)
-    authors = models.ManyToManyField(user, related_name="%(app_label)s_%(class)s_authors")
+    FILE_TYPES = [
+        ('image', 'Image'),
+        ('audio', 'Audio'),
+        ('document', 'Document'),
+        ('pdf', 'PDF'),
+        ('other', 'Other'),
+    ]
+
+    file = models.FileField(
+        upload_to=get_upload_path,
+        validators=[FileExtensionValidator(
+            allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp3', 'wav', 'pdf', 'doc', 'docx'])]
+    )
     title = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.CharField(max_length=100)
+    file_type = models.CharField(max_length=50, choices=FILE_TYPES, blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-
     is_downloadable = models.BooleanField(default=False)
     downloads_count = models.PositiveIntegerField(default=0)
+    author = models.ForeignKey(user, on_delete=models.CASCADE, related_name="uploaded_files")
 
     class Meta:
-        abstract = True
         ordering = ['-uploaded_at']
+        verbose_name = 'File'
+        verbose_name_plural = 'Files'
 
     def __str__(self):
-        return f"{self.title} by {', '.join([author.username for author in self.authors.all()])}"
-
-    def __init__(self, *args, **kwargs):
-        model_name = self.__class__.__name__.lower()
-        self._meta.get_field('authors').related_name = f"{model_name}_authors"
-        super().__init__(*args, **kwargs)
-
-class ArtistFileModel(FileModel):
-    style = models.CharField(max_length=100)
-    medium = models.CharField(max_length=100)
-    height_px = models.PositiveIntegerField(default=0)
-    width_px = models.PositiveIntegerField(default=0)
-    height_cm = models.PositiveIntegerField(default=0)
-    width_cm = models.PositiveIntegerField(default=0)
+        return f"{self.title} by {self.author.username}"
 
     def save(self, *args, **kwargs):
-        if self.title:
-            self.filename = f"{self.title.replace(' ', '_')}.{self.file.name.split('.')[-1]}"
-        else:
-            self.filename = os.path.basename(self.file.name)
+        if not self.file_type:
+            ext = self.file.name.split('.')[-1].lower()
+            if ext in ['jpg', 'jpeg', 'png', 'gif']:
+                self.file_type = 'image'
+            elif ext in ['mp3', 'wav']:
+                self.file_type = 'audio'
+            elif ext in ['pdf']:
+                self.file_type = 'pdf'
+            elif ext in ['doc', 'docx']:
+                self.file_type = 'document'
+            else:
+                self.file_type = 'other'
+        super().save(*args, **kwargs)
 
-        super(ArtistFileModel, self).save(*args, **kwargs)
+    def move_to_archive(self):
+        """
+        Move the file to an archive directory and manually delete from original location
+        Returns the archive path if successful, None otherwise
+        """
+        if not self.file:
+            return None
 
-    class Meta:
-        ordering = ['-style']
+        try:
+            # Get the source file's path
+            source_path = self.file.path
+            source_name = self.file.name
 
-    def __str__(self):
-        return f"{self.title}"
+            # Only proceed if the file exists
+            if not os.path.exists(source_path):
+                return None
 
-class WriterFileModel(FileModel):
-    genre = models.ManyToManyField(WriterGenreTypes)
-    subgenre = models.ManyToManyField(Subgenre)
-    literature_type = models.ManyToManyField(WriterLiteratureType, blank=False)
-    word_count = models.PositiveIntegerField(default=0)
-    language = models.CharField(max_length=100)
+            # Create the archive path
+            archive_path = get_archive_path(source_name)
 
-    class Meta:
-        ordering = ['-title']
+            # Get the full file system path for archive destination
+            full_archive_path = os.path.join(settings.MEDIA_ROOT, archive_path)
 
-    def __str__(self):
-        authors_list = ", ".join(str(author) for author in self.authors.all())
-        return f"{self.title} by {authors_list}"
+            # Create archive directory if it doesn't exist
+            os.makedirs(os.path.dirname(full_archive_path), exist_ok=True)
 
-class MusicianFileModel(FileModel):
+            # Copy the file to the archive
+            shutil.copy2(source_path, full_archive_path)
+
+            # Manually delete the original file
+            os.remove(source_path)
+
+            return archive_path
+        except Exception as e:
+            print(f"Error moving file to archive {self.file.name}: {e}")
+            return None
+
+
+class MusicFileModel(FileModel):
     genre = models.CharField(max_length=100)
-    lyrics = models.TextField(blank=True, null=True)
-    mood = models.CharField(max_length=100)
-    instruments = models.ManyToManyField(MusicianInstruments, blank=True)
-    duration = models.TimeField()
-    bpm = models.PositiveIntegerField(default=0)
+    bpm = models.PositiveIntegerField()
 
-    def __str__(self):
-        return f"{self.title} by {self.authors.all()}"
+
+class ImageFileModel(FileModel):
+    style = models.CharField(max_length=100)
+    medium = models.CharField(max_length=100)
+    height_px = models.PositiveIntegerField()
+    width_px = models.PositiveIntegerField()
+
+
+class DocumentFileModel(FileModel):
+    word_count = models.PositiveIntegerField()
+    language = models.CharField(max_length=100)

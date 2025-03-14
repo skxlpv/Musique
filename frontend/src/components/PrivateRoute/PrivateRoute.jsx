@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useAuth } from "../../contexts/useAuth";
+import { useAuth } from "../../features/auth/contexts/useAuth";
 
 export const PrivateRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();

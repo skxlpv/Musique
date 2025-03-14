@@ -1,6 +1,6 @@
 import { useState } from "react";
-import pencil_icon from "../../assets/pencil.png";
-import save_icon from "../../assets/save.png";
+import pencil_icon from "../../../../assets/pencil.png";
+import save_icon from "../../../../assets/save.png";
 
 export const BoxContainer = ({containerHeader, fragments, styles, onContentSave}) => {
     const [isEditing, setIsEditing] = useState(false);
