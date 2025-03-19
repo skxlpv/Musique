@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 logger = logging.getLogger(__name__)
 
 
-from apps.v1.users.models import CustomUser
-from apps.v1.users.serializers import UserSerializer
+from api.v1.users.models import CustomUser
+from api.v1.users.serializers import UserSerializer
 
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()

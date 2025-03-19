@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from apps.v1.user_profile.views import UserProfileView
+from api.v1.user_profile.views import UserProfileView
 
 app_name = 'user_profile'
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.v1.user_profile.models import UserProfile
+from api.v1.user_profile.models import UserProfile
 
 class UserProfileSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()

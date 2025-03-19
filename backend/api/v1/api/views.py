@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.v1.api.serializers import RegisterSerializer
+from api.v1.api.serializers import RegisterSerializer
 from backend import settings
 
 class CustomTokenObtainPairView(TokenObtainPairView):
