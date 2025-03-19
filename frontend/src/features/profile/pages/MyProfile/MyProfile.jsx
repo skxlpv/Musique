@@ -4,7 +4,7 @@ import settings_icon from "../../../../assets/settings_icon.png";
 import notification_icon from "../../../../assets/notification_icon.png";
 import exit_icon from "../../../../assets/exit_icon.png";
 import profile_photo from "../../../../assets/user.jpg";
-import api from "../../../../utils/api";
+import api from "../../../../services/api";
 
 export const MyProfile = () => {
     const [profileData, setProfileData] = useState({});

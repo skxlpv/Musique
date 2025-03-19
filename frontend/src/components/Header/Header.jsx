@@ -1,18 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { headerPageNamesObject } from "../../utils/subHeaderTextObjects"
-import { logout } from "../../utils/api";
+import { logout } from "../../services/api";
 import { routes } from "../../routes";
+import { useAuth } from "../../features/auth/contexts/useAuth";
 
 export const Header = () => {
     const nav = useNavigate();
+    const { loading, isAuthenticated, userData } = useAuth();
+
 
     const handleLogout = async () => {
         const success = await logout();
-        if (success){
-            nav("auth/login")
+        if (success) {
+            nav("/auth/login", { replace: true });
         }
-    }
+    };
 
     return (
         <div className="mb-24">
@@ -67,9 +70,25 @@ export const Header = () => {
                         <li className="list-item-hover">
                             <a className="cursor-default" href={routes.home_page.url}>Contacts</a>
                         </li>
-                        <li>
-                            <button className="text-red-500 h-4" onClick={handleLogout}>Logout</button>
-                        </li>
+                        {/* Only show when NOT loading */}
+                        {!loading && (
+                            <>
+                                {isAuthenticated && (
+                                    <li>
+                                        <a>{userData?.username}</a>
+                                    </li>
+                                )}
+                                <li>
+                                    <button 
+                                        className="text-red-500 h-4" 
+                                        onClick={handleLogout}
+                                        disabled={!isAuthenticated}
+                                    >
+                                        {isAuthenticated && 'Logout'}
+                                    </button>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </div>
             </div>

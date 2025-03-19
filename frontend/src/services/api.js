@@ -7,6 +7,7 @@ const LOGOUT_URL = `${BASE_URL}v1/logout/`;
 const REGISTER_URL = `${BASE_URL}v1/register/`;
 const CHECK_AUTH_ROUTE = `${BASE_URL}v1/check_auth/`;
 const AUTH_URL = `${BASE_URL}v1/check_auth/`;
+const CURRENT_USER = `${BASE_URL}v1/users/me`
 
 function getCsrfToken() {
   const cookieValue = document.cookie
@@ -118,6 +119,15 @@ export const is_authenticated = async () => {
   } catch (error) {
     console.error("Auth check error:", error);
     return false;
+  }
+};
+
+export const get_current_user = async () => {
+  try {
+    const response = await api.get(CURRENT_USER);
+    return response.data;
+  } catch (error) {
+    return call_refresh(error, () => api.get(CURRENT_USER));
   }
 };
 

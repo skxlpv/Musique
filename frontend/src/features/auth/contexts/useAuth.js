@@ -1,19 +1,28 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { is_authenticated, login as apiLogin, logout as apiLogout } from "../../../utils/api";
+import { get_current_user, is_authenticated, login as apiLogin, logout as apiLogout } from "../../../services/api";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState(null);
 
     const checkAuth = async () => { 
         setLoading(true);
         try {
-            const response = await is_authenticated();
-            setIsAuthenticated(response);
+            const authStatus = await is_authenticated();
+            setIsAuthenticated(authStatus);
+            
+            if (authStatus) {
+                const userInfo = await get_current_user();
+                setUserData(userInfo);
+            } else {
+                setUserData(null);
+            }
         } catch {
             setIsAuthenticated(false);
+            setUserData(null);
         } finally {
             setLoading(false);
         }
@@ -23,7 +32,7 @@ export const AuthProvider = ({children}) => {
         try {
             const success = await apiLogin(username, password);
             if (success) {
-                setIsAuthenticated(true);
+                await checkAuth();  // Re-check auth status after login
                 return true;
             }
             return false;
@@ -37,7 +46,10 @@ export const AuthProvider = ({children}) => {
         try {
             const success = await apiLogout();
             if (success) {
+                // Clear all auth-related state immediately
                 setIsAuthenticated(false);
+                setUserData(null);
+                await checkAuth();  // Verify logout with backend
             }
             return success;
         } catch (error) {
@@ -48,15 +60,16 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         checkAuth();
-    }, []);
+    }, []); // Run only on initial mount
 
     return (
         <AuthContext.Provider value={{
-            isAuthenticated, 
-            loading, 
+            isAuthenticated,
+            loading,
             login,
             logout,
-            refreshAuth: checkAuth
+            refreshAuth: checkAuth,
+            userData
         }}>
             {children}
         </AuthContext.Provider>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import api from "../../../../utils/api"
+import api from "../../../../services/api"
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../../../routes";
 
