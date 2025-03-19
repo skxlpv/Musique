@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.v1.dictionary.serializers import ChordSerializer
+from apps.v1.dictionary.serializers import ChordSerializer
 
 
 class ChordApiView(APIView):

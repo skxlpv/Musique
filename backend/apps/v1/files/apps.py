@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DictionaryConfig(AppConfig):
+class FilesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'api.v1.dictionary'
+    name = 'apps.v1.files'

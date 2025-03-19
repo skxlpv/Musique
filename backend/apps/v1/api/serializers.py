@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.handlers.modwsgi import check_password
 from rest_framework import serializers
 
-from api.v1.files.models import FileModel
-from api.v1.users.models import CustomUser
+from apps.v1.files.models import FileModel
+from apps.v1.users.models import CustomUser
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
