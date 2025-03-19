@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.v1.dictionary.models import ChordA, ChordB, ChordC, ChordD, ChordE, ChordF, ChordG
+from apps.v1.dictionary.models import ChordA, ChordB, ChordC, ChordD, ChordE, ChordF, ChordG
 
 CHORD_MODELS = {
     'A': ChordA,

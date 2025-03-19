@@ -2,8 +2,8 @@ from rest_framework import generics, status, permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from api.v1.user_profile.models import UserProfile
-from api.v1.user_profile.serializers import UserProfileSerializer
+from apps.v1.user_profile.models import UserProfile
+from apps.v1.user_profile.serializers import UserProfileSerializer
 from django.conf import settings
 
 
