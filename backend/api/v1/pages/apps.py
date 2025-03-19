@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class PagesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.v1.pages'
+    name = 'api.v1.pages'

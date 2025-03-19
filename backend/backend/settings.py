@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
 
-    'apps.v1.api',
-    'apps.v1.users',
-    'apps.v1.dictionary',
-    'apps.v1.pages',
-    'apps.v1.files',
-    'apps.v1.user_profile'
+    'api.v1.api',
+    'api.v1.users',
+    'api.v1.dictionary',
+    'api.v1.pages',
+    'api.v1.files',
+    'api.v1.user_profile'
 ]
 
 MIDDLEWARE = [
@@ -114,7 +114,7 @@ DATABASES = {
 # REST API
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'apps.v1.api.authentication.CookiesJWTAuthentication',
+        'api.v1.api.authentication.CookiesJWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.BasePagination',
