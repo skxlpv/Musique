@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from __future__ import annotations
+
 
 # Create your views here.

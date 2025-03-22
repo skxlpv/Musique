@@ -11,8 +11,8 @@
 }
 
 .card {
-    @apply 
-    flex flex-col justify-start items-center 
+    @apply
+    flex flex-col justify-start items-center
     px-12 py-16 h-3/4 w-full
     transition-all duration-1000 ease-in-out
     bg-gradient-to-b from-black to-black

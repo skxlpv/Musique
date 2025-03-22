@@ -1,10 +1,12 @@
 # serializers.py
-from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.handlers.modwsgi import check_password
-from rest_framework import serializers
+from __future__ import annotations
 
 from api.v1.files.models import FileModel
 from api.v1.users.models import CustomUser
+from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,18 +38,24 @@ class LoginSerializer(serializers.Serializer):
         password = data.get('password')
 
         user = CustomUser.objects.filter(username=username).first()
-        status = check_password()
 
         print(username, password)
 
         if username and password:
-            user = authenticate(request=self.context.get('request'),
-                                username=username, password=password)
+            user = authenticate(
+                request=self.context.get('request'),
+                username=username,
+                password=password,
+            )
             print(user)
             if user is None:
-                raise serializers.ValidationError("Invalid username or password")
+                raise serializers.ValidationError(
+                    'Invalid username or password',
+                )
         else:
-            raise serializers.ValidationError("Must provide both username and password")
+            raise serializers.ValidationError(
+                'Must provide both username and password',
+            )
 
         data['user'] = user
         return data

@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const BASE_URL = "http://127.0.0.1:8000/api/";
-const REFRESH_URL = `${BASE_URL}token/refresh/`;
-const LOGIN_URL = `${BASE_URL}token/`;
-const LOGOUT_URL = `${BASE_URL}v1/logout/`;
-const REGISTER_URL = `${BASE_URL}v1/register/`;
-const CHECK_AUTH_ROUTE = `${BASE_URL}v1/check_auth/`;
-const AUTH_URL = `${BASE_URL}v1/check_auth/`;
-const CURRENT_USER = `${BASE_URL}v1/users/me`
+export const BASE_URL = "http://127.0.0.1:8000/";
+const REFRESH_URL = `${BASE_URL}api/token/refresh/`;
+const LOGIN_URL = `${BASE_URL}api/token/`;
+const LOGOUT_URL = `${BASE_URL}api/v1/logout/`;
+const REGISTER_URL = `${BASE_URL}api/v1/register/`;
+const CHECK_AUTH_ROUTE = `${BASE_URL}api/v1/check_auth/`;
+const AUTH_URL = `${BASE_URL}api/v1/check_auth/`;
+const CURRENT_USER = `${BASE_URL}api/v1/users/me`
 
 function getCsrfToken() {
   const cookieValue = document.cookie
@@ -50,7 +50,9 @@ export const refresh_token = async () => {
     const response = await api.post(REFRESH_URL, {});
     return response.data.refreshed;
   } catch (error) {
-    console.error("Refresh token error:", error);
+    if (!error.response || error.response.status !== 401) {
+      console.error("Refresh token error:", error);
+    }
     return false;
   }
 };
@@ -58,10 +60,10 @@ export const refresh_token = async () => {
 export const login = async (username, password) => {
   try {
     const response = await api.post(LOGIN_URL, {
-      username: username, 
+      username: username,
       password: password
     });
-    
+
     if (response.data && response.data.success) {
       return true;
     }
@@ -89,7 +91,7 @@ export const register_user = async (data) => {
       email: data.email,
       password: data.password
     });
-    
+
     if (response.status >= 200 && response.status < 300) {
       return true;
     }
@@ -117,7 +119,6 @@ export const is_authenticated = async () => {
     await api.post(AUTH_URL, {});
     return true;
   } catch (error) {
-    console.error("Auth check error:", error);
     return false;
   }
 };

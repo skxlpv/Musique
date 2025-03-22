@@ -27,8 +27,8 @@ export const fileState = atom({
 
 export const authState = atom({
     key: "authState",
-    default: { 
-        isAuthenticated: false, 
+    default: {
+        isAuthenticated: false,
         username: null,
         email: null
     },

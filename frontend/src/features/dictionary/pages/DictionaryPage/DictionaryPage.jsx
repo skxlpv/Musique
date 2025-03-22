@@ -86,7 +86,7 @@ export const DictionaryPage = () => {
                     onClick={() => handleRootNoteClick(note)}
                     key={note}
                     className={`${topBoxStyle} h-16 w-16 flex items-center justify-center
-                                            shadow-neutral-400 shadow-sm 
+                                            shadow-neutral-400 shadow-sm
                                             hover:duration-200
                                             ${
                                             rootNote === note

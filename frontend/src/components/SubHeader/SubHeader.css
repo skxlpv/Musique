@@ -7,3 +7,15 @@
     @apply hover:bg-neutral-950 rounded-full h-14 px-10 flex justify-center items-center
     duration-75 hover:text-white text-zinc-400 w-96 text-center
 }
+
+.button-card-outlined {
+    @apply  w-fit px-3.5 h-9 flex items-center rounded-xl duration-75
+    text-zinc-400 border-neutral-800
+    hover:bg-neutral-950 hover:text-white hover:border-b-2 hover:border-neutral-800
+
+}
+
+.button-card-outlined img,
+.button-card-outlined span {
+    @apply border-none outline-none;
+}

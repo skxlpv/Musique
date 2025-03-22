@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 class CookiesJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
@@ -11,8 +14,7 @@ class CookiesJWTAuthentication(JWTAuthentication):
 
         try:
             user = self.get_user(validated_token)
-        except:
+        except Exception:
             return None
 
         return user, validated_token
-

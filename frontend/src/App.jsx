@@ -21,10 +21,10 @@ function App() {
                             .map((route, index) => (
                                 <Route path={route.url} key={index}
                                     element={
-                                        route.requiresAuth ? 
-                                        <PrivateRoute>{route.component}</PrivateRoute> : 
+                                        route.requiresAuth ?
+                                        <PrivateRoute>{route.component}</PrivateRoute> :
                                         route.component
-                                    } 
+                                    }
                                 />
                             ))}
                     </Routes>

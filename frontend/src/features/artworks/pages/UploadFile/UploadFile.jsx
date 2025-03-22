@@ -52,15 +52,15 @@ export const UploadFile = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       if (fileType === "audio"){
-        nav(routes.musicians_page.url)  
+        nav(routes.musicians_page.url)
       } else if (fileType === "image"){
         nav(routes.artists_page.url)
       } else if (fileType === "document"){
         nav(routes.writers_page.url)
       }
-      
+
     } catch (err) {
       console.error(err);
       alert("File upload failed");
@@ -69,26 +69,26 @@ export const UploadFile = () => {
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col items-center w-full">
-      {!file ? 
+      {!file ?
       <div className="flex flex-col items-center m-5">
         <label htmlFor="file-upload" className="medium-header pb-10 button-card-5xl outline-dashed outline-white">Upload</label>
-        <input 
+        <input
           id="file-upload"
-          className="hidden" 
-          type="file" 
-          onChange={handleFileChange} 
-          required 
+          className="hidden"
+          type="file"
+          onChange={handleFileChange}
+          required
         />
       </div>
       :
       <div className="flex flex-col items-center m-5">
         <label htmlFor="file-upload" className="button-card-5xl outline-dashed outline-white overflow-hidden">{file.name}</label>
-        <input 
+        <input
           id="file-upload"
-          className="hidden" 
-          type="file" 
-          onChange={handleFileChange} 
-          required 
+          className="hidden"
+          type="file"
+          onChange={handleFileChange}
+          required
         />
       </div>
       }
@@ -125,7 +125,7 @@ export const UploadFile = () => {
           )}
           <div className="flex flex-row justify-between">
             <div className="flex flex-row justify-between">
-              <input id="is_downloadable" type="checkbox" {...register("is_downloadable")} 
+              <input id="is_downloadable" type="checkbox" {...register("is_downloadable")}
               className="checkbox"/>
               <label htmlFor="is_downloadable">File Can Be Downloaded</label>
             </div>

@@ -13,7 +13,7 @@ export const Registration = () => {
     const handleRegistration = async (data) => {
         setIsLoading(true);
         setRegistrationError("");
-        
+
         try {
             const response = await register_user(data);
             if (response) {
@@ -38,7 +38,7 @@ export const Registration = () => {
             pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: "Invalid email address"
-            }        
+            }
         },
         password: {
             required: "Password is required",
@@ -52,37 +52,37 @@ export const Registration = () => {
     return (
         <div>
             <form className="flex flex-col gap-4 text-black" onSubmit={handleSubmit(handleRegistration)}>
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     placeholder="Username"
-                    className="p-2 rounded" 
-                    {...register('username', registerRequirements.username)} 
+                    className="p-2 rounded"
+                    {...register('username', registerRequirements.username)}
                     disabled={isLoading}
                 />
                 {errors?.username && <p className="text-red-500">{errors.username.message}</p>}
 
-                <input 
-                    type="email" 
+                <input
+                    type="email"
                     placeholder="Email"
-                    className="p-2 rounded" 
-                    {...register('email', registerRequirements.email)} 
+                    className="p-2 rounded"
+                    {...register('email', registerRequirements.email)}
                     disabled={isLoading}
                 />
                 {errors?.email && <p className="text-red-500">{errors.email.message}</p>}
 
-                <input 
-                    type="password" 
+                <input
+                    type="password"
                     placeholder="Password"
-                    className="p-2 rounded" 
-                    {...register('password', registerRequirements.password)} 
+                    className="p-2 rounded"
+                    {...register('password', registerRequirements.password)}
                     disabled={isLoading}
                 />
                 {errors?.password && <p className="text-red-500">{errors.password.message}</p>}
 
                 {registrationError && <p className="text-red-500">{registrationError}</p>}
 
-                <button 
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-gray-400" 
+                <button
+                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
                     type="submit"
                     disabled={isLoading}
                 >

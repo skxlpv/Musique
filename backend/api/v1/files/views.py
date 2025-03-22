@@ -1,15 +1,26 @@
 # views.py
+from __future__ import annotations
+
 from django.contrib.auth import get_user_model
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import ValidationError
-from .models import FileModel, MusicFileModel, ImageFileModel, DocumentFileModel
-from .serializers import FileModelSerializer, MusicFileModelSerializer, ImageFileModelSerializer, DocumentFileModelSerializer
+from rest_framework import status
+from rest_framework.parsers import FormParser
+from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import DocumentFileModel
+from .models import FileModel
+from .models import ImageFileModel
+from .models import MusicFileModel
+from .serializers import DocumentFileModelSerializer
+from .serializers import FileModelSerializer
+from .serializers import ImageFileModelSerializer
+from .serializers import MusicFileModelSerializer
 
 user = get_user_model()
+
 
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -19,7 +30,7 @@ class FileUploadView(APIView):
         try:
             file = request.data.get('file')
             if not file:
-                raise ValidationError("No file was provided.")
+                raise ValidationError('No file was provided.')
 
             # Determine file type based on extension
             ext = file.name.split('.')[-1].lower()
@@ -55,6 +66,15 @@ class FileUploadView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except ValidationError as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         except Exception as e:
-            return Response({"error": "An error occurred during file upload.", "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {
+                    'error': 'An error occurred during file upload.',
+                    'message': str(e),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

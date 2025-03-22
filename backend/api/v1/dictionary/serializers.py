@@ -1,6 +1,13 @@
-from rest_framework import serializers
+from __future__ import annotations
 
-from api.v1.dictionary.models import ChordA, ChordB, ChordC, ChordD, ChordE, ChordF, ChordG
+from api.v1.dictionary.models import ChordA
+from api.v1.dictionary.models import ChordB
+from api.v1.dictionary.models import ChordC
+from api.v1.dictionary.models import ChordD
+from api.v1.dictionary.models import ChordE
+from api.v1.dictionary.models import ChordF
+from api.v1.dictionary.models import ChordG
+from rest_framework import serializers
 
 CHORD_MODELS = {
     'A': ChordA,
@@ -21,7 +28,15 @@ CHORD_MODELS = {
 
 class ChordSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['root', 'type', 'name', 'code', 'alternative', 'subset', 'group']
+        fields = [
+            'root',
+            'type',
+            'name',
+            'code',
+            'alternative',
+            'subset',
+            'group',
+        ]
 
     @classmethod
     def get_model(cls, root_note):
@@ -36,6 +51,16 @@ class ChordSerializer(serializers.ModelSerializer):
         if model is None:
             return None
         elif model:
-            return type(f'{model.__name__}Serializer', (cls,), {'Meta': type('Meta', (), {'model': model, 'fields': cls.Meta.fields})})
+            return type(
+                f'{model.__name__}Serializer',
+                (cls,),
+                {
+                    'Meta': type(
+                        'Meta',
+                        (),
+                        {'model': model, 'fields': cls.Meta.fields},
+                    ),
+                },
+            )
         else:
-            raise ValueError(f"No model found for root note {root_note}")
+            raise ValueError(f'No model found for root note {root_note}')

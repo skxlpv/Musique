@@ -1,11 +1,14 @@
 # models.py
-from django.contrib.auth import get_user_model
-from django.db import models
-from django.core.validators import FileExtensionValidator
-from datetime import datetime
+from __future__ import annotations
+
 import os
 import shutil
+from datetime import datetime
+
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.validators import FileExtensionValidator
+from django.db import models
 
 user = get_user_model()
 
@@ -14,7 +17,11 @@ def get_upload_path(instance, filename):
     today = datetime.now()
     file_title = instance.title if instance.title else filename.split('.')[0]
     extension = filename.split('.')[-1]
-    return os.path.join(f"{today.year}", f"{today.month}", f"{file_title}.{extension}")
+    return os.path.join(
+        f'{today.year}',
+        f'{today.month}',
+        f'{file_title}.{extension}',
+    )
 
 
 def get_archive_path(file_path):
@@ -34,17 +41,39 @@ class FileModel(models.Model):
 
     file = models.FileField(
         upload_to=get_upload_path,
-        validators=[FileExtensionValidator(
-            allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp3', 'wav', 'pdf', 'doc', 'docx'])]
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    'jpg',
+                    'jpeg',
+                    'png',
+                    'gif',
+                    'mp3',
+                    'wav',
+                    'pdf',
+                    'doc',
+                    'docx',
+                ],
+            ),
+        ],
     )
     title = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.CharField(max_length=100)
-    file_type = models.CharField(max_length=50, choices=FILE_TYPES, blank=True, null=True)
+    file_type = models.CharField(
+        max_length=50,
+        choices=FILE_TYPES,
+        blank=True,
+        null=True,
+    )
     uploaded_at = models.DateTimeField(auto_now_add=True)
     is_downloadable = models.BooleanField(default=False)
     downloads_count = models.PositiveIntegerField(default=0)
-    author = models.ForeignKey(user, on_delete=models.CASCADE, related_name="uploaded_files")
+    author = models.ForeignKey(
+        user,
+        on_delete=models.CASCADE,
+        related_name='uploaded_files',
+    )
 
     class Meta:
         ordering = ['-uploaded_at']
@@ -52,7 +81,7 @@ class FileModel(models.Model):
         verbose_name_plural = 'Files'
 
     def __str__(self):
-        return f"{self.title} by {self.author.username}"
+        return f'{self.title} by {self.author.username}'
 
     def save(self, *args, **kwargs):
         if not self.file_type:
@@ -103,7 +132,7 @@ class FileModel(models.Model):
 
             return archive_path
         except Exception as e:
-            print(f"Error moving file to archive {self.file.name}: {e}")
+            print(f'Error moving file to archive {self.file.name}: {e}')
             return None
 
 

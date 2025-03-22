@@ -1,6 +1,12 @@
 # admin.py
+from __future__ import annotations
+
 from django.contrib import admin
-from .models import FileModel, MusicFileModel, ImageFileModel, DocumentFileModel
+
+from .models import DocumentFileModel
+from .models import FileModel
+from .models import ImageFileModel
+from .models import MusicFileModel
 
 
 class FileModelAdmin(admin.ModelAdmin):
@@ -38,7 +44,12 @@ class MusicFileModelAdmin(FileModelAdmin):
 
 
 class ImageFileModelAdmin(FileModelAdmin):
-    list_display = FileModelAdmin.list_display + ('style', 'medium', 'width_px', 'height_px')
+    list_display = FileModelAdmin.list_display + (
+        'style',
+        'medium',
+        'width_px',
+        'height_px',
+    )
     list_filter = FileModelAdmin.list_filter + ('style', 'medium')
 
     def delete_model(self, request, obj):

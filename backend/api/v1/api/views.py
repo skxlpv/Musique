@@ -1,18 +1,14 @@
-import logging
-from django.contrib.auth import login, authenticate, logout
-from django.http import JsonResponse
-from django.middleware.csrf import get_token
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from __future__ import annotations
 
 from api.v1.api.serializers import RegisterSerializer
-from backend import settings
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -25,7 +21,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
             res = Response()
 
-            res.data = {"success": True}
+            res.data = {'success': True}
 
             res.set_cookie(
                 key='access_token',
@@ -33,7 +29,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 httponly=True,
                 secure=True,
                 samesite='None',
-                path='/'
+                path='/',
             )
             res.set_cookie(
                 key='refresh_token',
@@ -41,12 +37,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 httponly=True,
                 secure=True,
                 samesite='None',
-                path='/'
+                path='/',
             )
 
             return res
         except Exception as e:
-            return Response({"success": False, "error": e})
+            return Response({'success': False, 'error': e})
+
 
 class CustomRefreshToken(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -62,7 +59,7 @@ class CustomRefreshToken(TokenObtainPairView):
 
             res = Response()
 
-            res.data = {"refreshed": True}
+            res.data = {'refreshed': True}
 
             res.set_cookie(
                 key='access_token',
@@ -70,12 +67,13 @@ class CustomRefreshToken(TokenObtainPairView):
                 httponly=True,
                 secure=True,
                 samesite='None',
-                path='/'
+                path='/',
             )
 
             return res
         except:
-            return Response({"refreshed": False})
+            return Response({'refreshed': False})
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -86,19 +84,20 @@ def register(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 def logout(request):
     try:
         res = Response()
-        res.data = {"success": True}
+        res.data = {'success': True}
         res.delete_cookie('access_token', path='/', samesite='None')
         res.delete_cookie('refresh_token', path='/', samesite='None')
         return res
     except:
-        return Response({"success": False})
+        return Response({'success': False})
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def is_authenticated(request):
-    return Response({"authenticated": True})
+    return Response({'authenticated': True})

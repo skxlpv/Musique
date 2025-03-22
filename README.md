@@ -9,6 +9,6 @@
         <quote>"Minds' Universal Resource"</quote>
       </summary>
     </ul>
-  </div>    
+  </div>
   <img src="https://github.com/user-attachments/assets/694083fc-beae-45e7-b490-2598c123b661" alt="banner">
 </body>

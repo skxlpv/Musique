@@ -8,12 +8,12 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
 
-    const checkAuth = async () => { 
+    const checkAuth = async () => {
         setLoading(true);
         try {
             const authStatus = await is_authenticated();
             setIsAuthenticated(authStatus);
-            
+
             if (authStatus) {
                 const userInfo = await get_current_user();
                 setUserData(userInfo);
@@ -49,7 +49,6 @@ export const AuthProvider = ({ children }) => {
                 // Clear all auth-related state immediately
                 setIsAuthenticated(false);
                 setUserData(null);
-                await checkAuth();  // Verify logout with backend
             }
             return success;
         } catch (error) {
