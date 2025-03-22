@@ -1,3 +1,9 @@
 .tracking-ultrawide {
     letter-spacing: 0.3em;
 }
+
+.profile-dropdown-open .button-card-outlined {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-color: transparent;
+}
