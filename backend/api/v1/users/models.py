@@ -12,11 +12,12 @@ from backend import settings
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(self, username, email, first_name, last_name, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
         email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
+        user = self.model(username=username, email=email,
+                          first_name=first_name, last_name=last_name, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -25,10 +26,10 @@ class CustomUserManager(BaseUserManager):
         user_profile_model.save()
         return user
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
+    def create_superuser(self, username, email, first_name, last_name, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(username, email, password, **extra_fields)
+        return self.create_user(username, email, first_name, last_name, password, **extra_fields)
 
 
 class CustomUser(AbstractUser):
@@ -47,7 +48,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name',]
 
     def __str__(self):
         return self.username
@@ -55,42 +56,15 @@ class CustomUser(AbstractUser):
 
 class UserProfile(models.Model):
     class Pronouns(models.TextChoices):
-        HE = (
-            'he',
-            _('He/Him'),
-        )
-        SHE = (
-            'she',
-            _('She/Her'),
-        )
-        THEY = (
-            'they',
-            _('They/Them'),
-        )
-        ZE = (
-            'ze',
-            _('Ze/Zir'),
-        )
-        SHE_THEY = (
-            'she_they',
-            _('She/They'),
-        )
-        HE_THEY = (
-            'he_they',
-            _('He/They'),
-        )
-        ANY = (
-            'any',
-            _('Any'),
-        )
-        NONE = (
-            'none',
-            _('None'),
-        )
-        OTHER = (
-            'other',
-            _('Other'),
-        )
+        HE = ('he', _('He/Him'),)
+        SHE = ('she', _('She/Her'),)
+        THEY = ('they', _('They/Them'),)
+        ZE = ('ze', _('Ze/Zir'),)
+        SHE_THEY = ('she_they', _('She/They'),)
+        HE_THEY = ('he_they', _('He/They'),)
+        ANY = ('any', _('Any'),)
+        NONE = ('none', _('None'),)
+        OTHER = ('other', _('Other'),)
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -125,6 +99,14 @@ class UserProfile(models.Model):
     )
     social_links = models.JSONField(default=dict, blank=True)
     joined_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def first_name(self):
+        return self.user.first_name
+
+    @property
+    def last_name(self):
+        return self.user.last_name
 
     def clean(self):
         super().clean()

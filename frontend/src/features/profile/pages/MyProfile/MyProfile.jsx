@@ -1,28 +1,19 @@
-import { useEffect, useState } from "react";
-import api from "../../../../services/api";
+import { BaseInfo } from '../../components/BaseInfo';
+import { TestButton } from '../../components/TestButton';
 
 export const MyProfile = () => {
-    const [profileData, setProfileData] = useState({});
-
-    const fetchUserProfileData = async () => {
-        try {
-            const response = await api.get(
-                "http://127.0.0.1:8000/api/v1/users/me",
-            );
-            setProfileData(response.data);
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    useEffect(() => {
-        fetchUserProfileData();
-    }, []);
-
-
     return(
-        <div className="w-[80rem] h-[40rem] flex">
-            <h1>Profile</h1>
+        <>
+        <div className="w-[55rem] flex p-10 rounded-3xl border-2 border-neutral-950">
+            <BaseInfo/>
         </div>
+
+
+
+        
+        <br></br>
+        <TestButton/>
+        </>
+        
     );
 };

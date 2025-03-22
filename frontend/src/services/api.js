@@ -8,6 +8,8 @@ const REGISTER_URL = `${BASE_URL}api/v1/register/`;
 const CHECK_AUTH_ROUTE = `${BASE_URL}api/v1/check_auth/`;
 const AUTH_URL = `${BASE_URL}api/v1/check_auth/`;
 const CURRENT_USER = `${BASE_URL}api/v1/users/me`
+const MEDIA_ROOT = `${BASE_URL}media/`
+export const MEDIA_AVATARS = `${MEDIA_ROOT}users/avatars/`
 
 function getCsrfToken() {
   const cookieValue = document.cookie

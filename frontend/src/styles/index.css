@@ -44,7 +44,7 @@ p {
 }
 
 h1 {
-    @apply mb-2
+    @apply mb-2 text-zinc-400
 }
 
 .icon{
@@ -70,6 +70,33 @@ textarea{
     @apply appearance-none w-6 h-6 checked:!bg-white !bg-black checked:border-2
     !rounded-full border-2 shrink-0 mr-2
     flex justify-center transition-all duration-300
+}
+
+@layer utilities {
+    .noise-pattern {
+        position: relative;
+    }
+
+    .noise-pattern::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url(https://grainy-gradients.vercel.app/noise.svg);
+        opacity: 0.15;
+        pointer-events: none;
+        mix-blend-mode: overlay;
+        z-index: 1;
+    }
+
+    /* Variants for noise opacity */
+    .noise-subtle::before { opacity: 0.05; }
+    .noise-medium::before { opacity: 0.15; }
+    .noise-strong::before { opacity: 0.25; }
+
+    /* Variants for blend modes */
+    .noise-overlay::before { mix-blend-mode: overlay; }
+    .noise-soft-light::before { mix-blend-mode: soft-light; }
+    .noise-color-burn::before { mix-blend-mode: color-burn; }
 }
 
 /* Slider ////////////////////////////////////////////////////////////////////////////*/
