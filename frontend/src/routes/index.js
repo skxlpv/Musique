@@ -16,6 +16,9 @@ export const routes = {
     my_profile: {
         url: "/profile", component: <MyProfile/>, requiresAuth: true
     },
+    settings: {
+        url: "/settings", component: null, requiresAuth: true
+    },
 
     //PAGES
     dictionary_page: {
