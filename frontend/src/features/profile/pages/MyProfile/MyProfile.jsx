@@ -2,11 +2,11 @@ import { BaseInfo } from '../../components/BaseInfo';
 import { GradientCard } from '../../../../components/GradientCard/GradientCard'
 
 export const MyProfile = () => {
-    return(
+    return (
         <>
-        <GradientCard>
-            <BaseInfo/>
-        </GradientCard>
+            <GradientCard>
+                <BaseInfo />
+            </GradientCard>
         </>
     );
 };
