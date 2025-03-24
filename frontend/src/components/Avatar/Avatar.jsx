@@ -30,7 +30,7 @@ export const Avatar = ({ size = "md" }) => {
         <img
             src={imageSource}
             alt={`${userData?.username || "User"} avatar`}
-            className={`rounded-xl object-cover ${imageSizeStyle}`}
+            className={`max-w-none rounded-xl object-cover flex-nowrap ${imageSizeStyle}`}
             onError={(e) => {
                 e.target.src = DEFAULT_AVATAR_PATH;
             }}

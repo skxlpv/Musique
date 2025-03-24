@@ -1,11 +1,11 @@
 import React from "react";
 
-export const GradientCard = ({ children }) => {
-  return (
-    <div class="w-[55rem] flex p-[1px] rounded-2xl bg-gradient-to-b from-neutral-800 to-black">
-      <div class="rounded-2xl bg-black px-8 py-8 w-full">
-        {children}
-      </div>
-    </div>
-  );
+export const GradientCard = ({children}) => {
+    return (
+        <div className="w-full flex p-[1px] rounded-2xl bg-gradient-to-b from-neutral-600 to-black">
+            <div className="rounded-2xl bg-black px-16 py-10 w-full flex">
+                {children}
+            </div>
+        </div>
+    );
 };

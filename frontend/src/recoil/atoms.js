@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import {profileOptions} from "../utils/profileTabs";
 
 export const rootNoteState = atom({
     key: "rootNoteState",
@@ -32,4 +33,9 @@ export const authState = atom({
         username: null,
         email: null
     },
+});
+
+export const activeTabState = atom({
+    key: "activeTabState",
+    default: profileOptions.artworks
 });

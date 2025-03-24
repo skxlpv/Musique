@@ -12,7 +12,12 @@
     @apply  w-fit px-3.5 h-9 flex items-center rounded-xl duration-75
     text-zinc-400 border-neutral-800
     hover:bg-neutral-950 hover:text-white hover:border-b-2 hover:border-neutral-800
+}
 
+.button-card-outlined-invert {
+    @apply  w-32 px-3.5 h-9 flex items-start rounded-xl
+    border-neutral-800 bg-white text-black
+    hover:border-b-2 hover:border-neutral-800 transition-all duration-150
 }
 
 .button-card-outlined img,
