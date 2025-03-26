@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from rest_framework.decorators import permission_classes, api_view
+
+from api.v1.api.serializers import FileSerializer
+from api.v1.files.models import FileModel
 from api.v1.users.models import CustomUser
 from api.v1.users.models import UserProfile
 from api.v1.users.serializers import UserSerializer
@@ -51,39 +55,9 @@ class UserProfileView(generics.GenericAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-    def patch(self, request, *args, **kwargs):
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-            data = request.data
-            allowed_fields = [
-                'about',
-                'quote',
-                'instagram_link',
-                'telegram_link',
-            ]
-
-            for field in allowed_fields:
-                if field in data:
-                    setattr(user_profile, field, data[field])
-            user_profile.save()
-
-            return Response(
-                {
-                    'username': request.user.username,
-                    'about': user_profile.about,
-                    'quote': user_profile.quote,
-                    'instagram_link': user_profile.instagram_link,
-                    'telegram_link': user_profile.telegram_link,
-                },
-                status=status.HTTP_200_OK,
-            )
-        except UserProfile.DoesNotExist:
-            return Response(
-                {'error': 'User profile not found'},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        except Exception:
-            return Response(
-                {'error': 'Update failed'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_files(request):
+    files = FileModel.objects.filter(author=request.user)
+    serializer = FileSerializer(files, many=True)
+    return Response(serializer.data)

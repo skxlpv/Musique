@@ -64,4 +64,4 @@ class LoginSerializer(serializers.Serializer):
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = FileModel
-        fields = ['file', 'uploaded_at', 'user', 'type']
+        fields = "__all__"

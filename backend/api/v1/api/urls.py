@@ -7,6 +7,8 @@ from api.v1.files.views import FileUploadView
 from django.urls import include
 from django.urls import path
 
+from api.v1.users.views import get_user_files
+
 app_name = 'api_v1'
 
 urlpatterns = [
@@ -16,4 +18,5 @@ urlpatterns = [
     path('users/', include('api.v1.users.urls'), name='users'),
     path('pages/', include('api.v1.pages.urls'), name='pages'),
     path('upload-file/', FileUploadView.as_view(), name='upload_file'),
+    path('files/', get_user_files, name='get_user_files'),
 ]

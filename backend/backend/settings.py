@@ -46,33 +46,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-CORS_ALLOW_CREDENTIALS = True
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-CSRF_COOKIE_HTTPONLY = False  # JavaScript needs to access CSRF cookie
-CSRF_COOKIE_SECURE = True  # Only send over HTTPS
-CSRF_COOKIE_SAMESITE = 'None'  # Restrict CSRF cookie to same site
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'Lax'
-
-
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -189,3 +170,66 @@ USE_I18N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS Configuration
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Adjust CORS for development
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:5173',  # Vite default
+        'http://127.0.0.1:5173',
+        'http://localhost:8080',  # Vue CLI default
+        'http://127.0.0.1:8080',
+    ]
+    CORS_ORIGIN_ALLOW_ALL = True  # Use with caution in production
+    CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
+else:
+    # Production: explicitly define allowed origins
+    CORS_ALLOWED_ORIGINS = [
+        'https://yourdomain.com',
+        'https://www.yourdomain.com',
+    ]
+    CORS_ORIGIN_ALLOW_ALL = False
+
+# CSRF Configuration
+CSRF_COOKIE_HTTPONLY = False  # Allow JS to read CSRF token
+CSRF_COOKIE_SECURE = DEBUG  # Only secure in production
+CSRF_COOKIE_SAMESITE = 'Lax' if not DEBUG else 'None'
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]
+
+# Session Cookie Settings
+SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SAMESITE = 'Lax' if not DEBUG else 'None'
+
+# Additional Security Recommendations
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
