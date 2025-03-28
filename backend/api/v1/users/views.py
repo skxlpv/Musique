@@ -54,10 +54,3 @@ class UserProfileView(generics.GenericAPIView):
                 {'error': 'Could not retrieve user data'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_user_files(request):
-    files = FileModel.objects.filter(author=request.user)
-    serializer = FileSerializer(files, many=True)
-    return Response(serializer.data)

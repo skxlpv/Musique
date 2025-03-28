@@ -4,6 +4,7 @@ from __future__ import annotations
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +19,7 @@ from .serializers import DocumentFileModelSerializer
 from .serializers import FileModelSerializer
 from .serializers import ImageFileModelSerializer
 from .serializers import MusicFileModelSerializer
+from ..api.serializers import FileSerializer
 
 user = get_user_model()
 
@@ -78,3 +80,10 @@ class FileUploadView(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_files_by_username(request, username):
+    files = FileModel.objects.filter(author=get_user_model().objects.get(username=username))
+    serializer = FileSerializer(files, many=True)
+    return Response(serializer.data)

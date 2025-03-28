@@ -3,11 +3,11 @@ import "../SubHeader/SubHeader.css"
 
 export const SubHeader = ({additionalStyle, object}) => {
     return (
-        <div className={`flex w-full items-center justify-center h-24 ${additionalStyle}`}>
+        <div className={`flex w-full items-center justify-center h-0 ${additionalStyle}`}>
             <ul className="gap-4 text-xl flex flex-row items-center">
                 {Object.keys(object).map((item, key) => {
                     return(
-                        <li className="button-card-outlined" key={key}>
+                        <li className="text-small btn-secondary pr-1" key={key}>
                             <Link to={object[item].link}>
                                 {object[item].name}
                             </Link>

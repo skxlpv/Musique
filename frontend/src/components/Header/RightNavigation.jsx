@@ -14,16 +14,16 @@ export const RightNavigation = ({
     handleLogout
 }) => {
     return (
-        <div className="w-1/3">
-            <ul className="flex gap-4 text-xl justify-end items-center">
+        <div className="mt-1">
+            <ul className="flex text-xl gap-4">
                 <li>
-                    <a className="cursor-default button-card-outlined" href={routes.upload_file.url}>Add Work</a>
+                    <a className="text-small btn-secondary" href={routes.upload_file.url}>Add Work</a>
                 </li>
                 <li>
-                    <a className="cursor-default button-card-outlined" href={routes.home_page.url}>About</a>
+                    <a className="text-small btn-secondary" href={routes.home_page.url}>About</a>
                 </li>
                 <li>
-                    <a className="cursor-default button-card-outlined" href={routes.home_page.url}>Contacts</a>
+                    <a className="text-small btn-secondary" href={routes.home_page.url}>Contacts</a>
                 </li>
                 {/* Only show when NOT loading */}
                 {!loading && <>

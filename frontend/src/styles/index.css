@@ -2,30 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: 'Bebas Neue Pro';
-    src: local('Bebas Neue Pro'), url("../assets/fonts/BebasNeuePro/BebasNeuePro-SemiExpBold.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 .min-h-46 {
     min-height: 46rem;
 }
 
-*, *:hover {
-    cursor: url("../assets/pointer.cur"), default;
-}
+/** {*/
+/*    cursor: url("../assets/pointer.cur"), default;*/
+/*}*/
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: "Bebas Neue Pro", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
 
-  background-repeat: repeat;
-  background-position: fixed;
+    background-repeat: repeat;
+    background-position: fixed;
+
 }
 
 body {
@@ -40,11 +36,11 @@ code {
 }
 
 p {
-    @apply text-zinc-300 mb-2
+    @apply mb-1
 }
 
 h1 {
-    @apply mb-2 text-zinc-300
+    @apply mb-1
 }
 
 .icon{
@@ -116,4 +112,147 @@ textarea{
 
 ::-webkit-scrollbar-thumb:hover {
     background: #8b8b8b;
+}
+
+@layer components {
+    /* Typography Styles */
+    .text-h1 {
+        @apply text-4xl font-bold;
+    }
+    .text-h2 {
+        @apply text-3xl font-semibold;
+    }
+    .text-h3 {
+        @apply text-2xl;
+    }
+    .text-h4 {
+        @apply text-xl;
+    }
+    .text-body {
+        @apply text-base text-foreground-secondary;
+    }
+    .text-small {
+        @apply text-sm text-foreground-muted
+    }
+
+    /* Button Styles */
+    .btn-secondary {
+        @apply transition duration-300 ease-in-out border border-transparent pb-1
+        hover:text-foreground-light hover:border-b-white;
+    }
+    .btn-primary {
+        @apply px-4 py-2 bg-primary-600 text-white rounded-lg
+        hover:bg-primary-700 transition-colors
+        border border-border hover:border-white/20
+        focus:outline-none focus:ring-2 focus:ring-white/20;
+    }
+    .btn-outline {
+        @apply px-4 py-1.5 border border-border text-foreground
+        rounded-lg hover:bg-border
+        transition-colors;
+    }
+    .btn-disabled {
+        @apply px-4 py-1.5 bg-background-secondary text-foreground-muted
+        rounded-lg border border-border
+        opacity-50 cursor-not-allowed;
+    }
+
+    /* Form Input Styles */
+    .input-label {
+        @apply block text-sm font-medium text-foreground-secondary mb-2;
+    }
+    .input-text {
+        @apply w-full px-3 py-2
+        bg-background-secondary border border-border
+        rounded-lg text-foreground
+        focus:outline-none focus:ring-2 focus:ring-white/20
+        placeholder-foreground-muted;
+    }
+    .input-select {
+        @apply w-full px-3 py-2
+        bg-background-secondary border border-border
+        rounded-lg text-foreground
+        focus:outline-none focus:ring-2 focus:ring-white/20;
+    }
+    .input-checkbox {
+        @apply h-4 w-4
+        bg-background-secondary border border-border
+        rounded text-primary-500
+        focus:ring-2 focus:ring-white/20;
+    }
+    .input-radio {
+        @apply h-4 w-4
+        bg-background-secondary border border-border
+        text-primary-500
+        focus:ring-2 focus:ring-white/20;
+    }
+
+    /* Card Styles */
+    .card {
+        @apply  border border-border
+        rounded-xl shadow-soft p-6 space-y-4
+        hover:border-white/20 transition-all;
+    }
+    .card-tertiary {
+        @apply bg-background-tertiary border border-border
+        rounded-xl shadow-medium p-6 space-y-4
+        hover:border-primary-500/50 transition-all;
+    }
+    .card-title {
+        @apply text-xl font-semibold;
+    }
+    .card-content {
+        @apply text-foreground-secondary;
+    }
+
+    /* Badge Styles */
+    .badge-primary {
+        @apply px-2 py-1 bg-primary-900/20 text-primary-400
+        rounded-full text-sm border border-primary-900/30;
+    }
+    .badge-success {
+        @apply px-2 py-1 bg-green-900/20 text-green-400
+        rounded-full text-sm border border-green-900/30;
+    }
+    .badge-error {
+        @apply px-2 py-1 bg-red-900/20 text-red-400
+        rounded-full text-sm border border-red-900/30;
+    }
+    .badge-warning {
+        @apply px-2 py-1 bg-yellow-900/20 text-yellow-400
+        rounded-full text-sm border border-yellow-900/30;
+    }
+
+    /* Alert Styles */
+    .alert-info {
+        @apply bg-blue-900/10 border border-blue-900/20
+        text-blue-400 p-4 rounded-lg flex items-start;
+    }
+    .alert-success {
+        @apply bg-green-900/10 border border-green-900/20
+        text-green-400 p-4 rounded-lg flex items-start;
+    }
+
+    /* Progress & Loader Styles */
+    .progress-bar {
+        @apply w-full bg-background-secondary rounded-full h-2.5 border border-border;
+    }
+    .progress-indicator {
+        @apply bg-primary-600 h-2.5 rounded-full;
+    }
+    .loader {
+        @apply animate-spin rounded-full h-5 w-5 border-b-2 border-white;
+    }
+
+    /* Tooltip Styles */
+    .tooltip-container {
+        @apply relative group;
+    }
+    .tooltip {
+        @apply hidden group-hover:block absolute z-10
+        bg-background-tertiary text-foreground
+        text-sm px-3 py-2 rounded-lg
+        -top-10 left-1/2 transform -translate-x-1/2
+        border border-border shadow-medium;
+    }
 }

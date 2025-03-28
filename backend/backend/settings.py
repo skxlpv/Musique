@@ -225,7 +225,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Session Cookie Settings
-SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax' if not DEBUG else 'None'
 
 # Additional Security Recommendations

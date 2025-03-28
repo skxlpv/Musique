@@ -37,10 +37,6 @@ class LoginSerializer(serializers.Serializer):
         username = data.get('username')
         password = data.get('password')
 
-        user = CustomUser.objects.filter(username=username).first()
-
-        print(username, password)
-
         if username and password:
             user = authenticate(
                 request=self.context.get('request'),

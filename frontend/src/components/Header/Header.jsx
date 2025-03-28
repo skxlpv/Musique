@@ -43,13 +43,15 @@ export const Header = () => {
     }, []);
 
     return (
-        <div className="mb-24">
-            <div className="flex w-full items-center shadow-md shadow-neutral-950 bg-black px-16 h-28 fixed z-10">
-                {/* Left section: Navigation links */}
-                <MemoizedLeftPanel />
+        <div className="mb-16">
+            <div className="border-b border-neutral-800 flex w-full items-center justify-between shadow-md  bg-black px-60 h-16 fixed z-10">
+                <div className="flex flex-row items-center w-1/4 justify-between">
+                    {/* Middle section: Logo */}
+                    <MemoizedCenterPanel />
 
-                {/* Middle section: Logo */}
-                <MemoizedCenterPanel />
+                    {/* Left section: Navigation links */}
+                    <MemoizedLeftPanel />
+                </div>
 
                 {/* Right section: Additional links and authentication state */}
                 <MemoizedRightPanel

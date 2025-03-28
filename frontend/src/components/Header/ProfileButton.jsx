@@ -14,7 +14,8 @@ export const ProfileButton = ({
     return (
         <li className="relative" ref={dropdownRef}>
             <div className={`relative z-10 ${isDropdownOpen ? 'profile-dropdown-open' : ''}`}>
-                <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={`button-card-outlined ${isDropdownOpen && `!border-2 !border-neutral-800`}`}>
+                <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className={`text-small btn-secondary ${isDropdownOpen && `!border-2 !border-neutral-800`}`}>
                     <div className="flex items-center">
                         <span className="text-ellipsis overflow-hidden mr-2">
                             {userData?.username || "No Profile"}

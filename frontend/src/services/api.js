@@ -8,7 +8,8 @@ const REGISTER_URL = `${BASE_URL}api/v1/register/`;
 const CHECK_AUTH_ROUTE = `${BASE_URL}api/v1/check_auth/`;
 const AUTH_URL = `${BASE_URL}api/v1/check_auth/`;
 const CURRENT_USER = `${BASE_URL}api/v1/users/me`
-const MEDIA_ROOT = `${BASE_URL}media/`
+const FILES_URL = `${BASE_URL}api/v1/files/`
+export const MEDIA_ROOT = `${BASE_URL}media/`
 export const MEDIA_AVATARS = `${MEDIA_ROOT}users/avatars/`
 
 function getCsrfToken() {
@@ -133,5 +134,14 @@ export const get_current_user = async () => {
     return call_refresh(error, () => api.get(CURRENT_USER));
   }
 };
+
+export const get_user_files = async (username) => {
+  try {
+    const response = await api.get(FILES_URL + `${username}/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export default api;

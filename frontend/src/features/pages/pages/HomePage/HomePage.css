@@ -10,7 +10,7 @@
     text-shadow: 0 4px 0px var(--shadowColor)
 }
 
-.card {
+.card-outlined {
     @apply
     flex flex-col justify-start items-center
     px-12 py-16 h-3/4 w-full
