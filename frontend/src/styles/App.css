@@ -8,3 +8,6 @@
     border-bottom-color: transparent;
 }
 
+.vertical-rule {
+    @apply flex flex-row border-l h-full
+}

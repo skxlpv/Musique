@@ -1,7 +1,9 @@
+import {BaseTab} from "./BaseTab";
+
 export const StatisticsTab = () => {
     return (
-        <div>
-            <h1 className="text-3xl">Statistics</h1>
-        </div>
+        <BaseTab tabTitle="Statistics">
+            <h1>Hello</h1>
+        </BaseTab>
     )
 }

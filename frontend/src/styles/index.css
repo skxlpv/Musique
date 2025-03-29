@@ -27,8 +27,6 @@ body {
 body {
   background-color: rgb(0, 0, 0);
   color: white;
-
-  padding-bottom: 20rem;
 }
 
 code {
@@ -190,7 +188,7 @@ textarea{
     /* Card Styles */
     .card {
         @apply  border border-border
-        rounded-xl shadow-soft p-6 space-y-4
+        rounded-xl shadow-soft
         hover:border-white/20 transition-all;
     }
     .card-tertiary {

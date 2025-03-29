@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'api.v1.api',
     'api.v1.users',
+    'api.v1.user_profile',
     'api.v1.dictionary',
     'api.v1.pages',
     'api.v1.files',

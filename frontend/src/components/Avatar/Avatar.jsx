@@ -5,7 +5,7 @@ import { BASE_URL, MEDIA_AVATARS } from "../../services/api";
 const SIZE_CLASSES = {
     sm: "h-6 w-6",
     md: "h-12 w-12",
-    lg: "h-24 w-24",
+    lg: "h-16 w-16",
     xl: "h-32 w-32",
     xl2: "h-40 w-40",
     xl3: "h-52 w-52",
@@ -30,7 +30,7 @@ export const Avatar = ({ size = "md" }) => {
         <img
             src={imageSource}
             alt={`${userData?.username || "User"} avatar`}
-            className={`max-w-none rounded-xl object-cover flex-nowrap ${imageSizeStyle}`}
+            className={`max-w-none object-cover flex-nowrap ${imageSizeStyle}`}
             onError={(e) => {
                 e.target.src = DEFAULT_AVATAR_PATH;
             }}

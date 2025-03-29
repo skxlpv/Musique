@@ -1,42 +1,58 @@
-import React from "react";
-import {useAuth} from '../../auth/contexts/useAuth'
-import {Avatar} from '../../../components/Avatar/Avatar'
-import {TabsContainer} from "../../../components/TabsContainer/TabsContainer";
-import {profileOptions} from "../../../utils/profileTabs";
+import React from 'react';
+import { Mail, Calendar } from 'lucide-react';
+import {Avatar} from "../../../components/Avatar/Avatar";
+import {useAuth} from "../../auth/contexts/useAuth";
 
 export const BaseInfo = () => {
     const {userData} = useAuth();
 
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+
+        const date = new Date(dateString);
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) return dateString;
+
+        // Format as Month Day, Year (e.g., March 22, 2025)
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
     return (
-        <div className="flex flex-row items-center justify-between">
-            <div className="flex flex-row items-start pt-4">
-                <div className="pl-6">
-                    <Avatar size="xl"/>
-                </div>
-                <div className="flex flex-col justify-start pl-6">
-                    <div className="w-full">
-                        <div className="flex flex-row gap-4 items-end w-full">
-                            <p className="text-h">
-                                {userData.first_name} {userData.last_name}
-                            </p>
-                        </div>
-                        <div className="m-0 flex flex-row gap-4">
-                            <p className="text-small">
-                                Theatre Artist. {userData.pronouns}
-                            </p>
+        <div className="flex">
+            {/* Left section - Name and title */}
+            <div className="w-full">
+                <div className="flex gap-4">
+                    <div className="flex ml-2 mb-4">
+                        <Avatar size={"lg"}/>
+                    </div>
+                    <div>
+                        <h1 className="text-h2">
+                            {userData.first_name} {userData.last_name}
+                        </h1>
+                        <div className="text-body">
+                            <span>{userData.username}</span>
+                            <span className="text-small badge-warning">{userData.pronouns}</span>
                         </div>
                     </div>
-                    <hr className="border-neutral-600 my-1 w-11/12"/>
-                    <div className="flex flex-col">
-                        <p className="text-body">Email:
-                            <p className="inline text-zinc-400"> {userData.email}</p>
-                        </p>
-                        <p className="text-body">Phone Number:
-                            <p className="inline text-zinc-400">+380965639681</p>
-                        </p>
+                </div>
+                <div className="flex flex-row h-fit gap-4">
+                    <div className="flex items-center">
+                        <Mail size={16} className="mr-1 text-white" />
+                        <span className="text-body">{userData.email}</span>
+                    </div>
+                    <div className="flex items-center">
+                        <Calendar size={16} className="mr-1 text-white" />
+                        <span className="text-body">Joined {formatDate(userData.joined_at)}</span>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 };
+
+export default BaseInfo;

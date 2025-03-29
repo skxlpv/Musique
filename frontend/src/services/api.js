@@ -131,6 +131,7 @@ export const get_current_user = async () => {
     const response = await api.get(CURRENT_USER);
     return response.data;
   } catch (error) {
+    console.log(error)
     return call_refresh(error, () => api.get(CURRENT_USER));
   }
 };

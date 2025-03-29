@@ -37,15 +37,16 @@ export const FileRenderer = ({ file }) => {
     });
 
     return (
-        <div className="card-tertiary p-4 w-1/6 h-80 flex flex-col justify-between">
+        <div className="card w-52 h-80 flex flex-col justify-between">
             <div className="flex justify-center h-1/2 items-center">
-                <FileIcon size={90}/>
+                {/*<FileIcon size={60}/>*/}
             </div>
-            <div className="border-t-gray-400 border-t flex flex-col">
-                <h2 className="text-xl truncate">{file.title}</h2>
-                <span className="text-base truncate">{file.description}</span>
-                <span className="text-base truncate">Category: {file.category}</span>
-                <span className="text-base truncate">Uploaded: {formattedDate}</span>
+            <div className="flex flex-col">
+                <hr className="border-zinc-600"/>
+                <div className="flex flex-col pb-4 px-4">
+                    <h2 className="text-base truncate mt-2">{file.title}</h2>
+                    <span className="text-small truncate">Uploaded: {formattedDate}</span>
+                </div>
             </div>
         </div>
     );

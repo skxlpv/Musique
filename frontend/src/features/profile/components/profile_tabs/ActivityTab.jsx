@@ -1,7 +1,9 @@
+import {BaseTab} from "./BaseTab";
+
 export const ActivityTab = () => {
     return (
-        <div>
-            <h1 className="text-3xl">Activity</h1>
-        </div>
+        <BaseTab tabTitle="Activity">
+            <h1>Hello</h1>
+        </BaseTab>
     )
 }

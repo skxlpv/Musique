@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from api.v1.users.views import UserListView
-from api.v1.users.views import UserProfileView
+from api.v1.user_profile.views import UserProfileView
 from django.urls import path
 
 app_name = 'users'

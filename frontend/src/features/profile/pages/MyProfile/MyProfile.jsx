@@ -10,12 +10,8 @@ export const MyProfile = () => {
 
     return (
         <div className="flex min-w-full justify-center">
-            {/* Main content area with left padding to accommodate sidebar */}
             <div className="flex flex-col min-w-full">
-                <div className="card mb-4">
-                    <BaseInfo/>
-                </div>
-                {/* Fixed sidebar container */}
+                <BaseInfo/>
                 <div className="w-full flex justify-center">
                     <TabsContainer object={profileOptions}/>
                 </div>
