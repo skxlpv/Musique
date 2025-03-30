@@ -28,7 +28,6 @@ export const Header = () => {
         }
     };
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -44,16 +43,12 @@ export const Header = () => {
 
     return (
         <div className="mb-16">
-            <div className="border-b border-neutral-800 flex w-full items-center justify-between shadow-md  bg-black px-60 h-16 fixed z-10">
-                <div className="flex flex-row items-center w-1/4 justify-between">
-                    {/* Middle section: Logo */}
+            <div className="border-b border-border flex w-full items-center justify-between shadow-medium bg-background px-4 md:px-8 lg:px-60 h-16 fixed top-0 z-10">
+                <div className="flex flex-row items-center w-full lg:w-1/4 justify-between">
                     <MemoizedCenterPanel />
-
-                    {/* Left section: Navigation links */}
                     <MemoizedLeftPanel />
                 </div>
 
-                {/* Right section: Additional links and authentication state */}
                 <MemoizedRightPanel
                     loading={loading}
                     isAuthenticated={isAuthenticated}
@@ -66,7 +61,7 @@ export const Header = () => {
                     handleLogout={handleLogout} />
             </div>
             <SubHeader
-                additionalStyle={"z-0 absolute top-28"}
+                additionalStyle="z-0 absolute top-28"
                 object={headerPageNamesObject}
             />
         </div>

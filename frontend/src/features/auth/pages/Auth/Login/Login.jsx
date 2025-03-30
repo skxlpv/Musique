@@ -32,7 +32,7 @@ export const Login = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col text-black gap-4">
+        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-4">
             <input
                 type="text"
                 placeholder="Username"

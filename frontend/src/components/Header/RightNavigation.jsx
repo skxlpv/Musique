@@ -17,13 +17,13 @@ export const RightNavigation = ({
         <div className="mt-1">
             <ul className="flex text-xl gap-4">
                 <li>
-                    <a className="text-small btn-secondary" href={routes.upload_file.url}>Add Work</a>
+                    <a className="body-small btn" href={routes.upload_file.url}>Add Work</a>
                 </li>
                 <li>
-                    <a className="text-small btn-secondary" href={routes.home_page.url}>About</a>
+                    <a className="body-small btn" href={routes.home_page.url}>About</a>
                 </li>
                 <li>
-                    <a className="text-small btn-secondary" href={routes.home_page.url}>Contacts</a>
+                    <a className="body-small btn" href={routes.home_page.url}>Contacts</a>
                 </li>
                 {/* Only show when NOT loading */}
                 {!loading && <>

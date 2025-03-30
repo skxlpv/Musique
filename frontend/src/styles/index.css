@@ -10,6 +10,11 @@
 
 /* Base Styles */
 @layer base {
+
+    html {
+        scroll-behavior: smooth !important;
+    }
+
     body {
         @apply bg-background text-foreground antialiased font-sans tracking-tighter;
     }
@@ -49,9 +54,12 @@
 
     /* Buttons */
     .btn {
-        @apply inline-flex items-center justify-center font-medium rounded-lg
-        transition-colors focus:outline-none focus:ring-2;
+        @apply inline-flex items-center justify-center font-medium transition-all pb-0.5 border-b border-b-black;
     }
+    .btn:hover {
+        @apply border-b border-b-white;
+    }
+
     .btn-primary {
         @apply px-4 py-2 bg-primary-600 text-white border border-primary-700
         hover:bg-primary-700 hover:border-primary-500
@@ -67,7 +75,7 @@
         hover:bg-accent-purple/80 focus:ring-accent-purple/50;
     }
     .btn-icon {
-        @apply p-2 rounded-lg border hover:bg-primary-900/30;
+        @apply p-2 rounded-lg border hover:bg-background-secondary;
     }
     .btn-group {
         @apply inline-flex rounded-md shadow-sm [&>button]:rounded-none

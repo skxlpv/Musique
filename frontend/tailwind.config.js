@@ -14,9 +14,9 @@ module.exports = {
             },
             colors: {
                 background: {
-                    DEFAULT: '#0a0a0a',
-                    secondary: '#111111',
-                    tertiary: '#161616'
+                    DEFAULT: 'black',
+                    secondary: '#222222',
+                    tertiary: '#333333',
                 },
                 foreground: {
                     DEFAULT: '#fafafa',
