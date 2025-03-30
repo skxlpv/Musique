@@ -51,6 +51,15 @@ export const BaseInfo = () => {
                     </div>
                 </div>
             </div>
+            <div className="flex gap-4 w-1/3 justify-end">
+                <ul>
+                    <li>
+                        <button className="text-small btn-secondary">
+                            Create a Sub Profile
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
     );
 };

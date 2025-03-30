@@ -18,6 +18,30 @@ class UserProfileView(generics.GenericAPIView):
             )
             avatar_url = user_profile.avatar.url if user_profile.avatar else None
 
+            sub_profiles_data = []
+
+            for sub_profile in user_profile.all_subprofiles:
+                fields = {field.name: field for field in sub_profile._meta.fields
+                          if not field.is_relation and field.name != 'id'}
+
+                sub_profile_data = {
+                    'id': sub_profile.id,
+                    'profile_name': sub_profile.__class__.__name__,
+                    'content': {},
+                }
+
+                for field_name, field in fields.items():
+                    value = getattr(sub_profile, field_name)
+                    if hasattr(value, 'url'):  # For FileField/ImageField
+                        value = value.url if value else None
+                    sub_profile_data['content'][field_name] = value
+
+                for field in sub_profile._meta.many_to_many:
+                    related_objects = getattr(sub_profile, field.name).all()
+                    sub_profile_data['content'][field.name] = [obj.id for obj in related_objects]
+
+                sub_profiles_data.append(sub_profile_data)
+
             response_data = {
                 'username': user_profile.user.username,
                 "first_name": user_profile.first_name,
@@ -28,11 +52,10 @@ class UserProfileView(generics.GenericAPIView):
                 'pronouns': user_profile.get_pronouns_display(),
                 'custom_pronouns': user_profile.custom_pronouns,
                 'avatar': avatar_url,
-                'social_links': user_profile.social_links,
                 'joined_at': user_profile.joined_at,
                 'favour_points': user_profile.favour_points,
+                'sub_profiles' : sub_profiles_data,
             }
-
 
             return Response(
                 response_data,

@@ -124,7 +124,7 @@ def logout(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['POST'])
+@api_view(['HEAD'])
 @permission_classes([IsAuthenticated])
 def is_authenticated(request):
     return Response({'authenticated': True})
