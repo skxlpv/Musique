@@ -1,7 +1,7 @@
 from django.db import models
 
 class TheatreRole(models.Model):
-    artist = models.ForeignKey('TheatreArtist', on_delete=models.CASCADE, related_name='past_roles')
+    artist = models.ForeignKey('TheatreArtistProfile', on_delete=models.CASCADE, related_name='past_roles')
     role = models.CharField(max_length=100)
     production = models.CharField(max_length=200)
     year = models.PositiveIntegerField()

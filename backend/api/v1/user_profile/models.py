@@ -36,6 +36,20 @@ class UserProfile(models.Model):
         NONE = ('none', _('None'),)
         OTHER = ('other', _('Other'),)
 
+    class ProfileType(models.TextChoices):
+        DEFAULT = 'default', _('Default')
+        MUSICIAN = 'musician', _('Musician')
+        ARTIST = 'artist', _('Artist')
+        THEATRE = 'theatre', _('Theatre Artist')
+        WRITER = 'writer', _('Writer')
+        CRAFTSMAN = 'craftsman', _('Craftsman')
+
+    profile_type = models.CharField(
+        max_length=20,
+        choices=ProfileType.choices,
+        default=ProfileType.DEFAULT
+    )
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -78,6 +92,24 @@ class UserProfile(models.Model):
     def last_name(self):
         return self.user.last_name
 
+    @property
+    def all_subprofiles(self):
+        """Return all subprofiles associated with this profile"""
+        subprofiles = []
+
+        if hasattr(self, 'musician_profiles'):
+            subprofiles.extend(self.musician_profiles.all())
+        if hasattr(self, 'artist_profiles'):
+            subprofiles.extend(self.artist_profiles.all())
+        if hasattr(self, 'theatre_artist_profiles'):
+            subprofiles.extend(self.theatre_artist_profiles.all())
+        if hasattr(self, 'writer_profiles'):
+            subprofiles.extend(self.writer_profiles.all())
+        if hasattr(self, 'craftsman_profiles'):
+            subprofiles.extend(self.craftsman_profiles.all())
+
+        return subprofiles
+
     def clean(self):
         super().clean()
         if self.pronouns == self.Pronouns.OTHER and not self.custom_pronouns:
@@ -85,11 +117,72 @@ class UserProfile(models.Model):
                 {'custom_pronouns': "Please specify your pronouns when selecting 'Other'"},
             )
 
+    def create_subprofile(self, profile_type, **kwargs):
+        """Create a new subprofile of the specified type for this profile"""
+        model_map = {
+            self.ProfileType.MUSICIAN: MusicianProfile,
+            self.ProfileType.ARTIST: ArtistProfile,
+            self.ProfileType.THEATRE: TheatreArtistProfile,
+            self.ProfileType.WRITER: WriterProfile,
+            self.ProfileType.CRAFTSMAN: CraftsmanProfile,
+        }
+
+        if profile_type not in model_map:
+            raise ValueError(f"Invalid profile type: {profile_type}")
+
+        # Check if profile already exists
+        if self.has_subprofile(profile_type):
+            raise ValidationError(f"User already has a {profile_type} profile")
+
+        profile_class = model_map[profile_type]
+        subprofile = profile_class(main_profile=self, **kwargs)
+        subprofile.save()
+        return subprofile
+
+    def has_subprofile(self, profile_type):
+        """Check if profile has a specific subprofile type"""
+        related_name_map = {
+            self.ProfileType.MUSICIAN: 'musician_profiles',
+            self.ProfileType.ARTIST: 'artist_profiles',
+            self.ProfileType.THEATRE: 'theatre_artist_profiles',
+            self.ProfileType.WRITER: 'writer_profiles',
+            self.ProfileType.CRAFTSMAN: 'craftsman_profiles',
+        }
+
+        if profile_type not in related_name_map:
+            raise ValueError(f"Invalid profile type: {profile_type}")
+
+        related_name = related_name_map[profile_type]
+        return getattr(self, related_name).exists()
+
+    def get_subprofile(self, profile_type):
+        """Get a specific subprofile if it exists"""
+        related_name_map = {
+            self.ProfileType.MUSICIAN: 'musician_profiles',
+            self.ProfileType.ARTIST: 'artist_profiles',
+            self.ProfileType.THEATRE: 'theatre_artist_profiles',
+            self.ProfileType.WRITER: 'writer_profiles',
+            self.ProfileType.CRAFTSMAN: 'craftsman_profiles',
+        }
+
+        if profile_type not in related_name_map:
+            raise ValueError(f"Invalid profile type: {profile_type}")
+
+        related_name = related_name_map[profile_type]
+        return getattr(self, related_name).first()
+
     class Meta:
         ordering = ['-joined_at']
 
 
-class Musician(UserProfile):
+# Changed from subclass to standalone models with FKs to main profile
+
+class MusicianProfile(models.Model):
+    main_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='musician_profiles'
+    )
     instruments = models.ManyToManyField(Instrument, blank=True)
     genres = models.ManyToManyField(Genre, blank=True)
     bands = models.ManyToManyField(Band, blank=True)
@@ -97,23 +190,37 @@ class Musician(UserProfile):
     class Meta:
         verbose_name = 'Musician Profile'
         verbose_name_plural = 'Musician Profiles'
+        # Add constraint to ensure uniqueness
+        constraints = [
+            models.UniqueConstraint(fields=['main_profile'], name='unique_musician_profile')
+        ]
 
     def __str__(self):
-        return f"{self.user.username}'s Musician Profile"
+        return f"{self.main_profile.user.username}'s Musician Profile"
 
 
-class Artist(UserProfile):
+class ArtistProfile(models.Model):
+    main_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='artist_profiles'
+    )
     styles = models.ManyToManyField(Style, blank=True)
     mediums = models.ManyToManyField(Medium, blank=True)
 
     class Meta:
         verbose_name = 'Artist Profile'
         verbose_name_plural = 'Artist Profiles'
+        # Add constraint to ensure uniqueness
+        constraints = [
+            models.UniqueConstraint(fields=['main_profile'], name='unique_artist_profile')
+        ]
 
     def __str__(self):
-        return f"{self.user.username}'s Artist Profile"
+        return f"{self.main_profile.user.username}'s Artist Profile"
 
-class TheatreArtist(UserProfile):
+
+class TheatreArtistProfile(models.Model):
     SPECIALTY_CHOICES = [
         ('actor', 'Actor'),
         ('director', 'Director'),
@@ -122,32 +229,51 @@ class TheatreArtist(UserProfile):
         ('other', 'Other'),
     ]
 
+    main_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='theatre_artist_profiles'
+    )
     specialty = models.CharField(max_length=20, choices=SPECIALTY_CHOICES)
     current_projects = models.ManyToManyField('TheatreProject', blank=True)
     theatre_companies = models.ManyToManyField(TheatreCompany, blank=True)
-    preferred_genre = models.ManyToManyField(TheatrePieceGenre, blank=True, help_text="Theatre artist's preferred genre")
-
+    preferred_genre = models.ManyToManyField(TheatrePieceGenre, blank=True,
+                                             help_text="Theatre artist's preferred genre")
 
     class Meta:
         verbose_name = 'Theatre Artist Profile'
         verbose_name_plural = 'Theatre Artist Profiles'
+        # Add constraint to ensure uniqueness
+        constraints = [
+            models.UniqueConstraint(fields=['main_profile'], name='unique_theatre_artist_profile')
+        ]
 
     def __str__(self):
-        return f"{self.user.username}'s Theatre Artist Profile"
+        return f"{self.main_profile.user.username}'s Theatre Artist Profile"
 
-class Writer(UserProfile):
+
+class WriterProfile(models.Model):
+    main_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='writer_profiles'
+    )
     genres = models.ManyToManyField(WriterGenre, blank=True)
     influences = models.CharField(max_length=200, blank=True)
 
     class Meta:
         verbose_name = 'Writer Profile'
         verbose_name_plural = 'Writer Profiles'
+        # Add constraint to ensure uniqueness
+        constraints = [
+            models.UniqueConstraint(fields=['main_profile'], name='unique_writer_profile')
+        ]
 
     def __str__(self):
-        return f"{self.user.username}'s Writer Profile"
+        return f"{self.main_profile.user.username}'s Writer Profile"
 
 
-class Craftsman(UserProfile):
+class CraftsmanProfile(models.Model):
     CRAFT_TYPE_CHOICES = [
         ('woodworking', 'Woodworking'),
         ('pottery', 'Pottery'),
@@ -157,12 +283,21 @@ class Craftsman(UserProfile):
         ('other', 'Other'),
     ]
 
+    main_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='craftsman_profiles'
+    )
     craft_type = models.CharField(max_length=20, choices=CRAFT_TYPE_CHOICES, help_text="Preferred user type of craft")
     materials = models.ManyToManyField(Material, blank=True)
 
     class Meta:
         verbose_name = 'Craftsman Profile'
         verbose_name_plural = 'Craftsman Profiles'
+        # Add constraint to ensure uniqueness
+        constraints = [
+            models.UniqueConstraint(fields=['main_profile'], name='unique_craftsman_profile')
+        ]
 
     def __str__(self):
-        return f"{self.user.username}'s Craftsman Profile"
+        return f"{self.main_profile.user.username}'s Craftsman Profile"

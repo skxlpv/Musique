@@ -9,7 +9,7 @@ class Medium(models.Model):
 
 
 class Exhibition(models.Model):
-    artist = models.ForeignKey('Artist', on_delete=models.CASCADE, related_name='exhibitions')
+    artist = models.ForeignKey('ArtistProfile', on_delete=models.CASCADE, related_name='exhibitions')
     title = models.CharField(max_length=200)
     date = models.DateField()
     location = models.CharField(max_length=200)
