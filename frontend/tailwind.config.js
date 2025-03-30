@@ -9,63 +9,72 @@ module.exports = {
     darkMode: 'class',
     theme: {
         extend: {
-            // Dark theme color palette
+            fontFamily: {
+                sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+            },
             colors: {
                 background: {
                     DEFAULT: '#0a0a0a',
-                    secondary: '#161616',
-                    tertiary: '#1f1f1f'
+                    secondary: '#111111',
+                    tertiary: '#161616'
                 },
                 foreground: {
-                    DEFAULT: '#888888',
+                    DEFAULT: '#fafafa',
                     secondary: '#a1a1a1',
-                    muted: '#737373',
-                    light: '#fafafa'
+                    muted: '#737373'
                 },
                 border: {
-                    DEFAULT: '#262626',
-                    hover: '#3f3f3f'
+                    DEFAULT: '#333333',
+                    hover: '#555555'
                 },
                 primary: {
-                    50: '#f0f9ff',
-                    100: '#e0f2fe',
-                    200: '#bae6fd',
-                    300: '#7dd3fc',
-                    400: '#38bdf8',
-                    500: '#0ea5e9',
-                    600: '#0284c7',
-                    700: '#0369a1',
-                    800: '#075985',
-                    900: '#0c4a6e'
+                    50: '#e6f5ff',
+                    100: '#cceaff',
+                    200: '#99d5ff',
+                    300: '#66c0ff',
+                    400: '#33aaff',
+                    500: '#0095ff',
+                    600: '#0077cc',
+                    700: '#005999',
+                    800: '#003c66',
+                    900: '#001e33'
+                },
+                accent: {
+                    purple: '#6d28d9',
+                    blue: '#1d4ed8',
+                    teal: '#0d9488',
+                    amber: '#d97706',
+                    pink: '#db2777'
+                },
+                success: {
+                    DEFAULT: '#10b981',
+                    dark: '#065f46'
+                },
+                warning: {
+                    DEFAULT: '#f59e0b',
+                    light: 'rgba(245, 158, 11, 0.2)',
+                    dark: '#92400e'
+                },
+                error: {
+                    DEFAULT: '#ef4444',
+                    dark: '#991b1b'
+                },
+                info: {
+                    DEFAULT: '#3b82f6',
+                    dark: '#1e40af'
                 }
             },
-            // Additional border radius
-            borderRadius: {
-                'lg': '0.5rem',
-                'xl': '0.75rem',
-                '2xl': '1rem'
-            },
-            // Custom box shadows
-            boxShadow: {
-                'soft': '0 1px 2px 0 rgba(255, 255, 255, 0.05)',
-                'medium': '0 2px 4px 0 rgba(255, 255, 255, 0.1)'
-            },
-            // Background image with noise
             backgroundImage: {
                 'grainy-gradient': `
                     linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to)),
                     url(https://grainy-gradients.vercel.app/noise.svg)
                 `,
             },
-            // Custom animation for loader
-            animation: {
-                'spin-slow': 'spin 1.5s linear infinite',
-            }
         },
     },
     plugins: [
         // Optional: Custom scrollbar plugin
-        plugin(function({ addUtilities }) {
+        plugin(function ({addUtilities}) {
             addUtilities({
                 '.scrollbar-thin': {
                     '&::-webkit-scrollbar': {

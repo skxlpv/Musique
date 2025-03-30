@@ -38,9 +38,25 @@ class UserProfileView(generics.GenericAPIView):
 
                 for field in sub_profile._meta.many_to_many:
                     related_objects = getattr(sub_profile, field.name).all()
-                    sub_profile_data['content'][field.name] = [obj.id for obj in related_objects]
+                    related_objects_data = []
+
+                    for obj in related_objects:
+                        obj_fields = {f.name: f for f in obj._meta.fields if not f.is_relation}
+                        obj_data = {}
+
+                        for field_name, field_obj in obj_fields.items():
+                            value = getattr(obj, field_name)
+                            if hasattr(value, 'url'):  # Handle FileField/ImageField
+                                value = value.url if value else None
+                            obj_data[field_name] = value
+
+                        related_objects_data.append(obj_data)
+
+                    sub_profile_data['content'][field.name] = related_objects_data
 
                 sub_profiles_data.append(sub_profile_data)
+
+
 
             response_data = {
                 'username': user_profile.user.username,

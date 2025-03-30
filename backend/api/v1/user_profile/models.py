@@ -176,7 +176,6 @@ class UserProfile(models.Model):
 
 
 # Changed from subclass to standalone models with FKs to main profile
-
 class MusicianProfile(models.Model):
     main_profile = models.ForeignKey(
         UserProfile,
@@ -190,7 +189,6 @@ class MusicianProfile(models.Model):
     class Meta:
         verbose_name = 'Musician Profile'
         verbose_name_plural = 'Musician Profiles'
-        # Add constraint to ensure uniqueness
         constraints = [
             models.UniqueConstraint(fields=['main_profile'], name='unique_musician_profile')
         ]
@@ -211,7 +209,6 @@ class ArtistProfile(models.Model):
     class Meta:
         verbose_name = 'Artist Profile'
         verbose_name_plural = 'Artist Profiles'
-        # Add constraint to ensure uniqueness
         constraints = [
             models.UniqueConstraint(fields=['main_profile'], name='unique_artist_profile')
         ]
@@ -243,7 +240,6 @@ class TheatreArtistProfile(models.Model):
     class Meta:
         verbose_name = 'Theatre Artist Profile'
         verbose_name_plural = 'Theatre Artist Profiles'
-        # Add constraint to ensure uniqueness
         constraints = [
             models.UniqueConstraint(fields=['main_profile'], name='unique_theatre_artist_profile')
         ]
@@ -264,7 +260,6 @@ class WriterProfile(models.Model):
     class Meta:
         verbose_name = 'Writer Profile'
         verbose_name_plural = 'Writer Profiles'
-        # Add constraint to ensure uniqueness
         constraints = [
             models.UniqueConstraint(fields=['main_profile'], name='unique_writer_profile')
         ]
@@ -294,7 +289,6 @@ class CraftsmanProfile(models.Model):
     class Meta:
         verbose_name = 'Craftsman Profile'
         verbose_name_plural = 'Craftsman Profiles'
-        # Add constraint to ensure uniqueness
         constraints = [
             models.UniqueConstraint(fields=['main_profile'], name='unique_craftsman_profile')
         ]

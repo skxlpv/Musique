@@ -29,15 +29,18 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
 # Application definition
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+
     'api.v1.api',
     'api.v1.users',
     'api.v1.user_profile',
@@ -234,3 +237,59 @@ SECURE_SSL_REDIRECT = not DEBUG
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
+
+JAZZMIN_SETTINGS = {
+    "menu": [
+        {
+            "name": "Profiles",
+            "models": [
+                "user_profile.UserProfile",
+                "user_profile.MusicianProfile",
+                "user_profile.ArtistProfile",
+                "user_profile.TheatreArtistProfile",
+                "user_profile.WriterProfile",
+                "user_profile.CraftsmanProfile",
+            ],
+        },
+        {
+            "name": "Musician Specific",
+            "models": [
+                "user_profile.Instrument",
+                "user_profile.Band",
+                "user_profile.Genre",
+            ],
+        },
+        {
+            "name": "Artist Specific",
+            "models": [
+                "user_profile.Style",
+                "user_profile.Medium",
+                "user_profile.Exhibition",
+            ],
+        },
+        {
+            "name": "Craftsman Specific",
+            "models": [
+                "user_profile.Material",
+                "user_profile.Workshop",
+            ],
+        },
+        {
+            "name": "Theatre Artist Specific",
+            "models": [
+                "user_profile.TheatreRole",
+                "user_profile.TheatreCompany",
+                "user_profile.TheatrePieceGenre",
+                "user_profile.TheatreProject",
+            ],
+        },
+        {
+            "name": "Writer Specific",
+            "models": [
+                "user_profile.WriterGenre",
+            ],
+        },
+    ],
+    "navigation_expanded": False,
+    "theme": "dark",
+}

@@ -5,7 +5,6 @@ const REFRESH_URL = `${BASE_URL}api/token/refresh/`;
 const LOGIN_URL = `${BASE_URL}api/token/`;
 const LOGOUT_URL = `${BASE_URL}api/v1/logout/`;
 const REGISTER_URL = `${BASE_URL}api/v1/register/`;
-const CHECK_AUTH_ROUTE = `${BASE_URL}api/v1/check_auth/`;
 const AUTH_URL = `${BASE_URL}api/v1/check_auth/`;
 const CURRENT_USER = `${BASE_URL}api/v1/users/me`
 const FILES_URL = `${BASE_URL}api/v1/files/`
@@ -108,18 +107,9 @@ export const register_user = async (data) => {
   }
 };
 
-export const check_auth = async () => {
-  try {
-    const response = await api.get(CHECK_AUTH_ROUTE);
-    return response.data;
-  } catch (error) {
-    return call_refresh(error, () => api.get(CHECK_AUTH_ROUTE));
-  }
-};
-
 export const is_authenticated = async () => {
   try {
-    await api.post(AUTH_URL, {});
+    await api.head(AUTH_URL, {});
     return true;
   } catch (error) {
     return false;
@@ -129,6 +119,7 @@ export const is_authenticated = async () => {
 export const get_current_user = async () => {
   try {
     const response = await api.get(CURRENT_USER);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error)
