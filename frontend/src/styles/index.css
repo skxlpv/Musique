@@ -8,9 +8,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base Styles */
 @layer base {
-
     html {
         scroll-behavior: smooth !important;
     }
@@ -39,23 +37,49 @@
     }
 }
 
-/* Component Styles */
 @layer components {
-    /* Typography */
-    .heading-1 { @apply text-5xl font-bold; }
-    .heading-2 { @apply text-4xl font-bold; }
-    .heading-3 { @apply text-3xl font-semibold; }
-    .heading-4 { @apply text-2xl font-semibold; }
-    .heading-5 { @apply text-xl font-medium; }
-    .heading-6 { @apply text-lg font-medium; }
-    .body-large { @apply text-lg; }
-    .body-small { @apply text-sm; }
-    .body-xsmall { @apply text-xs; }
+    /* === Typography === */
+    .heading-1 {
+        @apply text-5xl font-bold;
+    }
 
-    /* Buttons */
+    .heading-2 {
+        @apply text-4xl font-bold;
+    }
+
+    .heading-3 {
+        @apply text-3xl font-semibold;
+    }
+
+    .heading-4 {
+        @apply text-2xl font-semibold;
+    }
+
+    .heading-5 {
+        @apply text-xl font-medium;
+    }
+
+    .heading-6 {
+        @apply text-lg font-medium;
+    }
+
+    .body-large {
+        @apply text-lg;
+    }
+
+    .body-small {
+        @apply text-sm;
+    }
+
+    .body-xsmall {
+        @apply text-xs;
+    }
+
+    /* === Buttons === */
     .btn {
         @apply inline-flex items-center justify-center font-medium transition-all pb-0.5 border-b border-b-black;
     }
+
     .btn:hover {
         @apply border-b border-b-white;
     }
@@ -65,24 +89,28 @@
         hover:bg-primary-700 hover:border-primary-500
         focus:ring-primary-500/50;
     }
+
     .btn-outline {
         @apply px-4 py-2 bg-transparent border-2 hover:bg-primary-900/30
         border-primary-700 text-primary-400
         hover:border-primary-600 focus:ring-primary-500/50;
     }
+
     .btn-accent {
         @apply px-4 py-2 bg-accent-purple text-white border-accent-purple
         hover:bg-accent-purple/80 focus:ring-accent-purple/50;
     }
+
     .btn-icon {
         @apply p-2 rounded-lg border hover:bg-background-secondary;
     }
+
     .btn-group {
         @apply inline-flex rounded-md shadow-sm [&>button]:rounded-none
         [&>button:first-child]:rounded-l-lg [&>button:last-child]:rounded-r-lg;
     }
 
-    /* Form Elements */
+    /* === Form Elements === */
     .input {
         @apply w-full px-3 py-2 bg-background border-2 border-border rounded-lg
         placeholder-foreground-muted focus:border-primary-500
@@ -112,14 +140,23 @@
     }
     .toggle-checked { @apply translate-x-4 bg-primary-500 border-primary-500; }
 
-    /* Cards */
+    /* === Cards & Structures === */
     .card {
         @apply bg-background-secondary rounded-xl border-2 border-border p-6;
     }
     .card-header { @apply flex items-center gap-4 mb-4; }
     .card-icon { @apply p-3 bg-primary-900/30 rounded-lg; }
 
-    /* Alerts */
+    /* === Tables === */
+    .table-container { @apply border-2 border-border rounded-xl overflow-hidden; }
+    .table {
+        @apply w-full divide-y divide-border;
+    }
+    .table th { @apply px-6 py-4 text-left font-medium bg-background-secondary; }
+    .table td { @apply px-6 py-4; }
+    .table tr:nth-child(even) { @apply bg-background-secondary; }
+
+    /* === Alerts & Badges === */
     .alert {
         @apply p-4 rounded-lg border-2 flex items-start gap-3;
     }
@@ -136,7 +173,7 @@
         @apply bg-info/20 border-info/30 text-info;
     }
 
-    /* Badges & Tags */
+    /* === Badges & Tags === */
     .badge {
         @apply px-3 py-1 rounded-full text-sm inline-flex items-center gap-2;
     }
@@ -149,44 +186,7 @@
     .badge-teal { @apply bg-accent-teal/20 text-accent-teal; }
     .badge-amber { @apply bg-accent-amber/20 text-accent-amber; }
 
-    /* Tooltips & Popovers */
-    .tooltip-container { @apply group relative inline-block; }
-    .tooltip {
-        @apply absolute hidden group-hover:block bg-background-secondary
-        text-sm px-3 py-2 rounded-lg border-2 border-border shadow-medium;
-    }
-    .tooltip-arrow {
-        @apply absolute w-3 h-3 bg-background-secondary border-b-2 border-r-2
-        border-border rotate-45;
-    }
-
-    /* Progress & Loaders */
-    .progress-bar { @apply w-full h-2 bg-background-tertiary rounded-full; }
-    .progress-fill { @apply h-2 rounded-full transition-all duration-300; }
-    .spinner {
-        @apply animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full;
-    }
-    .bounce-loader { @apply flex gap-2 [&>div]:w-3 [&>div]:h-3 [&>div]:bg-primary-500 [&>div]:rounded-full; }
-
-    /* Tables */
-    .table-container { @apply border-2 border-border rounded-xl overflow-hidden; }
-    .table {
-        @apply w-full divide-y divide-border;
-        th { @apply px-6 py-4 text-left font-medium bg-background-secondary; }
-        td { @apply px-6 py-4; }
-        tr:nth-child(even) { @apply bg-background-secondary; }
-    }
-
-    /* Navigation */
-    .nav-horizontal {
-        @apply flex gap-6 [&>a]:text-foreground-secondary [&>a]:hover:text-foreground;
-    }
-    .nav-vertical {
-        @apply flex flex-col gap-2 [&>a]:px-4 [&>a]:py-2 [&>a]:rounded-lg
-        [&>a]:hover:bg-background-tertiary;
-    }
-
-    /* Modals & Dialogs */
+    /* === Modals & Dialogs === */
     .modal-overlay {
         @apply fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center;
     }
@@ -195,21 +195,29 @@
     }
     .modal-header { @apply flex justify-between items-start mb-6; }
     .modal-actions { @apply flex justify-end gap-4 mt-6; }
-
-    /* Color Swatches */
-    .color-swatch { @apply h-20 rounded-lg border-2 border-border; }
-    .color-label { @apply mt-2 text-sm; }
-
-    /* Miscellaneous */
-    .section-heading {
-        @apply text-2xl font-semibold mb-6 border-b border-border pb-2;
-    }
-    .toc-grid { @apply grid md:grid-cols-3 gap-4; }
-    .toc-link { @apply text-primary-400 hover:text-primary-300; }
 }
 
-/* Animations */
 @layer utilities {
+    /* === Tooltips & Popovers === */
+    .tooltip-container { @apply relative inline-block; }
+    .tooltip {
+        @apply absolute hidden group-hover:block bg-background-secondary
+        text-sm px-3 py-2 rounded-lg border-2 border-border shadow-md;
+    }
+    .tooltip-arrow {
+        @apply absolute w-3 h-3 bg-background-secondary border-b-2 border-r-2
+        border-border rotate-45;
+    }
+
+    /* === Progress & Loaders === */
+    .progress-bar { @apply w-full h-2 bg-background-tertiary rounded-full; }
+    .progress-fill { @apply h-2 rounded-full transition-all duration-300; }
+    .spinner {
+        @apply animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full;
+    }
+    .bounce-loader { @apply flex gap-2 [&>div]:w-3 [&>div]:h-3 [&>div]:bg-primary-500 [&>div]:rounded-full; }
+
+    /* === Animations === */
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes bounce {
         0%, 100% { transform: translateY(0); }
@@ -220,27 +228,4 @@
     .animate-bounce { animation: bounce 0.5s infinite; }
     .delay-100 { animation-delay: 100ms; }
     .delay-200 { animation-delay: 200ms; }
-}
-
-/* Custom Variants */
-@layer variants {
-    /* Button Sizes */
-    .btn-sm { @apply px-2.5 py-1.5 text-xs; }
-    .btn-lg { @apply px-5 py-3; }
-
-    /* Input States */
-    .input-disabled {
-        @apply bg-background-tertiary text-foreground-muted cursor-not-allowed opacity-60;
-    }
-
-    /* Card Variations */
-    .card-image { @aspect-video w-full rounded-lg mb-4; }
-    .card-stats { @apply text-4xl font-bold mb-2; }
-
-    /* Table Responsive */
-    @media (max-width: 768px) {
-        .table-responsive {
-            @apply block overflow-x-auto whitespace-nowrap;
-        }
-    }
 }

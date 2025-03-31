@@ -4,11 +4,11 @@ import { RightNavigation } from './RightNavigation';
 import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
-import { headerPageNamesObject } from "../../utils/subHeaderTextObjects"
-import { logout } from "../../services/api";
-import { useAuth } from "../../features/auth/contexts/useAuth";
-import { BASE_URL } from "../../services/api"
-import dropdown_vector from "../../assets/dropdown-vector.svg"
+import { headerPageNamesObject } from "../../../utils/subHeaderTextObjects"
+import { logout } from "../../../services/api";
+import { useAuth } from "../../../features/auth/contexts/useAuth";
+import { BASE_URL } from "../../../services/api"
+import dropdown_vector from "../../../assets/dropdown-vector.svg"
 
 const MemoizedLeftPanel = memo(LeftNavigation);
 const MemoizedCenterPanel = memo(CenterNavigation);

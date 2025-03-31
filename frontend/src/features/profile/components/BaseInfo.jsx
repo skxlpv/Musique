@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Calendar } from 'lucide-react';
-import {Avatar} from "../../../components/Avatar/Avatar";
+import {Avatar} from "../../../components/atoms/Avatar/Avatar";
 import {useAuth} from "../../auth/contexts/useAuth";
 
 export const BaseInfo = () => {

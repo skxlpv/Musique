@@ -1,6 +1,6 @@
 import React from "react";
 import {useRecoilState} from "recoil";
-import {activeTabState} from "../../recoil/atoms";
+import {activeTabState} from "../../../recoil/atoms";
 
 export const TabsContainer = ({object}) => {
     const [activeTab, setActiveTab] = useRecoilState(activeTabState);

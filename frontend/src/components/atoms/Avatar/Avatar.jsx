@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { useAuth } from "../../features/auth/contexts/useAuth";
-import { BASE_URL, MEDIA_AVATARS } from "../../services/api";
+import { useAuth } from "../../../features/auth/contexts/useAuth";
+import { BASE_URL, MEDIA_AVATARS } from "../../../services/api";
 
 const SIZE_CLASSES = {
     sm: "h-6 w-6",

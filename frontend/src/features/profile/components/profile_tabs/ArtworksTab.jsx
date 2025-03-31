@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {get_user_files} from '../../../../services/api';
 import {useAuth} from "../../../auth/contexts/useAuth";
-import {FileList} from "../../../../components/FileRenderer/FileRenderer";
+import {FileList} from "../../../../components/molecules/FileRenderer/FileRenderer";
 import {BaseTab} from "./BaseTab";
 
 export const ArtworksTab = () => {

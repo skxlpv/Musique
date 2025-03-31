@@ -1,15 +1,13 @@
 import React from "react";
-import "./HomePage.css";
-import "../../../../styles/TextStyles.css";
 
 export const HomePage = () => {
     return (
         <div>
             <div className="w-full flex justify-center">
-                <h1 className="text-header">
+                <h1 className="heading-1">
                     Everything.
-                    <p className="text-5xl ml-20 rotate-6 mt-auto">In a single place</p>
                 </h1>
+                <p className="heading-1 ml-10 mt-auto">In a single place</p>
             </div>
         </div>
     );

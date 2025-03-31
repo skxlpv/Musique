@@ -1,6 +1,6 @@
 import React from "react";
 import { ProfileDropdown } from "./ProfileDropdown";
-import { Avatar } from "../Avatar/Avatar";
+import { Avatar } from "../../atoms/Avatar/Avatar";
 
 export const ProfileButton = ({
     dropdownRef,

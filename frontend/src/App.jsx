@@ -1,11 +1,11 @@
 import './styles/App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {RecoilRoot} from 'recoil';
 
-import { Header } from "./components/Header/Header";
-import { AuthProvider } from './features/auth/contexts/useAuth';
-import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
-import { routes } from './routes';
+import {Header} from "./components/organisms/Header/Header";
+import {AuthProvider} from './features/auth/contexts/useAuth';
+import {PrivateRoute} from './components/organisms/PrivateRoute/PrivateRoute';
+import {routes} from './routes';
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
             <Router>
                 <AuthProvider>
                     <div className='bg-background text-foreground min-h-screen flex flex-col'>
-                        <Header />
+                        <Header/>
                         <main className="flex-1 container mx-auto px-4 md:px-60 py-20 mt-6 !scroll-smooth">
                             <Routes>
                                 {Object.values(routes)
