@@ -3,7 +3,7 @@ import { AuthPage } from "../features/auth/pages/Auth/AuthPage";
 import { DictionaryPage } from "../features/dictionary/pages/DictionaryPage/DictionaryPage";
 import { ArtistsPage } from "../features/pages/pages/ArtistsPage/ArtistsPage";
 import { HomePage } from "../features/pages/pages/HomePage/HomePage";
-import { MyProfile } from "../features/profile/pages/MyProfile/MyProfile";
+import { MyProfile } from "../features/profile/MyProfile/MyProfile";
 
 export const routes = {
     //BASE

@@ -8,7 +8,7 @@ export const FileRenderer = ({ file }) => {
     });
 
     return (
-        <div className="card w-52 h-80 flex flex-col justify-between">
+        <div className="card w-52 h-80 flex flex-col justify-between card card-section card-element">
             <div className="flex flex-col">
                 <hr className="border-zinc-600"/>
                 <div className="flex flex-col pb-4 px-4">

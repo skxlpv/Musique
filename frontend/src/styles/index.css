@@ -142,10 +142,15 @@
 
     /* === Cards & Structures === */
     .card {
-        @apply bg-background-secondary rounded-xl border-2 border-border p-6;
+        @apply rounded-xl p-6;
     }
-    .card-header { @apply flex items-center gap-4 mb-4; }
-    .card-icon { @apply p-3 bg-primary-900/30 rounded-lg; }
+    .card-section {
+        @apply shadow-neutral-950 shadow-sm rounded-xl p-6
+        border border-border bg-gradient-to-tr from-black to-neutral-950;
+    }
+    .card-element {
+        @apply shadow-xl bg-gradient-to-b from-black to-neutral-950;
+    }
 
     /* === Tables === */
     .table-container { @apply border-2 border-border rounded-xl overflow-hidden; }

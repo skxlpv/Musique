@@ -14,18 +14,18 @@ module.exports = {
       },
       colors: {
         background: {
-          DEFAULT: 'black',
-          secondary: '#222222',
-          tertiary: '#333333',
+          DEFAULT: '#000000',
+          secondary: '#111111',
+          tertiary: '#1a1a1a',
         },
         foreground: {
-          DEFAULT: '#fafafa',
-          secondary: '#a1a1a1',
-          muted: '#737373'
+          DEFAULT: '#eaeaea',
+          secondary: '#b0b0b0',
+          muted: '#3b3b3b'
         },
         border: {
-          DEFAULT: '#333333',
-          hover: '#555555'
+          DEFAULT: '#151515',
+          hover: '#222222'
         },
         primary: {
           50: '#e6f5ff',

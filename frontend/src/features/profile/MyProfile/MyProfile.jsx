@@ -1,9 +1,9 @@
 import React, {Suspense} from "react";
 import {useRecoilValue} from "recoil";
-import {activeTabState} from "../../../../recoil/atoms";
-import {BaseInfo} from "../../components/BaseInfo";
-import {TabsContainer} from "../../../../components/molecules/TabsContainer/TabsContainer";
-import {profileOptions} from "../../../../utils/profileTabs";
+import {activeTabState} from "../../../recoil/atoms";
+import {BaseInfo} from "../components/BaseInfo";
+import {TabsContainer} from "../../../components/molecules/TabsContainer/TabsContainer";
+import {profileOptions} from "../../../utils/profileTabs";
 
 export const MyProfile = () => {
     const activeTab = useRecoilValue(activeTabState);
