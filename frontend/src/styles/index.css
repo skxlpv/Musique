@@ -76,11 +76,11 @@
     }
 
     /* === Buttons === */
-    .btn {
-        @apply inline-flex items-center justify-center font-medium transition-all pb-0.5 border-b border-b-black;
+    .btn-small {
+        @apply inline-flex items-center justify-center font-medium transition-all pb-1 border-b border-b-black;
     }
 
-    .btn:hover {
+    .btn-small:hover {
         @apply border-b border-b-white;
     }
 
@@ -142,11 +142,15 @@
 
     /* === Cards & Structures === */
     .card {
-        @apply rounded-xl p-6;
+        @apply rounded-xl p-6 my-2 border border-border;
     }
     .card-section {
         @apply shadow-neutral-950 shadow-sm rounded-xl p-6
-        border border-border bg-gradient-to-tr from-black to-neutral-950;
+        border border-border bg-neutral-950;
+    }
+    .card-gradient {
+        @apply shadow-neutral-950 shadow-sm rounded-xl p-6 my-2
+        border border-border bg-gradient-to-tr from-black to-neutral-950
     }
     .card-element {
         @apply shadow-xl bg-gradient-to-b from-black to-neutral-950;
@@ -200,6 +204,23 @@
     }
     .modal-header { @apply flex justify-between items-start mb-6; }
     .modal-actions { @apply flex justify-end gap-4 mt-6; }
+
+    /* === Navigation & Tabs === */
+    .navigation-container {
+        @apply rounded-md border border-border overflow-hidden;
+    }
+    .navigation-tab {
+        @apply p-2 inline-flex items-center justify-center font-medium
+        transition-all
+        first:rounded-l-md
+        last:rounded-r-md;
+    }
+    .navigation-tab:active {
+        @apply bg-zinc-900
+    }
+    .navigation-tab-focused {
+        @apply bg-neutral-950
+    }
 }
 
 @layer utilities {

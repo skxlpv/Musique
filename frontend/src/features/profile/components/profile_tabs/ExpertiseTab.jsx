@@ -90,7 +90,7 @@ export const ExpertiseTab = () => {
                     allowMultipleOpen={false}
                 />
             ) : (
-                <div className="card card-section p-8 text-center text-gray-500">
+                <div className="p-8 text-center text-gray-500">
                     No information available. Create new sub profile!
                 </div>
             )}

@@ -1,17 +1,20 @@
+import dropdown_vector from "../../../assets/dropdown-vector.svg"
+
 export const AccordionItem = ({ title, content, isOpen, onClick, itemKey }) => {
     return (
-        <div className="border border-neutral-600 rounded-md mb-2 overflow-hidden card-element">
+        <div className="border border-border rounded-md mb-2 overflow-hidden">
             <button
                 onClick={onClick}
-                className="flex border border-neutral-400 justify-between rounded-md items-center w-full p-4 text-left focus:outline-none"
+                className="flex border border-border justify-between
+                rounded-md items-center w-full p-4 text-left focus:outline-none"
                 id={`accordion-header-${itemKey}`}
             >
                 <span className="font-semibold text-small">{title}</span>
                 <span>
                     {isOpen ? (
-                        "UP"
+                        <img className="w-7 rotate-180 transition-all duration-200" src={dropdown_vector} alt="Meow"></img>
                     ) : (
-                        "DOWN"
+                        <img className="w-7 transition-all duration-200" src={dropdown_vector} alt="Meow"></img>
                     )}
                 </span>
             </button>

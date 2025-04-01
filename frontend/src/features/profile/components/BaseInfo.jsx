@@ -23,7 +23,7 @@ export const BaseInfo = () => {
     };
 
     return (
-        <div className="flex card card-section">
+        <div className="flex card-gradient">
             {/* Left section - Name and title */}
             <div className="w-full">
                 <div className="flex gap-10">

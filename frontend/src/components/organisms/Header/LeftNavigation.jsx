@@ -6,16 +6,16 @@ export const LeftNavigation = () => {
         <div className="flex">
             <ul className="flex text-xl gap-4">
                 <li>
-                    <a className="body-small btn" href={routes.dictionary_page.url}>Dictionary</a>
+                    <a className="body-small btn-small" href={routes.dictionary_page.url}>Dictionary</a>
                 </li>
                 <li>
-                    <a className="body-small btn" href={routes.home_page.url}>Learn</a>
+                    <a className="body-small btn-small" href={routes.home_page.url}>Learn</a>
                 </li>
                 <li>
-                    <a className="body-small btn" href={routes.home_page.url}>Analyze</a>
+                    <a className="body-small btn-small" href={routes.home_page.url}>Analyze</a>
                 </li>
                 <li>
-                    <a className="body-small btn" href={routes.home_page.url}>Discover</a>
+                    <a className="body-small btn-small" href={routes.home_page.url}>Discover</a>
                 </li>
             </ul>
         </div>

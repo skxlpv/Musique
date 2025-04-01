@@ -1,27 +1,32 @@
-import React from "react";
-import {useRecoilState} from "recoil";
-import {activeTabState} from "../../../recoil/atoms";
+import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { activeProfileTabState } from "../../../recoil/atoms";
 
-export const TabsContainer = ({object}) => {
-    const [activeTab, setActiveTab] = useRecoilState(activeTabState);
+export const TabsContainer = ({ object }) => {
+    const [activeTab, setActiveTab] = useRecoilState(activeProfileTabState);
+    const [focusedTab, setFocusedTab] = useState(null);
+
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+        setFocusedTab(tab);
+    };
 
     return (
-        <div className="flex flex-col w-full mt-4 mb-6">
-            <ul className="text-small w-full flex flex-row justify-between">
+        <div className="flex flex-col w-full navigation-container">
+            <ul className="text-small w-full flex flex-row justify-between items-center">
                 {Object.keys(object).map((tabKey) => (
                     <li
                         key={tabKey}
-                        className={`${activeTab === object[tabKey] 
-                            ? 'btn-secondary cursor-pointer !text-foreground-light !border-b-white' 
-                            : 'btn-secondary cursor-pointer'} 
-                            mt-1.5 w-52 flex justify-center `}
-                        onClick={() => setActiveTab(object[tabKey])}
+                        className={`navigation-tab cursor-pointer w-52 flex justify-center ${
+                            focusedTab === object[tabKey] ? 'navigation-tab-focused' : ''
+                        }`}
+                        onClick={() => handleTabClick(object[tabKey])}
+                        tabIndex="0"  // Makes the li element focusable
                     >
                         {object[tabKey].name}
                     </li>
                 ))}
             </ul>
-            <hr className="border-white" />
         </div>
     );
 };

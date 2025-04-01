@@ -23,8 +23,8 @@ module.exports = {
           muted: '#3b3b3b'
         },
         border: {
-          DEFAULT: '#151515',
-          hover: '#222222'
+          DEFAULT: '#2f2f2f',
+          hover: '#464646'
         },
         primary: {
           50: '#e6f5ff',

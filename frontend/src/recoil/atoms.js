@@ -35,7 +35,7 @@ export const authState = atom({
     },
 });
 
-export const activeTabState = atom({
+export const activeProfileTabState = atom({
     key: "activeTabState",
     default: profileOptions.artworks
 });

@@ -7,7 +7,7 @@ export const SubHeader = ({additionalStyle, object}) => {
             <ul className="gap-4 text-xl flex flex-row items-center">
                 {Object.keys(object).map((item, key) => {
                     return(
-                        <li className="body-small btn pr-1" key={key}>
+                        <li className="body-small btn-small pr-1" key={key}>
                             <Link to={object[item].link}>
                                 {object[item].name}
                             </Link>

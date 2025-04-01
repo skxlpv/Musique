@@ -1,12 +1,12 @@
 import React, {Suspense} from "react";
 import {useRecoilValue} from "recoil";
-import {activeTabState} from "../../../recoil/atoms";
+import {activeProfileTabState} from "../../../recoil/atoms";
 import {BaseInfo} from "../components/BaseInfo";
 import {TabsContainer} from "../../../components/molecules/TabsContainer/TabsContainer";
 import {profileOptions} from "../../../utils/profileTabs";
 
 export const MyProfile = () => {
-    const activeTab = useRecoilValue(activeTabState);
+    const activeTab = useRecoilValue(activeProfileTabState);
 
     return (
         <div className="flex min-w-full justify-center">
