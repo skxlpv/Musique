@@ -5,9 +5,6 @@
 @import '@fontsource/inter/700.css';
 
 @import "tailwindcss";
-
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 @layer base {
@@ -70,16 +67,16 @@
   }
 
   .body-small {
-    @apply text-sm;
+    @apply text-sm text-neutral-300;
   }
 
   .body-xsmall {
-    @apply text-xs;
+    @apply text-xs text-neutral-400;
   }
 
   /* === Buttons === */
   .btn-small {
-    @apply inline-flex items-center justify-center font-medium transition-all pb-1 border-b border-b-black;
+    @apply inline-flex items-center justify-center font-medium transition-all pb-1 border-b border-b-black cursor-pointer;
   }
 
   .btn-small:hover {
@@ -87,9 +84,8 @@
   }
 
   .btn-primary {
-    @apply px-4 py-2 bg-blue-600 text-white border border-blue-700
-    hover:bg-blue-700 hover:border-blue-500
-    focus:ring-blue-500/50;
+    @apply px-4 py-1 text-white border border-white/15 rounded-lg
+    hover:bg-neutral-950 hover:border-white/20;
   }
 
   .btn-outline {
@@ -151,8 +147,8 @@
     border border-zinc-600 bg-neutral-950;
   }
   .card-gradient {
-    @apply shadow-neutral-950 shadow-sm rounded-xl p-6 my-2
-    border border-zinc-600 bg-gradient-to-tr from-black to-neutral-950
+    @apply shadow-neutral-950 shadow-sm rounded-xl p-6 px-10 my-2
+    border border-zinc-600 bg-gradient-to-b from-black to-violet-950/15
   }
   .card-element {
     @apply shadow-xl bg-gradient-to-b from-black to-neutral-950;
@@ -186,7 +182,7 @@
 
   /* === Badges & Tags === */
   .badge {
-    @apply px-3 py-1 rounded-full text-sm inline-flex items-center gap-2;
+    @apply px-3 py-1 rounded-full text-sm inline-flex items-center gap-2 outline outline-neutral-800;
   }
   .badge-success { @apply bg-green-500/20 text-green-500; }
   .badge-error { @apply bg-red-500/20 text-red-500; }
@@ -222,6 +218,10 @@
   }
   .navigation-tab-focused {
     @apply bg-neutral-950
+  }
+
+  .accordion-item {
+    @apply border border-l-neutral-600 border-r-neutral-600 border-y-neutral-500
   }
 }
 

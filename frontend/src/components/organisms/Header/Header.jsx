@@ -43,7 +43,7 @@ export const Header = () => {
 
     return (
         <div className="mb-16">
-            <div className="border-b border-border flex w-full items-center justify-between shadow-medium bg-background px-4 md:px-8 lg:px-60 h-16 fixed top-0 z-10">
+            <div className="border-b border-b-neutral-800 shadow-xl shadow-white/[3%] flex w-full items-center justify-between shadow-medium bg-background px-4 md:px-8 lg:px-60 h-16 fixed top-0 z-10">
                 <div className="flex flex-row items-center w-full lg:w-1/4 justify-between">
                     <MemoizedCenterPanel />
                     <MemoizedLeftPanel />

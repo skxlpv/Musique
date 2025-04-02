@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { activeProfileTabState } from "../../../recoil/atoms";
 
 export const TabsContainer = ({ object }) => {
-    const [activeTab, setActiveTab] = useRecoilState(activeProfileTabState);
+    const [_, setActiveTab] = useRecoilState(activeProfileTabState);
     const [focusedTab, setFocusedTab] = useState(null);
 
     const handleTabClick = (tab) => {
@@ -12,7 +12,7 @@ export const TabsContainer = ({ object }) => {
     };
 
     return (
-        <div className="flex flex-col w-full navigation-container">
+        <div className="flex flex-col w-full navigation-container mb-4">
             <ul className="text-small w-full flex flex-row justify-between items-center">
                 {Object.keys(object).map((tabKey) => (
                     <li
@@ -21,7 +21,7 @@ export const TabsContainer = ({ object }) => {
                             focusedTab === object[tabKey] ? 'navigation-tab-focused' : ''
                         }`}
                         onClick={() => handleTabClick(object[tabKey])}
-                        tabIndex="0"  // Makes the li element focusable
+                        tabIndex="0"
                     >
                         {object[tabKey].name}
                     </li>

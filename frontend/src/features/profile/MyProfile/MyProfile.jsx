@@ -8,7 +8,6 @@ import {profileOptions} from "../../../utils/profileTabs.jsx";
 export const MyProfile = () => {
     const activeTab = useRecoilValue(activeProfileTabState);
 
-    // Safely check if activeTab exists before rendering content
     const renderTabContent = () => {
         if (!activeTab) {
             return <div className="p-4 text-center">No tab selected</div>;
