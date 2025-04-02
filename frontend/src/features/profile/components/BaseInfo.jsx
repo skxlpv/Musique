@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mail, Calendar } from 'lucide-react';
 import {Avatar} from "../../../components/atoms/Avatar/Avatar";
-import {useAuth} from "../../auth/contexts/useAuth";
+import {useAuth} from "../../auth/contexts/useAuth.jsx";
 
 export const BaseInfo = () => {
     const {userData} = useAuth();

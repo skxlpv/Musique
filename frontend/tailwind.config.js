@@ -1,75 +1,54 @@
 /** @type {import('tailwindcss').Config} */
-
-module.exports = {
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
-
-  darkMode: 'class',
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
-      },
       colors: {
-        background: {
-          DEFAULT: '#000000',
-          secondary: '#111111',
-          tertiary: '#1a1a1a',
+        border: {
+          DEFAULT: "#303030",
+          hover: "#404040"
         },
         foreground: {
-          DEFAULT: '#eaeaea',
-          secondary: '#b0b0b0',
-          muted: '#3b3b3b'
+          DEFAULT: "#ffffff",
+          muted: "#a0a0a0"
         },
-        border: {
-          DEFAULT: '#2f2f2f',
-          hover: '#464646'
+        background: {
+          DEFAULT: "#000000",
+          secondary: "#111111",
+          tertiary: "#222222"
         },
         primary: {
-          50: '#e6f5ff',
-          100: '#cceaff',
-          200: '#99d5ff',
-          300: '#66c0ff',
-          400: '#33aaff',
-          500: '#0095ff',
-          600: '#0077cc',
-          700: '#005999',
-          800: '#003c66',
-          900: '#001e33'
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          900: "#1e3a8a"
         },
-        accent: {
-          purple: '#6d28d9',
-          blue: '#1d4ed8',
-          teal: '#0d9488',
-          amber: '#d97706',
-          pink: '#db2777'
-        },
-        success: {
-          DEFAULT: '#10b981',
-          dark: '#065f46'
-        },
+        success: "#22c55e",
+        error: "#ef4444",
         warning: {
-          DEFAULT: '#f59e0b',
-          light: 'rgba(245, 158, 11, 0.2)',
-          dark: '#92400e'
+          DEFAULT: "#f59e0b",
+          light: "#0c0a04"
         },
-        error: {
-          DEFAULT: '#ef4444',
-          dark: '#991b1b'
-        },
-        info: {
-          DEFAULT: '#3b82f6',
-          dark: '#1e40af'
+        info: "#0ea5e9",
+        accent: {
+          purple: "#8b5cf6",
+          blue: "#3b82f6",
+          teal: "#14b8a6",
+          amber: "#f59e0b"
         }
-      },
-      backgroundImage: {
-        'grainy-gradient': `
-                    linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to)),
-                    url(https://grainy-gradients.vercel.app/noise.svg)
-                `,
-      },
+      }
     },
+    fontFamily: {
+      sans: ['Inter', 'sans-serif']
+    }
   },
-  plugins: [],
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+  preflight: true
 }

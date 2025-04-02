@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "../../../../services/api"
 import { useNavigate } from "react-router-dom";
-import { routes } from "../../../../routes";
+import { routes } from "../../../../routes/index.jsx";
 
 export const UploadFile = () => {
   const { register, handleSubmit } = useForm();

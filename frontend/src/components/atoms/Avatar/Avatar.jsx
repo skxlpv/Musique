@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useAuth } from "../../../features/auth/contexts/useAuth";
+import { useAuth } from "../../../features/auth/contexts/useAuth.jsx";
 import { BASE_URL, MEDIA_AVATARS } from "../../../services/api";
 
 const SIZE_CLASSES = {

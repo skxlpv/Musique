@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { headerPageNamesObject } from "../../../utils/subHeaderTextObjects"
 import { logout } from "../../../services/api";
-import { useAuth } from "../../../features/auth/contexts/useAuth";
+import { useAuth } from "../../../features/auth/contexts/useAuth.jsx";
 import { BASE_URL } from "../../../services/api"
 import dropdown_vector from "../../../assets/dropdown-vector.svg"
 

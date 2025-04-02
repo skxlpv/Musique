@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import {profileOptions} from "../utils/profileTabs";
+import {profileOptions} from "../utils/profileTabs.jsx";
 
 export const rootNoteState = atom({
     key: "rootNoteState",

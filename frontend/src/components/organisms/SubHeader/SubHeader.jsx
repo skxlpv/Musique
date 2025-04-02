@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "./SubHeader.css"
 
 export const SubHeader = ({additionalStyle, object}) => {
     return (

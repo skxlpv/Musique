@@ -1,5 +1,5 @@
 import React from "react";
-import { routes } from "../../../routes"
+import { routes } from "../../../routes/index.jsx"
 
 export const LeftNavigation = () => {
     return (

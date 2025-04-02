@@ -1,9 +1,0 @@
-.profile-dropdown-open .button-card-outlined {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-color: transparent;
-}
-
-.vertical-rule {
-    @apply flex flex-row border-l h-full
-}

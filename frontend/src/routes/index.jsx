@@ -4,6 +4,7 @@ import { DictionaryPage } from "../features/dictionary/pages/DictionaryPage/Dict
 import { ArtistsPage } from "../features/pages/pages/ArtistsPage/ArtistsPage";
 import { HomePage } from "../features/pages/pages/HomePage/HomePage";
 import { MyProfile } from "../features/profile/MyProfile/MyProfile";
+import ErrorBoundary from "../components/atoms/ErrorBoundary/ErrorBoundary.jsx";
 
 export const routes = {
     //BASE
@@ -14,12 +15,11 @@ export const routes = {
         url: "/auth/*", component: <AuthPage/>, requiresAuth: false
     },
     my_profile: {
-        url: "/profile", component: <MyProfile/>, requiresAuth: true
+        url: "/profile", component: <ErrorBoundary><MyProfile/></ErrorBoundary>, requiresAuth: true
     },
     settings: {
         url: "/settings", component: null, requiresAuth: true
     },
-
     //PAGES
     dictionary_page: {
         url: "/dictionary", component: <DictionaryPage/>, requiresAuth: true
@@ -39,7 +39,6 @@ export const routes = {
     craftspeople_page: {
         url: "/craftsmen", component: null, requiresAuth: true
     },
-
     //UPLOAD FILE
     upload_file: {
         url: "/upload", component: <UploadFile/>, requiresAuth: true

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "../../../contexts/useAuth";
+import { useAuth } from "../../../contexts/useAuth.jsx";
 
 export const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();

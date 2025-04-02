@@ -1,5 +1,5 @@
 import { BaseTab } from "./BaseTab";
-import { useAuth } from "../../../auth/contexts/useAuth";
+import { useAuth } from "../../../auth/contexts/useAuth.jsx";
 import { Accordion } from "../../../../components/atoms/Accordion/Accordion";
 import React from 'react';
 

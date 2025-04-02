@@ -1,11 +1,10 @@
-import './styles/App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {RecoilRoot} from 'recoil';
 
 import {Header} from "./components/organisms/Header/Header";
-import {AuthProvider} from './features/auth/contexts/useAuth';
+import {AuthProvider} from './features/auth/contexts/useAuth.jsx';
 import {PrivateRoute} from './components/organisms/PrivateRoute/PrivateRoute';
-import {routes} from './routes';
+import {routes} from './routes/index.jsx';
 
 function App() {
     return (

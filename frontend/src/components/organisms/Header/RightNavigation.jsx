@@ -1,5 +1,5 @@
 import React from "react";
-import { routes } from "../../../routes"
+import { routes } from "../../../routes/index.jsx"
 import { ProfileButton } from './ProfileButton.jsx'
 
 export const RightNavigation = ({
