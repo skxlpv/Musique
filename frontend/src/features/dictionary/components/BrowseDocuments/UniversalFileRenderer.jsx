@@ -147,11 +147,13 @@ export const UniversalFileRenderer = ({
     }
 
     return (
-        <div className="w-full h-full p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="w-full h-full p-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {files.map((file, index) => (
                 <div
                     key={index}
-                    className="border border-gray-300 rounded-lg h-56 w-full relative shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden"
+                    className="border border-neutral-700 rounded-lg
+                    h-56 w-full relative shadow-md hover:shadow-lg
+                    transition-shadow duration-300 cursor-pointer overflow-hidden"
                     onClick={() => onFileClick(file)}
                 >
                     {renderPreview(file)}
