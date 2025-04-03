@@ -1,7 +1,7 @@
 import { UploadFile } from "../features/artworks/pages/UploadFile/UploadFile";
 import { AuthPage } from "../features/auth/pages/Auth/AuthPage";
 import { DictionaryPage } from "../features/dictionary/pages/DictionaryPage/DictionaryPage";
-import { ArtistsPage } from "../features/pages/pages/ArtistsPage/ArtistsPage";
+import { ArtistsPage } from "../features/pages/pages/ArtistsPage/ArtistsPage.jsx";
 import { HomePage } from "../features/pages/pages/HomePage/HomePage";
 import { MyProfile } from "../features/profile/MyProfile/MyProfile";
 import ErrorBoundary from "../components/atoms/ErrorBoundary/ErrorBoundary.jsx";
