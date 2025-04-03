@@ -147,7 +147,7 @@ export const UniversalFileRenderer = ({
     }
 
     return (
-        <div className="w-full h-full p-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="w-full h-full p-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {files.map((file, index) => (
                 <div
                     key={index}
