@@ -1,85 +1,109 @@
 # views.py
-from __future__ import annotations
-
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.parsers import FormParser
-from rest_framework.parsers import MultiPartParser
+from rest_framework import viewsets, filters, permissions
+from rest_framework.decorators import permission_classes, api_view
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from .models import DocumentFileModel
-from .models import FileModel
-from .models import ImageFileModel
-from .models import MusicFileModel
-from .serializers import DocumentFileModelSerializer
-from .serializers import FileModelSerializer
-from .serializers import ImageFileModelSerializer
-from .serializers import MusicFileModelSerializer
+from .models import (
+    FileModel,
+    VisualArtModel,
+    MusicModel,
+    WritingModel,
+    TheatreModel,
+    CraftsModel
+)
+from .serializers import (
+    FileModelSerializer,
+    VisualArtSerializer,
+    MusicSerializer,
+    WritingSerializer,
+    TheatreSerializer,
+    CraftsSerializer
+)
 from ..api.serializers import FileSerializer
 
-user = get_user_model()
 
+class BaseFileViewSet(viewsets.ModelViewSet):
+    """Base ViewSet for file operations"""
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    parser_classes = [MultiPartParser, FormParser]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'description', 'tags', 'author__username']
+    ordering_fields = ['uploaded_at', 'title', 'downloads_count']
+    pagination_class = PageNumberPagination
 
-class FileUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        request = self.request
 
-    def post(self, request, *args, **kwargs):
-        try:
-            file = request.data.get('file')
-            if not file:
-                raise ValidationError('No file was provided.')
+        file_type = request.query_params.get('file_type') if hasattr(request, 'query_params') else request.GET.get(
+            'file_type')
+        if file_type:
+            queryset = queryset.filter(file_type=file_type)
 
-            # Determine file type based on extension
-            ext = file.name.split('.')[-1].lower()
-            if ext in ['mp3', 'wav']:
-                serializer_class = MusicFileModelSerializer
-                model_class = MusicFileModel
-            elif ext in ['jpg', 'jpeg', 'png', 'gif']:
-                serializer_class = ImageFileModelSerializer
-                model_class = ImageFileModel
-            elif ext in ['pdf', 'doc', 'docx']:
-                serializer_class = DocumentFileModelSerializer
-                model_class = DocumentFileModel
-            else:
-                serializer_class = FileModelSerializer
-                model_class = FileModel
+        tag = request.query_params.get('tag') if hasattr(request, 'query_params') else request.GET.get('tag')
+        if tag:
+            queryset = queryset.filter(tags__icontains=tag)
 
-            # Create a dictionary of all fields from the request data
-            data = request.data.dict()  # Convert MultiValueDict to a regular dict
-            data['file'] = file
-            data['author'] = user.objects.get(pk=request.user.id)
-            data['is_downloadable'] = data['is_downloadable'].capitalize()
+        is_featured = request.query_params.get('featured') if hasattr(request, 'query_params') else request.GET.get(
+            'featured')
+        if is_featured in ['true', 'True', '1']:
+            queryset = queryset.filter(is_featured=True)
 
-            # Remove fields that are not part of the model
-            model_fields = [f.name for f in model_class._meta.get_fields()]
-            filtered_data = {k: v for k, v in data.items() if k in model_fields}
-
-            # Create and save the file model
-            file_model = model_class(**filtered_data)
-            file_model.save()
-
-            # Serialize the response
-            serializer = serializer_class(file_model)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        except ValidationError as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST,
+        # Search query
+        query = request.query_params.get('q') if hasattr(request, 'query_params') else request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(tags__icontains=query) |
+                Q(author__username__icontains=query)
             )
-        except Exception as e:
-            return Response(
-                {
-                    'error': 'An error occurred during file upload.',
-                    'message': str(e),
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+
+        return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class FileViewSet(BaseFileViewSet):
+    """ViewSet for general file operations"""
+    queryset = FileModel.objects.all()
+    serializer_class = FileModelSerializer
+
+
+class VisualArtViewSet(BaseFileViewSet):
+    """ViewSet for visual art files"""
+    queryset = VisualArtModel.objects.all()
+    serializer_class = VisualArtSerializer
+
+
+class MusicViewSet(BaseFileViewSet):
+    """ViewSet for music files"""
+    queryset = MusicModel.objects.all()
+    serializer_class = MusicSerializer
+
+
+class WritingViewSet(BaseFileViewSet):
+    """ViewSet for writing files"""
+    queryset = WritingModel.objects.all()
+    serializer_class = WritingSerializer
+
+
+class TheatreViewSet(BaseFileViewSet):
+    """ViewSet for theatre files"""
+    queryset = TheatreModel.objects.all()
+    serializer_class = TheatreSerializer
+
+
+class CraftsViewSet(BaseFileViewSet):
+    """ViewSet for crafts files"""
+    queryset = CraftsModel.objects.all()
+    serializer_class = CraftsSerializer
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
