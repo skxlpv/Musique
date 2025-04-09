@@ -32,7 +32,7 @@ class Command(BaseCommand):
         )
 
         # Sample image directory (create this folder and add some test images)
-        image_dir = "sample_images"
+        image_dir = "api/v1/files/management/commands/sample_images"
         if not os.path.exists(image_dir):
             os.makedirs(image_dir)
             self.stdout.write(self.style.WARNING(

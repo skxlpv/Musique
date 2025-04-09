@@ -1,6 +1,3 @@
-# models.py
-from __future__ import annotations
-
 import os
 import shutil
 from datetime import datetime
@@ -22,12 +19,24 @@ def get_upload_path(instance, filename):
         category_folder,
         f'{today.year}',
         f'{today.month}',
+        f'{file_title}',
         f'{file_title}.{extension}',
     )
 
+def get_cover_art_upload_path(instance, filename):
+    today = datetime.now()
+    category_folder = instance.category.lower().replace(' ', '_')
+    file_title = instance.title
+    extension = filename.split('.')[-1]
+    return os.path.join(
+        category_folder,
+        f'{today.year}',
+        f'{today.month}',
+        file_title,
+        f'cover_art.{extension}'
+    )
 
 def get_archive_path(file_path):
-    # Create the archive path
     archive_path = os.path.join('archive', file_path)
     return archive_path
 
@@ -101,6 +110,10 @@ class FileModel(models.Model):
         return f'{self.title} by {self.author.username}'
 
     def save(self, *args, **kwargs):
+        if not self.title and self.file:
+            filename = os.path.basename(self.file.name)
+            self.title = os.path.splitext(filename)[0]
+
         if not self.file_type:
             ext = self.file.name.split('.')[-1].lower()
             if ext in ['jpg', 'jpeg', 'png', 'gif', 'svg']:
@@ -175,6 +188,7 @@ class VisualArtModel(FileModel):
 
 class MusicModel(FileModel):
     """Model for music works (songs, compositions, etc.)"""
+    cover_art = models.ImageField(upload_to=get_cover_art_upload_path, blank=True)
     genre = models.CharField(max_length=100, blank=True)
     bpm = models.PositiveIntegerField(null=True, blank=True)
     duration_seconds = models.PositiveIntegerField(null=True, blank=True)

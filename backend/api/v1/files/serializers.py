@@ -48,7 +48,7 @@ class MusicSerializer(FileModelSerializer):
     class Meta(FileModelSerializer.Meta):
         model = MusicModel
         fields = FileModelSerializer.Meta.fields + [
-            'genre', 'bpm', 'duration_seconds', 'instruments',
+            'cover_art', 'genre', 'bpm', 'duration_seconds', 'instruments',
             'lyrics', 'composer', 'recording_date'
         ]
 
