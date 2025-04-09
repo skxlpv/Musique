@@ -13,7 +13,7 @@ function App() {
                 <AuthProvider>
                     <div className='bg-background text-foreground min-h-screen flex flex-col'>
                         <Header/>
-                        <main className="flex-1 container mx-auto px-4 md:px-40 py-20 mt-6 !scroll-smooth">
+                        <main className="flex-1 container mx-auto px-4 py-20 mt-6 !scroll-smooth">
                             <Routes>
                                 {Object.values(routes)
                                     .filter(route => route.component !== null)
