@@ -229,6 +229,8 @@ class TheatreModel(FileModel):
     duration_minutes = models.PositiveIntegerField(null=True, blank=True)
     cast_size = models.PositiveIntegerField(null=True, blank=True)
     genre = models.CharField(max_length=100, blank=True)
+    period = models.CharField(max_length=100, blank=True)
+    theme = models.CharField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):
         self.category = 'theatre'
