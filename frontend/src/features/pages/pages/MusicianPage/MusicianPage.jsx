@@ -1,4 +1,4 @@
-import { UniversalFileRenderer } from "../../components/BrowseDocuments/UniversalFileRenderer.jsx"
+import { FileRenderer } from "../../components/FileRenderer.jsx"
 
 export const MusicianPage = () => {
     const handleFileClick = (file) => {
@@ -12,7 +12,7 @@ export const MusicianPage = () => {
                 <h1 className="heading-3 text-neutral-500">Tune in, stand out</h1>
             </div>
             <div>
-                <UniversalFileRenderer
+                <FileRenderer
                     category="music"
                     onFileClick={(file) => handleFileClick(file)}
                 />
