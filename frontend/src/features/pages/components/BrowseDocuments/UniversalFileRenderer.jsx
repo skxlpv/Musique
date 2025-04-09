@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+).toString();
 
 import { File, Image, Music, FileText, Video, Hammer } from "lucide-react";
 
@@ -11,6 +18,9 @@ export const UniversalFileRenderer = ({
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // Store page information for each PDF file using its URL as the key
+    const [pdfStates, setPdfStates] = useState({});
 
     // Map categories to their endpoints and file type groups
     const categoryConfig = {
@@ -64,18 +74,15 @@ export const UniversalFileRenderer = ({
 
         switch (fileType) {
             case 'image':
-                return <Image className="w-10 h-10 text-blue-500" />;
+                return <Image className="w-24 h-24 text-blue-500" />;
             case 'audio':
-                return <Music className="w-10 h-10 text-green-500" />;
-            case 'video':
-                return <Video className="w-10 h-10 text-red-500" />;
+                return <Music className="w-24 h-24 text-green-500" />;
             case 'document':
-            case 'pdf':
-                return <FileText className="w-10 h-10 text-yellow-500" />;
+                return <FileText className="w-24 h-24 text-yellow-500" />;
             case 'craft':
-                return <Hammer className="w-10 h-10 text-orange-500" />;
+                return <Hammer className="w-24 h-24 text-orange-500" />;
             default:
-                return <File className="w-10 h-10 text-gray-500" />;
+                return <File className="w-24 h-24 text-gray-500" />;
         }
     };
 
@@ -98,11 +105,64 @@ export const UniversalFileRenderer = ({
         return 'unknown';
     };
 
+    // Handle document load success for PDFs
+    const handleDocumentLoadSuccess = (file, numPages) => {
+        const fileUrl = file.file.startsWith('http') ? file.file : `http://127.0.0.1:8000/${file.file}`;
+
+        setPdfStates(prevStates => ({
+            ...prevStates,
+            [fileUrl]: {
+                ...prevStates[fileUrl],
+                numPages,
+                pageNumber: prevStates[fileUrl]?.pageNumber || 1
+            }
+        }));
+    };
+
+    // Handle page navigation for PDFs
+    const changePage = (fileUrl, newPageNumber) => {
+        setPdfStates(prevStates => ({
+            ...prevStates,
+            [fileUrl]: {
+                ...prevStates[fileUrl],
+                pageNumber: newPageNumber
+            }
+        }));
+    };
+
+    // Check if a file is a PDF
+    const isPdf = (file) => {
+        return file.file && file.file.toLowerCase().endsWith('.pdf');
+    };
+
     // Render appropriate preview based on file type
     const renderPreview = (file) => {
         const fileType = file.file_type || categoryConfig[category]?.fileType || getFileTypeFromExtension(file.file);
         const fileUrl = file.file.startsWith('http') ? file.file : `http://127.0.0.1:8000/${file.file}`;
 
+        // Handle PDF files
+        if (fileType === 'document' && isPdf(file)) {
+            const pdfState = pdfStates[fileUrl] || { pageNumber: 1, numPages: 0 };
+
+            return (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                    <Document
+                        file={fileUrl}
+                        onLoadSuccess={(pdf) => handleDocumentLoadSuccess(file, pdf.numPages)}
+                        className="border border-gray-300 rounded-md overflow-hidden"
+                    >
+                        <Page
+                            pageNumber={pdfState.pageNumber}
+                            width={280}
+                            renderTextLayer={false}
+                            renderAnnotationLayer={false}
+                        />
+                    </Document>
+                </div>
+            );
+        }
+
+        // Handle image files
         switch (fileType) {
             case 'image':
                 return (
@@ -132,16 +192,15 @@ export const UniversalFileRenderer = ({
                         </div>
                     );
                 }
-
                 return (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
                         <Music className="w-16 h-16 text-green-600" />
                     </div>
                 );
-            case 'video':
+            case 'document':
                 return (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-50 to-purple-50">
-                        <Video className="w-16 h-16 text-red-600" />
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-yellow-50">
+                        <FileText className="w-16 h-16 text-yellow-600" />
                     </div>
                 );
             default:
@@ -169,17 +228,18 @@ export const UniversalFileRenderer = ({
         <div className="w-full h-full p-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {files.map((file, index) => (
                 <div
-                    key={index}
-                    className="border border-neutral-700 rounded-lg
-                    h-56 w-full relative shadow-md hover:shadow-lg
-                    transition-shadow duration-300 cursor-pointer overflow-hidden"
+                    key={file.id || index}
+                    className="flex flex-col rounded-lg overflow-hidden shadow-md border border-gray-200 h-96 cursor-pointer hover:shadow-lg transition-shadow"
                     onClick={() => onFileClick(file)}
                 >
-                    {renderPreview(file)}
-
-                    <div className="absolute bottom-0 w-full px-3 py-2 backdrop-blur-sm bg-black/30 text-white">
-                        <h3 className="font-medium truncate">{file.title}</h3>
-                        <p className="text-sm truncate">{file.description}</p>
+                    <div className="h-3/4 overflow-hidden bg-gray-100">
+                        {renderPreview(file)}
+                    </div>
+                    <div className="p-4 bg-white h-1/4 flex flex-col justify-between">
+                        <h3 className="font-medium text-gray-900 line-clamp-1">{file.title || file.name || 'Untitled'}</h3>
+                        {file.description && (
+                            <p className="text-sm text-gray-500 line-clamp-2">{file.description}</p>
+                        )}
                     </div>
                 </div>
             ))}
