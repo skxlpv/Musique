@@ -1,4 +1,4 @@
-import { UniversalFileRenderer } from "../../../dictionary/components/BrowseDocuments/UniversalFileRenderer.jsx"
+import { UniversalFileRenderer } from "../../components/BrowseDocuments/UniversalFileRenderer.jsx"
 
 export const ArtistsPage = () => {
     const handleFileClick = (file) => {
