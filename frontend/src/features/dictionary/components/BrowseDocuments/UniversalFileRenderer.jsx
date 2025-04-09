@@ -114,7 +114,6 @@ export const UniversalFileRenderer = ({
                     />
                 );
             case 'audio':
-                // Check if cover_art exists, use it as background if available
                 if (file.cover_art) {
                     const coverArtUrl = file.cover_art.startsWith('http')
                         ? file.cover_art
@@ -134,7 +133,6 @@ export const UniversalFileRenderer = ({
                     );
                 }
 
-                // Fallback to original music icon when no cover art
                 return (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
                         <Music className="w-16 h-16 text-green-600" />
