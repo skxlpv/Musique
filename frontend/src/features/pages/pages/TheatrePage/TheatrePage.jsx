@@ -1,19 +1,19 @@
 import { FileRenderer } from "../../components/FileRenderer.jsx"
 
-export const MusicianPage = () => {
+export const TheatrePage = () => {
     const handleFileClick = (file) => {
-        window.location.href = `/visual_art/${file.id}`;
+        window.location.href = `/art/view/${file.id}`;
     };
 
     return(
         <div className="w-full">
             <div className="ml-4 mb-4">
-                <h1 className="heading-1">Musician Page</h1>
-                <h1 className="heading-3 text-neutral-500">Tune in, stand out</h1>
+                <h1 className="heading-1">Theatre Page</h1>
+                <h1 className="heading-3 text-neutral-500">Feel the role, play a life</h1>
             </div>
             <div>
                 <FileRenderer
-                    category="music"
+                    category="theatre"
                     onFileClick={(file) => handleFileClick(file)}
                 />
             </div>

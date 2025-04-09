@@ -6,6 +6,7 @@ import { HomePage } from "../features/pages/pages/HomePage/HomePage";
 import { MyProfile } from "../features/profile/MyProfile/MyProfile";
 import { MusicianPage } from "../features/pages/pages/MusicianPage/MusicianPage.jsx";
 import {PageTitle} from "../components/atoms/PageTitle/PageTitle.jsx";
+import {TheatrePage} from "../features/pages/pages/TheatrePage/TheatrePage.jsx";
 
 export const routes = {
     //BASE
@@ -85,6 +86,7 @@ export const routes = {
         component: (
             <>
                 <PageTitle title="Theatre Artists" />
+                <TheatrePage />
             </>
         ),
         requiresAuth: true
