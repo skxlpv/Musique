@@ -1,0 +1,37 @@
+export const FileTypes = {
+    IMAGE: 'image',
+    AUDIO: 'audio',
+    VIDEO: 'video',
+    DOCUMENT: 'document',
+    CRAFT: 'craft',
+    UNKNOWN: 'unknown'
+};
+
+export const getFileTypeFromExtension = (filePath) => {
+    if (!filePath) return FileTypes.UNKNOWN;
+
+    const extension = filePath.split('.').pop().toLowerCase();
+
+    const extensionMap = {
+        image: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
+        audio: ['mp3', 'wav', 'ogg', 'flac'],
+        video: ['mp4', 'webm', 'avi', 'mov'],
+        document: ['pdf', 'doc', 'docx', 'txt', 'rtf']
+    };
+
+    for (const [type, extensions] of Object.entries(extensionMap)) {
+        if (extensions.includes(extension)) {
+            return type;
+        }
+    }
+
+    return FileTypes.UNKNOWN;
+};
+
+export const isPdf = (file) => {
+    return file.file && file.file.toLowerCase().endsWith('.pdf');
+};
+
+export const getFileUrl = (file) => {
+    return file.file.startsWith('http') ? file.file : `http://127.0.0.1:8000/${file.file}`;
+};
