@@ -5,7 +5,7 @@ import { PDFViewer } from './PDFViewer';
 import {DocViewer} from "./DocViewer.jsx";
 
 export const FilePreview = ({ file, category }) => {
-    const fileType = file.file_type || getCategoryFileType(category) || getFileTypeFromExtension(file.file);
+    const fileType = getCategoryFileType(category) || getFileTypeFromExtension(file.file);
     const fileUrl = getFileUrl(file);
 
     if (fileType === FileTypes.DOCUMENT && isPdf(file)) {
@@ -13,6 +13,8 @@ export const FilePreview = ({ file, category }) => {
     }
 
     switch (fileType) {
+        case FileTypes.DOCUMENT:
+            return (<DocViewer data={file} />)
         case FileTypes.IMAGE:
             return (
                 <div
@@ -47,8 +49,6 @@ export const FilePreview = ({ file, category }) => {
                     <FileIcon fileType={FileTypes.AUDIO} />
                 </div>
             );
-        case FileTypes.DOCUMENT:
-            return (<DocViewer data={file} />)
         default:
             return (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-yellow-50">

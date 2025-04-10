@@ -6,17 +6,17 @@ export const FileTypes = {
     UNKNOWN: 'unknown'
 };
 
+const extensionMap = {
+    image: ['jpg', 'jpeg', 'png', 'webp'],
+    audio: ['mp3', 'wav', 'ogg'],
+    pdf: ['pdf'],
+    document: ['doc', 'docx', 'txt', 'rtf', 'pdf']
+};
+
 export const getFileTypeFromExtension = (filePath) => {
     if (!filePath) return FileTypes.UNKNOWN;
 
     const extension = filePath.split('.').pop().toLowerCase();
-
-    const extensionMap = {
-        image: ['jpg', 'jpeg', 'png', 'webp'],
-        audio: ['mp3', 'wav', 'ogg'],
-        pdf: ['pdf'],
-        document: ['doc', 'docx', 'txt', 'rtf']
-    };
 
     for (const [type, extensions] of Object.entries(extensionMap)) {
         if (extensions.includes(extension)) {
@@ -31,8 +31,9 @@ export const isPdf = (file) => {
     return file.file && file.file.toLowerCase().endsWith('.pdf');
 };
 
-export const isDocx = (file) => {
-    return file.file && file.file.toLowerCase().endsWith('.docx');
+export const isDocument = (file) => {
+    const ext = file.file.split('.').pop().toLowerCase();
+    return extensionMap.document.includes(ext);
 };
 
 export const getFileUrl = (file) => {

@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import * as mammoth from 'mammoth';
 import {FileText, AlertCircle} from 'lucide-react';
 import truncate from "html-truncate";
+import {RTFJS} from 'rtf.js';
+import he from 'he';
 
 export const DocViewer = ({data, maxCharacters = 1200}) => {
     const [content, setContent] = useState('');
@@ -13,40 +15,53 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
         const loadDocument = async () => {
             try {
                 setLoading(true);
-
-                // Get the file URL from data
                 const fileUrl = data.file;
-
-                // Check file extension
                 const fileName = data.file || fileUrl.split('/').pop();
                 const extension = fileName.split('.').pop().toLowerCase();
                 setFileType(extension);
 
-                // Only process docx files with mammoth
-                if (extension !== 'docx') {
-                    setError(`File type .${extension} is not supported for preview. Only .docx files can be previewed.`);
+                // Check supported extensions
+                if (!['docx', 'txt', 'rtf'].includes(extension)) {
+                    setError(`File type .${extension} is not supported. Supported types: .docx, .txt, .rtf`);
                     setLoading(false);
                     return;
                 }
 
-                // Fetch the document file
+                // Fetch document
                 const response = await fetch(fileUrl);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch document (status: ${response.status})`);
+                if (!response.ok) throw new Error(`Failed to fetch document (status: ${response.status})`);
+
+                let contentHtml;
+
+                if (extension === 'docx') {
+                    const arrayBuffer = await (await response.blob()).arrayBuffer();
+                    const result = await mammoth.convertToHtml({ arrayBuffer });
+                    contentHtml = result.value;
+                } else if (extension === 'rtf') {
+                    const arrayBuffer = await response.arrayBuffer();
+                    const rtf = new RTFJS.Document(arrayBuffer, {});
+                    contentHtml = await new Promise((resolve, reject) => {
+                        rtf.render().then((htmlElements) => {
+                            const div = document.createElement('div');
+                            htmlElements.forEach(element => {
+                                element.style.color = 'black';
+                                div.appendChild(element)
+                            });
+                            resolve(div.innerHTML);
+                        }).catch(reject);
+                    });
+                } else { //TXT
+                    const text = await response.text();
+                    contentHtml = he.encode(text).replace(/\n/g, '<br>');
                 }
 
-                // Convert the response to an ArrayBuffer
-                const blob = await response.blob();
-                const arrayBuffer = await blob.arrayBuffer();
-
-                // Use mammoth to convert the docx to HTML
-                const result = await mammoth.convertToHtml({ arrayBuffer });
-                const truncatedContent = truncate(result.value, maxCharacters, {
+                const truncated = truncate(contentHtml, maxCharacters, {
                     ellipsis: '...',
                     keepWhitespace: false,
                     truncateLastWord: true
                 });
-                setContent(truncatedContent);
+
+                setContent(truncated);
 
             } catch (err) {
                 console.error('Error loading document:', err);
@@ -57,11 +72,11 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
         };
 
         loadDocument();
-    }, [data]);
+    }, [data, maxCharacters]);
 
     if (loading) {
         return (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <div className="w-full h-full flex items-center justify-center bg-gray-50 transition-opacity ease-in duration-300 opacity-100">
                 <div className="animate-pulse flex flex-col items-center">
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-2.5"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2 mb-2.5"></div>
@@ -95,26 +110,37 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
 
     return (
         <div className="w-full h-full overflow-hidden flex flex-col">
-            {/* Document header with info */}
             <div className="p-2 border-b-2 border-black flex items-center">
                 <FileText className="text-blue-600 mr-2" size={16}/>
                 <h3 className="font-medium text-lg text-black truncate">
                     {data.title || data.file || 'Document Preview'}
                 </h3>
                 <span className="ml-auto text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
-          {fileType?.toUpperCase()}
-        </span>
+                    {fileType?.toUpperCase()}
+                </span>
             </div>
 
             {/* Document content */}
-            <div className="flex-grow overflow-clip p-4 bg-white text-black text-[10px] relative no-scrollbar">
+            <div className="flex-grow overflow-clip p-4 bg-white text-black text-[10px] relative no-scrollbar content-fade-in">
                 <style dangerouslySetInnerHTML={{
                     __html: `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .content-fade-in {
+                    animation: fadeIn 0.7s ease-in;
+                }
+
                 .document-content {
                     max-width: 100%;
                     word-wrap: break-word;
                     overflow: clip;
-                    ani
+                }
+                .document-content * {
+                    color: black !important;
+                    font-family: inherit !important;
+                    font-size: 12px !important;
                 }
                 .document-content h1, .document-content h2, .document-content h3, 
                 .document-content h4, .document-content h5, .document-content h6 {
@@ -132,6 +158,7 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
                     max-width: 100% !important;
                     overflow-x: auto;
                     display: block;
+                    color: black;
                 }
                 .document-content td, .document-content th { 
                     border: 1px solid #ddd; 
