@@ -17,10 +17,13 @@ export const FilePreview = ({ file, category }) => {
             return (<DocViewer data={file} />)
         case FileTypes.IMAGE:
             return (
-                <div
-                    className="w-full h-full bg-cover bg-center"
+                <img
+                    src={fileUrl}
+                    className="w-full h-auto rounded-md"
+                    alt={file.file || 'Preview'}
+                    loading="lazy"
                     style={{
-                        backgroundImage: `url(${fileUrl})`,
+                        objectFit: 'cover'
                     }}
                 />
             );

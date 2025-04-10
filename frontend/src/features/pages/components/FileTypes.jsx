@@ -6,7 +6,7 @@ export const FileTypes = {
     UNKNOWN: 'unknown'
 };
 
-const extensionMap = {
+export const extensionMap = {
     image: ['jpg', 'jpeg', 'png', 'webp'],
     audio: ['mp3', 'wav', 'ogg'],
     pdf: ['pdf'],
