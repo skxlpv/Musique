@@ -1,12 +1,12 @@
 import { UploadFile } from "../features/artworks/pages/UploadFile/UploadFile";
 import { AuthPage } from "../features/auth/pages/Auth/AuthPage";
 import { DictionaryPage } from "../features/dictionary/pages/DictionaryPage/DictionaryPage";
-import { ArtistsPage } from "../features/pages/pages/ArtistsPage/ArtistsPage.jsx";
-import { HomePage } from "../features/pages/pages/HomePage/HomePage";
+import { ArtistsPage } from "../features/pages/pages/ArtistsPage.jsx";
+import { HomePage } from "../features/pages/pages/HomePage";
 import { MyProfile } from "../features/profile/MyProfile/MyProfile";
-import { MusicianPage } from "../features/pages/pages/MusicianPage/MusicianPage.jsx";
+import { MusicianPage } from "../features/pages/pages/MusicianPage.jsx";
 import {PageTitle} from "../components/atoms/PageTitle/PageTitle.jsx";
-import {TheatrePage} from "../features/pages/pages/TheatrePage/TheatrePage.jsx";
+import {TheatrePage} from "../features/pages/pages/TheatrePage.jsx";
 
 export const routes = {
     //BASE
