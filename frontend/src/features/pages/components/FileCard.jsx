@@ -1,26 +1,28 @@
 import React from 'react';
 import { FilePreview } from './FilePreview';
+import FileDisplayHeader from "../../../components/atoms/FileDisplayHeader/FileDisplayHeader.jsx";
+import {extensionMap} from "./FileTypes.jsx";
 
 export const FileCard = ({ file, category, onClick }) => {
+    const ext = file.file.split('.').pop().toLowerCase();
+    const isImage = extensionMap.image.includes(ext);
+
     return (
         <div
-            className="flex flex-col rounded-lg overflow-hidden shadow-md
-            border border-black min-h-7 w-full
+            className={`flex flex-col rounded-md overflow-hidden shadow-md
+            border border-black min-h-7 w-full ${isImage ? 'h-fit' : 'h-[26rem]'}
             cursor-pointer hover:shadow-lg transition-shadow
-            items-center outline outline-zinc-500"
+            items-center outline outline-white/50`}
             onClick={() => onClick(file)}
         >
-            <div className="h-80 w-full overflow-hidden bg-gray-100 p-0">
-                <FilePreview file={file} category={category} />
-            </div>
-            <hr className="mt-0"/>
-            <div className="p-4 bg-zinc-200 h-1/4 w-full flex flex-col line-clamp-2">
-                <h3 className="heading-6 text-black line-clamp-1">
-                    {file.title || file.name || 'Untitled'}
-                </h3>
-                {file.description && (
-                    <p className="text-gray-500 line-clamp-2">{file.description}</p>
+            <div className={`w-full bg-gray-100 p-0 overflow-hidden ${isImage ? 'h-auto' : 'h-full min-h-80'}`}>
+                {!isImage && (
+                    <FileDisplayHeader
+                        data={file}
+                        fileType={file.file_type}
+                    />
                 )}
+                <FilePreview file={file} category={category} />
             </div>
         </div>
     );

@@ -1,23 +1,23 @@
 const subHeaderNames = {
     artistsPage: {
         name: "🎨Artists Page",
-        link: "/artists",
+        link: "/art-gallery",
     },
     musiciansPage: {
         name: "🎵Musicians Page",
-        link: "/musicians",
+        link: "/music-gallery",
     },
     theatrePage: {
         name: "🎭Theatre Artists Page",
-        link: "/theatre"
+        link: "/theatrical-gallery",
     },
     writersPage: {
         name: "📝Writers Page",
-        link: "/writers"
+        link: "/writings-gallery",
     },
     craftsmenPage: {
         name: "🧶Craftspeople Page",
-        link: "/craftsmen"
+        link: "/craftspeople-gallery",
     }
 };
 

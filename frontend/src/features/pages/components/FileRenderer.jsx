@@ -8,28 +8,27 @@ import { EmptyState } from './States.jsx';
 export const FileRenderer = ({
                                           category,
                                           apiEndpoint = "http://127.0.0.1:8000/api/v1/files",
-                                          onFileClick = (file) => console.log("File clicked:", file)
                                       }) => {
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const categoryEndpoints = {
-        art: "visual_art",
-        music: "music",
-        writing: "writing",
-        theatre: "theatre",
-        crafts: "crafts",
+        art: "art-gallery",
+        music: "music-gallery",
+        writing: "writings-gallery",
+        theatre: "theatrical-gallery",
+        crafts: "craftspeople-gallery",
     };
-
     const endpoint = categoryEndpoints[category] || category;
+    const handleFileClick = (file) => {
+        window.location.href = `${endpoint}/${file.id}`;
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
                 const response = await axios.get(`${apiEndpoint}/${endpoint}/`);
-                console.log(response.data);
                 setFiles(response.data.results);
                 setError(null);
             } catch (err) {
@@ -43,23 +42,15 @@ export const FileRenderer = ({
         fetchData();
     }, [apiEndpoint, endpoint]);
 
-    if (loading) {
-        return <LoadingState />;
-    }
-
-    if (error) {
-        return <ErrorState message={error} />;
-    }
-
-    if (files.length === 0) {
-        return <EmptyState />;
-    }
+    if (loading) {return <LoadingState />;}
+    else if (error) {return <ErrorState message={error} />;}
+    else if (files.length === 0) {return <EmptyState />;}
 
     return (
         <FileGrid
             files={files}
             category={category}
-            onFileClick={onFileClick}
+            onFileClick={handleFileClick}
         />
     );
 };

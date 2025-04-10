@@ -7,6 +7,7 @@ import { MyProfile } from "../features/profile/MyProfile/MyProfile";
 import { MusicianPage } from "../features/pages/pages/MusicianPage.jsx";
 import {PageTitle} from "../components/atoms/PageTitle/PageTitle.jsx";
 import {TheatrePage} from "../features/pages/pages/TheatrePage.jsx";
+import {WritersPage} from "../features/pages/pages/WritersPage.jsx";
 
 export const routes = {
     //BASE
@@ -62,7 +63,7 @@ export const routes = {
         requiresAuth: true
     },
     artists_page: {
-        url: "/artists",
+        url: "/art-gallery",
         component: (
             <>
                 <PageTitle title="Artists" />
@@ -72,7 +73,7 @@ export const routes = {
         requiresAuth: true
     },
     musicians_page: {
-        url: "/musicians",
+        url: "/music-gallery",
         component: (
             <>
                 <PageTitle title="Musicians" />
@@ -82,7 +83,7 @@ export const routes = {
         requiresAuth: true
     },
     theatre_artists_page: {
-        url: "/theatre",
+        url: "/theatrical-gallery",
         component: (
             <>
                 <PageTitle title="Theatre Artists" />
@@ -92,16 +93,17 @@ export const routes = {
         requiresAuth: true
     },
     writers_page: {
-        url: "/writers",
+        url: "/writings-gallery",
         component: (
             <>
                 <PageTitle title="Writers" />
+                <WritersPage/>
             </>
         ),
         requiresAuth: true
     },
     craftspeople_page: {
-        url: "/craftsmen",
+        url: "/craftspeople-gallery",
         component: (
             <>
                 <PageTitle title="Craftspeople" />

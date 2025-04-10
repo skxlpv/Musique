@@ -25,7 +25,7 @@ export const PDFViewer = ({ file, width = 280 }) => {
     };
 
     return (
-        <div className="h-full flex flex-col items-center justify-center">
+        <div className="h-full flex flex-col items-center justify-start">
             <Document
                 file={fileUrl}
                 onLoadSuccess={handleDocumentLoadSuccess}

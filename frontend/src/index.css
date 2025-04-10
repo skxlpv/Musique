@@ -29,6 +29,13 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-zinc-500;
   }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
   /* Focus States */
   :focus-visible {
