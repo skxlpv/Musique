@@ -4,6 +4,7 @@ import {FileText, AlertCircle} from 'lucide-react';
 import truncate from "html-truncate";
 import {RTFJS} from 'rtf.js';
 import he from 'he';
+import FileDisplayHeader from "../../../components/atoms/FileDisplayHeader/FileDisplayHeader.jsx";
 
 export const DocViewer = ({data, maxCharacters = 1200}) => {
     const [content, setContent] = useState('');
@@ -110,16 +111,6 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
 
     return (
         <div className="w-full h-full overflow-hidden flex flex-col">
-            <div className="p-2 border-b-2 border-black flex items-center">
-                <FileText className="text-blue-600 mr-2" size={16}/>
-                <h3 className="font-medium text-lg text-black truncate">
-                    {data.title || data.file || 'Document Preview'}
-                </h3>
-                <span className="ml-auto text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
-                    {fileType?.toUpperCase()}
-                </span>
-            </div>
-
             {/* Document content */}
             <div className="flex-grow overflow-clip p-4 bg-white text-black text-[10px] relative no-scrollbar content-fade-in">
                 <style dangerouslySetInnerHTML={{

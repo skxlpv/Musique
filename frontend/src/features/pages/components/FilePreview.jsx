@@ -32,15 +32,8 @@ export const FilePreview = ({ file, category }) => {
                     : `http://127.0.0.1:8000/${file.cover_art}`;
 
                 return (
-                    <div
-                        className="w-full h-full bg-cover bg-center"
-                        style={{
-                            backgroundImage: `url(${coverArtUrl})`,
-                        }}
-                    >
-                        <div className="absolute bottom-2 right-2 bg-black/50 p-1 rounded-full">
-                            <FileIcon fileType={FileTypes.AUDIO} size="small" />
-                        </div>
+                    <div className="w-full h-full bg-cover bg-center"
+                         style={{backgroundImage: `url(${coverArtUrl})`,}}>
                     </div>
                 );
             }
