@@ -12,7 +12,9 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.1",
     "axios": "^1.8.4",
+    "html-truncate": "^1.2.2",
     "lucide-react": "^0.487.0",
+    "mammoth": "^1.9.0",
     "pdfjs": "^2.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

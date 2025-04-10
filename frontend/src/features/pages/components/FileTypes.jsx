@@ -31,6 +31,10 @@ export const isPdf = (file) => {
     return file.file && file.file.toLowerCase().endsWith('.pdf');
 };
 
+export const isDocx = (file) => {
+    return file.file && file.file.toLowerCase().endsWith('.docx');
+};
+
 export const getFileUrl = (file) => {
     return file.file.startsWith('http') ? file.file : `http://127.0.0.1:8000/${file.file}`;
 };

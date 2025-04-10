@@ -48,7 +48,7 @@ export const FilePreview = ({ file, category }) => {
                 </div>
             );
         case FileTypes.DOCUMENT:
-            return (<DocViewer data={file} category={category} />)
+            return (<DocViewer data={file} />)
         default:
             return (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-yellow-50">
