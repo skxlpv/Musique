@@ -8,21 +8,24 @@ import { EmptyState } from './States.jsx';
 export const FileRenderer = ({
                                           category,
                                           apiEndpoint = "http://127.0.0.1:8000/api/v1/files",
-                                          onFileClick = (file) => console.log("File clicked:", file)
                                       }) => {
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const categoryEndpoints = {
-        art: "visual_art",
-        music: "music",
-        writing: "writing",
-        theatre: "theatre",
-        crafts: "crafts",
+        art: "art-gallery",
+        music: "music-gallery",
+        writing: "writings-gallery",
+        theatre: "theatrical-gallery",
+        crafts: "craftspeople-gallery",
     };
 
     const endpoint = categoryEndpoints[category] || category;
+
+    const handleFileClick = (file) => {
+        window.location.href = `${endpoint}/${file.id}`;
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,7 +62,7 @@ export const FileRenderer = ({
         <FileGrid
             files={files}
             category={category}
-            onFileClick={onFileClick}
+            onFileClick={handleFileClick}
         />
     );
 };
