@@ -2,6 +2,7 @@ import React from 'react';
 import { FileTypes, getFileTypeFromExtension, isPdf, getFileUrl } from './FileTypes';
 import { FileIcon } from './FileIcon';
 import { PDFViewer } from './PDFViewer';
+import {DocViewer} from "./DocViewer.jsx";
 
 export const FilePreview = ({ file, category }) => {
     const fileType = file.file_type || getCategoryFileType(category) || getFileTypeFromExtension(file.file);
@@ -46,7 +47,8 @@ export const FilePreview = ({ file, category }) => {
                     <FileIcon fileType={FileTypes.AUDIO} />
                 </div>
             );
-
+        case FileTypes.DOCUMENT:
+            return (<DocViewer data={file} category={category} />)
         default:
             return (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-yellow-50">
@@ -58,7 +60,7 @@ export const FilePreview = ({ file, category }) => {
 
 const getCategoryFileType = (category) => {
     const categoryConfig = {
-        art: FileTypes.IMAGE,
+        visual_art: FileTypes.IMAGE,
         music: FileTypes.AUDIO,
         writing: FileTypes.DOCUMENT,
         theatre: FileTypes.DOCUMENT,

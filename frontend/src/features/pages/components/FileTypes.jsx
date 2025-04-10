@@ -1,7 +1,6 @@
 export const FileTypes = {
     IMAGE: 'image',
     AUDIO: 'audio',
-    VIDEO: 'video',
     DOCUMENT: 'document',
     CRAFT: 'craft',
     UNKNOWN: 'unknown'
@@ -13,10 +12,10 @@ export const getFileTypeFromExtension = (filePath) => {
     const extension = filePath.split('.').pop().toLowerCase();
 
     const extensionMap = {
-        image: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
-        audio: ['mp3', 'wav', 'ogg', 'flac'],
-        video: ['mp4', 'webm', 'avi', 'mov'],
-        document: ['pdf', 'doc', 'docx', 'txt', 'rtf']
+        image: ['jpg', 'jpeg', 'png', 'webp'],
+        audio: ['mp3', 'wav', 'ogg'],
+        pdf: ['pdf'],
+        document: ['doc', 'docx', 'txt', 'rtf']
     };
 
     for (const [type, extensions] of Object.entries(extensionMap)) {

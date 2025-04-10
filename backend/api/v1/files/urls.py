@@ -9,11 +9,11 @@ from api.v1.files.views import get_user_files_by_username
 
 router = DefaultRouter()
 router.register(r'files', FileViewSet)
-router.register(r'visual_art', VisualArtViewSet)
-router.register(r'music', MusicViewSet)
-router.register(r'writing', WritingViewSet)
-router.register(r'theatre', TheatreViewSet)
-router.register(r'crafts', CraftsViewSet)
+router.register(r'art-gallery', VisualArtViewSet)
+router.register(r'music-gallery', MusicViewSet)
+router.register(r'writings-gallery', WritingViewSet)
+router.register(r'theatrical-gallery', TheatreViewSet)
+router.register(r'craftspeople-gallery', CraftsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

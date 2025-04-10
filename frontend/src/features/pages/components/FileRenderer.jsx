@@ -12,7 +12,6 @@ export const FileRenderer = ({
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const categoryEndpoints = {
         art: "art-gallery",
         music: "music-gallery",
@@ -20,9 +19,7 @@ export const FileRenderer = ({
         theatre: "theatrical-gallery",
         crafts: "craftspeople-gallery",
     };
-
     const endpoint = categoryEndpoints[category] || category;
-
     const handleFileClick = (file) => {
         window.location.href = `${endpoint}/${file.id}`;
     };
@@ -32,7 +29,6 @@ export const FileRenderer = ({
             setLoading(true);
             try {
                 const response = await axios.get(`${apiEndpoint}/${endpoint}/`);
-                console.log(response.data);
                 setFiles(response.data.results);
                 setError(null);
             } catch (err) {
@@ -46,17 +42,9 @@ export const FileRenderer = ({
         fetchData();
     }, [apiEndpoint, endpoint]);
 
-    if (loading) {
-        return <LoadingState />;
-    }
-
-    if (error) {
-        return <ErrorState message={error} />;
-    }
-
-    if (files.length === 0) {
-        return <EmptyState />;
-    }
+    if (loading) {return <LoadingState />;}
+    else if (error) {return <ErrorState message={error} />;}
+    else if (files.length === 0) {return <EmptyState />;}
 
     return (
         <FileGrid
