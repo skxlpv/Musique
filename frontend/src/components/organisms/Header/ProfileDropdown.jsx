@@ -4,6 +4,7 @@ import { routes } from "../../../routes/index.jsx";
 
 import settings_icon from "../../../assets/settings_icon.png"
 import profile_icon from "../../../assets/user-account-icon.png"
+import logout from "../../../assets/logout.png"
 
 export const ProfileDropdown = ({
     isDropdownOpen, 
@@ -32,7 +33,7 @@ export const ProfileDropdown = ({
                 setIsDropdownOpen(false);
                 handleLogout();
             }} className="body-small btn-link flex text-center text-red-600 items-center">
-                    <img src={settings_icon} alt={"profile-button"} className="w-4 h-4 mr-0.5"/>
+                    <img src={logout} alt={"profile-button"} className="w-4 h-4 mr-0.5"/>
                     Logout
             </button>
         </div>
