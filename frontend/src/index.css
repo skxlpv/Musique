@@ -83,7 +83,14 @@
 
   /* === Buttons === */
   .btn-small {
-    @apply inline-flex items-center justify-center font-medium transition-all pb-1 border-b border-b-black cursor-pointer;
+    @apply inline-flex items-center justify-center
+    font-medium transition-all pb-1 p-2
+    border-b border-b-black cursor-pointer;
+  }
+
+  .btn-link {
+    @apply px-2 py-1 text-left text-sm cursor-pointer
+    hover:bg-neutral-800 hover:text-white;
   }
 
   .btn-small:hover {

@@ -12,11 +12,11 @@ export const ProfileButton = ({
 }) => {
     return (
         <li className="relative" ref={dropdownRef}>
-            <div className={`relative z-10 ${isDropdownOpen ? 'profile-dropdown-open' : ''}`}>
+            <div className={`relative z-10`}>
                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className={`body-small btn-small ${isDropdownOpen && `!border-2 !border-neutral-800`}`}>
-                    <div className="flex items-center">
-                        <span className="text-ellipsis overflow-hidden mr-2">
+                    <div className="flex items-center justify-center">
+                        <span className="text-ellipsis overflow-hidden mr-2 mb-1">
                             {userData?.username || "No Profile"}
                         </span>
                         <Avatar size="sm"/>
