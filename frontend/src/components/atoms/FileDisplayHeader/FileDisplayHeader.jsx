@@ -4,7 +4,7 @@ import {FileText} from "lucide-react";
 const FileDisplayHeader = ({data}) => {
     const fileType = data.file_url.split('.').pop().toLowerCase();
     return (
-        <div className="p-2 flex items-center">
+        <div className="p-2 flex items-center bg-white">
             <FileText className="text-blue-600 mr-2" size={20}/>
             <h3 className="font-medium text-lg text-black truncate">
                 {data.title || data.file || 'Document Preview'}
