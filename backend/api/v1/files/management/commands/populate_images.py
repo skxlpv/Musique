@@ -1,7 +1,7 @@
 import django
 import os
+from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')  # Replace with your actual settings path
 django.setup()
 
 import random
@@ -9,9 +9,6 @@ from django.core.management.base import BaseCommand
 from django.core.files import File
 from django.contrib.auth import get_user_model
 from faker import Faker
-from api.v1.users.models import CustomUser
-
-
 from api.v1.files.models import VisualArtModel
 
 
@@ -20,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         fake = Faker()
-        User = CustomUser
+        User = get_user_model()
 
         # Create a test user if none exists
         User, created = User.objects.get_or_create(

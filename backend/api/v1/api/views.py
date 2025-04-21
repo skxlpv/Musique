@@ -25,11 +25,10 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
             res = Response({'success': True})
 
-            # Secure cookie settings
             cookie_settings = {
                 'httponly': True,
                 'secure': True,
-                'samesite': 'None',  # More secure default
+                'samesite': 'None',
                 'path': '/'
             }
 
