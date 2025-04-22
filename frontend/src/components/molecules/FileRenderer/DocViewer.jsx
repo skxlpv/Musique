@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import * as mammoth from 'mammoth';
-import {FileText, AlertCircle} from 'lucide-react';
+import {FileText} from 'lucide-react';
 import truncate from "html-truncate";
 import {RTFJS} from 'rtf.js';
 import he from 'he';
