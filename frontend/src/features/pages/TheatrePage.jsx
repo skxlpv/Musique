@@ -1,4 +1,4 @@
-import { FileRenderer } from "../components/FileRenderer.jsx"
+import { FileRenderer } from "../../components/molecules/FileRenderer/FileRenderer.jsx"
 import BasePage from "./BasePage.jsx";
 
 export const TheatrePage = () => {

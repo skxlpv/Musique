@@ -1,6 +1,6 @@
 import React from 'react';
 import BasePage from "./BasePage.jsx";
-import {FileRenderer} from "../components/FileRenderer.jsx";
+import {FileRenderer} from "../../components/molecules/FileRenderer/FileRenderer.jsx";
 
 export const WritersPage = () => {
     return (

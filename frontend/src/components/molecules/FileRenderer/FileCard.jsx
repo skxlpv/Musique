@@ -1,6 +1,6 @@
 import React from 'react';
-import { FilePreview } from './FilePreview';
-import FileDisplayHeader from "../../../components/atoms/FileDisplayHeader/FileDisplayHeader.jsx";
+import { FilePreview } from './FilePreview.jsx';
+import FileDisplayHeader from "../../atoms/FileDisplayHeader/FileDisplayHeader.jsx";
 import { extensionMap } from "./FileTypes.jsx";
 
 export const FileCard = ({ file, category, onClick }) => {

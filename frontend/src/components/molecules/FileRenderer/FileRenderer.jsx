@@ -1,34 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { FileGrid } from './FileGrid.jsx';
+import { LoadingState } from './States.jsx';
+import { ErrorState } from './States.jsx';
+import { EmptyState } from './States.jsx';
 
-export const FileRenderer = ({ file }) => {
-    const formattedDate = new Date(file.uploaded_at).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+export const FileRenderer = ({
+                                          category,
+                                          apiEndpoint = "http://127.0.0.1:8000/api/v1/files",
+                                      }) => {
+    const [files, setFiles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const categoryEndpoints = {
+        art: "art-gallery",
+        music: "music-gallery",
+        writing: "writings-gallery",
+        theatre: "theatrical-gallery",
+        crafts: "craftspeople-gallery",
+    };
+    const endpoint = categoryEndpoints[category] || category;
+    const handleFileClick = (file) => {
+        window.location.href = `${endpoint}/${file.id}`;
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`${apiEndpoint}/${endpoint}/`);
+                setFiles(response.data.results);
+                setError(null);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError("Failed to load files. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [apiEndpoint, endpoint]);
+
+    if (loading) {return <LoadingState />;}
+    else if (error) {return <ErrorState message={error} />;}
+    else if (files.length === 0) {return <EmptyState />;}
 
     return (
-        <div className="card w-52 h-80 flex flex-col justify-between card card-section card-element">
-            <div className="flex flex-col">
-                <hr className="border-zinc-600"/>
-                <div className="flex flex-col pb-4 px-4">
-                    <h2 className="text-base truncate mt-2">{file.title}</h2>
-                    <span className="text-small truncate">Uploaded: {formattedDate}</span>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export const FileList = ({ files }) => {
-    return (
-        <div className="flex flex-row flex-wrap gap-6">
-            {files.map((file) => (
-                <FileRenderer
-                    key={file.id}
-                    file={file}
-                />
-            ))}
-        </div>
+        <FileGrid
+            files={files}
+            category={category}
+            onFileClick={handleFileClick}
+        />
     );
 };

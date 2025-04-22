@@ -1,13 +1,13 @@
 import { UploadFile } from "../features/artworks/pages/UploadFile/UploadFile";
 import { AuthPage } from "../features/auth/pages/Auth/AuthPage";
 import { DictionaryPage } from "../features/dictionary/pages/DictionaryPage/DictionaryPage";
-import { ArtistsPage } from "../features/pages/pages/ArtistsPage.jsx";
-import { HomePage } from "../features/pages/pages/HomePage";
+import { ArtistsPage } from "../features/pages/ArtistsPage.jsx";
+import { HomePage } from "../features/pages/HomePage.jsx";
 import { MyProfile } from "../features/profile/MyProfile/MyProfile";
-import { MusicianPage } from "../features/pages/pages/MusicianPage.jsx";
+import { MusicianPage } from "../features/pages/MusicianPage.jsx";
 import {PageTitle} from "../components/atoms/PageTitle/PageTitle.jsx";
-import {TheatrePage} from "../features/pages/pages/TheatrePage.jsx";
-import {WritersPage} from "../features/pages/pages/WritersPage.jsx";
+import {TheatrePage} from "../features/pages/TheatrePage.jsx";
+import {WritersPage} from "../features/pages/WritersPage.jsx";
 
 export const routes = {
     //BASE

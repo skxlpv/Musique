@@ -1,7 +1,7 @@
 import React from 'react';
-import { FileTypes, getFileTypeFromExtension, isPdf, getFileUrl } from './FileTypes';
-import { FileIcon } from './FileIcon';
-import { PDFViewer } from './PDFViewer';
+import { FileTypes, getFileTypeFromExtension, isPdf, getFileUrl } from './FileTypes.jsx';
+import { FileIcon } from './FileIcon.jsx';
+import { PDFViewer } from './PDFViewer.jsx';
 import {DocViewer} from "./DocViewer.jsx";
 import vinyl from "../../../assets/vinyl.png"
 import play from "../../../assets/play.png"

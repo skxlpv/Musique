@@ -1,6 +1,6 @@
 import React from 'react';
 import { File, Image, Music, FileText, Video, Hammer } from "lucide-react";
-import { FileTypes } from './FileTypes';
+import { FileTypes } from './FileTypes.jsx';
 
 export const FileIcon = ({ fileType, size = "medium" }) => {
     const sizeClasses = {
