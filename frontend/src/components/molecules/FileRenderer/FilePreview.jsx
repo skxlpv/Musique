@@ -5,7 +5,6 @@ import { PDFViewer } from './PDFViewer.jsx';
 import {DocViewer} from "./DocViewer.jsx";
 import vinyl from "../../../assets/vinyl.png"
 import play from "../../../assets/play.png"
-import pause from "../../../assets/pause.png"
 
 export const FilePreview = ({ file, category }) => {
     const fileType = getCategoryFileType(category) || getFileTypeFromExtension(file.file);
@@ -82,7 +81,7 @@ const getCategoryFileType = (category) => {
         music: FileTypes.AUDIO,
         writing: FileTypes.DOCUMENT,
         theatre: FileTypes.DOCUMENT,
-        crafts: FileTypes.CRAFT,
+        crafts: FileTypes.DOCUMENT,
     };
 
     return categoryConfig[category];

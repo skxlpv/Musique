@@ -1,7 +1,7 @@
 import django
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')  # Replace with your actual settings path
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
 import random

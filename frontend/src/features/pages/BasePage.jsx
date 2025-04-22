@@ -7,9 +7,7 @@ const BasePage = ({title, description, children}) => {
                 <h1 className="heading-1">{title}</h1>
                 <h1 className="heading-3 text-neutral-500">{description}</h1>
             </div>
-            <div>
-                {children}
-            </div>
+            {children}
         </div>
     );
 };

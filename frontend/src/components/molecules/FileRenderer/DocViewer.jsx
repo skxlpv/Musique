@@ -4,14 +4,12 @@ import {FileText, AlertCircle} from 'lucide-react';
 import truncate from "html-truncate";
 import {RTFJS} from 'rtf.js';
 import he from 'he';
-import FileDisplayHeader from "../../atoms/FileDisplayHeader/FileDisplayHeader.jsx";
 import HTMLRender from "../../atoms/HTMLRender/HTMLRender.jsx";
 
 export const DocViewer = ({data, maxCharacters = 1200}) => {
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [fileType, setFileType] = useState(null);
 
     useEffect(() => {
         const loadDocument = async () => {
@@ -20,18 +18,15 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
                 const fileUrl = data.file;
                 const fileName = data.file || fileUrl.split('/').pop();
                 const extension = fileName.split('.').pop().toLowerCase();
-                setFileType(extension);
 
-                // Check supported extensions
                 if (!['docx', 'txt', 'rtf'].includes(extension)) {
                     setError(`File type .${extension} is not supported. Supported types: .docx, .txt, .rtf`);
                     setLoading(false);
                     return;
                 }
 
-                // Fetch document
                 const response = await fetch(fileUrl);
-                if (!response.ok) throw new Error(`Failed to fetch document (status: ${response.status})`);
+                if (!response.ok) new Error(`Failed to fetch document (status: ${response.status})`);
 
                 let contentHtml;
 
@@ -78,9 +73,7 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
 
     if (loading) {
         return (
-            // <div className="animate-pulse flex flex-col items-center">
-                <h1 className="text-xs text-gray-500 mt-2">Loading document preview...</h1>
-            // </div>
+            <h1 className="text-xs text-gray-500 mt-2">Loading document preview...</h1>
         );
     }
 
