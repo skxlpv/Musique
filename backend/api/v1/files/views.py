@@ -1,7 +1,8 @@
 # views.py
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, filters, permissions
-from rest_framework.decorators import permission_classes, api_view
+from rest_framework.decorators import permission_classes, api_view, action
+from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q
@@ -35,6 +36,9 @@ class BaseFileViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'description', 'tags', 'author__username']
     ordering_fields = ['uploaded_at', 'title', 'downloads_count']
     pagination_class = PageNumberPagination
+
+    lookup_field = 'slug'
+    lookup_value_regex = '[-\w]+'
 
     def get_queryset(self):
         queryset = super().get_queryset()

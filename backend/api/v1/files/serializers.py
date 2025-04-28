@@ -13,13 +13,15 @@ class FileModelSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='author.username')
     file_url = serializers.SerializerMethodField()
     tags_list = serializers.SerializerMethodField()
+    field_labels = serializers.SerializerMethodField()
 
     class Meta:
         model = FileModel
         fields = [
             'id', 'file', 'file_url', 'title', 'description', 'category',
             'file_type', 'tags', 'tags_list', 'uploaded_at', 'is_downloadable',
-            'downloads_count', 'author', 'author_name', 'is_featured'
+            'downloads_count', 'author', 'author_name', 'is_featured', 'slug',
+            'field_labels'
         ]
         read_only_fields = ['downloads_count', 'uploaded_at']
 
@@ -34,6 +36,26 @@ class FileModelSerializer(serializers.ModelSerializer):
             return [tag.strip() for tag in obj.tags.split(',')]
         return []
 
+    def get_field_labels(self, obj):
+        """Returns verbose names for all fields in the serializer"""
+        model_class = obj._meta.model
+
+        serializer_fields = set(self.Meta.fields)
+
+        labels = {}
+        for field_name in serializer_fields:
+            try:
+                field = model_class._meta.get_field(field_name)
+                if hasattr(field, 'verbose_name'):
+                    labels[field_name] = field.verbose_name
+                elif field_name in ['field_labels', 'tags_list', 'file_url', 'author_name']:
+                    continue
+                else:
+                    labels[field_name] = field_name.replace('_', ' ').title()
+            except:
+                labels[field_name] = field_name.replace('_', ' ').title()
+
+        return labels
 
 class VisualArtSerializer(FileModelSerializer):
     class Meta(FileModelSerializer.Meta):
