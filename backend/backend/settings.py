@@ -3,10 +3,8 @@ from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
-
-from decouple import config
-
-SECRET_KEY = config('SECRET_KEY')
+load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
@@ -84,10 +82,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('POSTGRES_DB'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': config('DB_HOST', 'localhost'),
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': '5432',
     },
 }

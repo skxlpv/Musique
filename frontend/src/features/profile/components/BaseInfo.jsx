@@ -23,7 +23,7 @@ export const BaseInfo = () => {
     };
 
     return (
-        <div className="flex card-gradient justify-between">
+        <div className="flex card-gradient card-gradient-color-violet justify-between">
             {/* Left section - Name and title */}
             <div className="flex gap-10 items-center">
                 <div className="flex mb-4">

@@ -21,7 +21,7 @@ export const FileRenderer = ({
     };
     const endpoint = categoryEndpoints[category] || category;
     const handleFileClick = (file) => {
-        window.location.href = `${endpoint}/${file.id}`;
+        window.location.href = `${endpoint}/${file.slug}`;
     };
 
     useEffect(() => {

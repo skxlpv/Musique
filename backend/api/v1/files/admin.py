@@ -13,7 +13,7 @@ class FileModelAdmin(admin.ModelAdmin):
     list_display = ('title', 'file_type', 'category', 'uploaded_at', 'author')
     list_filter = ('file_type', 'category', 'uploaded_at')
     search_fields = ('title', 'description')
-    readonly_fields = ('file_type', 'uploaded_at', 'downloads_count')
+    readonly_fields = ('file_type', 'uploaded_at', 'downloads_count', 'slug')
 
     def delete_model(self, request, obj):
         """Override delete to move file to archive first"""

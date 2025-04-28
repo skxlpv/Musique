@@ -1,12 +1,10 @@
 import os
-import shutil
 from datetime import datetime
 
-from django.conf import settings
+from autoslug.fields import AutoSlugField
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from rest_framework.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -44,7 +42,6 @@ def get_archive_path(file_path):
 
 class FileModel(models.Model):
     """Base file model for all artistic works"""
-
     CATEGORY_CHOICES = [
         ('visual_art', 'Visual Art'),
         ('music', 'Music'),
@@ -81,31 +78,80 @@ class FileModel(models.Model):
                 ],
             ),
         ],
+        verbose_name="File",
+        help_text="Upload your artwork file"
     )
-    title = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='other')
+    title = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Title",
+        help_text="Title of your artwork"
+    )
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Description",
+        help_text="Detailed description of your artwork"
+    )
+    category = models.CharField(
+        max_length=100,
+        choices=CATEGORY_CHOICES,
+        default='other',
+        verbose_name="Category",
+        help_text="Artwork category"
+    )
     file_type = models.CharField(
         max_length=50,
         choices=FILE_TYPES,
         blank=True,
         null=True,
+        verbose_name="File Type",
+        help_text="Type of the uploaded file"
     )
-    tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated tags")
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    is_downloadable = models.BooleanField(default=False)
-    downloads_count = models.PositiveIntegerField(default=0)
+    slug = AutoSlugField(
+        populate_from='title',
+        verbose_name="Slug",
+        help_text="URL-friendly version of the title"
+    )
+    tags = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Tags",
+        help_text="Comma-separated tags for better discoverability"
+    )
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Upload Date",
+        help_text="Date and time when the artwork was uploaded"
+    )
+    is_downloadable = models.BooleanField(
+        default=False,
+        verbose_name="Downloadable",
+        help_text="Allow others to download this file"
+    )
+    downloads_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Download Count",
+        help_text="Number of times this file has been downloaded"
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='uploaded_files',
+        verbose_name="Author",
+        help_text="Creator of this artwork"
     )
-    is_featured = models.BooleanField(default=False)
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name="Featured",
+        help_text="Mark as featured artwork"
+    )
 
     class Meta:
         ordering = ['-uploaded_at']
-        verbose_name = 'File'
-        verbose_name_plural = 'Files'
+        verbose_name = 'Artwork'
+        verbose_name_plural = 'Artworks'
 
     def __str__(self):
         return f'{self.title} by {self.author.username}'
@@ -170,93 +216,225 @@ class FileModel(models.Model):
 
 
 class VisualArtModel(FileModel):
-    """Model for visual arts (paintings, photography, digital art, etc.)"""
-    style = models.CharField(max_length=100, blank=True)
-    medium = models.CharField(max_length=100, blank=True)
-    height_px = models.PositiveIntegerField(null=True, blank=True)
-    width_px = models.PositiveIntegerField(null=True, blank=True)
-    dimensions_physical = models.CharField(max_length=100, blank=True,
-                                           help_text="Physical dimensions (e.g. '24x36 inches')")
-    creation_date = models.DateField(null=True, blank=True)
+    style = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Art Style",
+        help_text="Artistic style (e.g., realism, abstract)"
+    )
+    medium = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Medium",
+        help_text="Materials used (e.g., oil, watercolor, digital)"
+    )
+    height_px = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Height (px)",
+        help_text="Height in pixels"
+    )
+    width_px = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Width (px)",
+        help_text="Width in pixels"
+    )
+    dimensions_physical = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Physical Dimensions",
+        help_text="Physical dimensions (e.g., '24x36 inches')"
+    )
+    creation_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Creation Date",
+        help_text="When the artwork was created"
+    )
 
-    def save(self, *args, **kwargs):
-        self.category = 'visual_art'
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f'{self.title} by {self.author.username}'
+    class Meta:
+        verbose_name = 'Visual Artwork'
+        verbose_name_plural = 'Visual Artworks'
 
 
 class MusicModel(FileModel):
-    """Model for music works (songs, compositions, etc.)"""
-    cover_art = models.ImageField(upload_to=get_cover_art_upload_path, blank=True)
-    genre = models.CharField(max_length=100, blank=True)
-    bpm = models.PositiveIntegerField(null=True, blank=True)
-    duration_seconds = models.PositiveIntegerField(null=True, blank=True)
-    instruments = models.CharField(max_length=255, blank=True)
-    lyrics = models.TextField(blank=True)
-    composer = models.CharField(max_length=100, blank=True)
-    recording_date = models.DateField(null=True, blank=True)
+    cover_art = models.ImageField(
+        upload_to=get_cover_art_upload_path,
+        blank=True,
+        verbose_name="Cover Art",
+        help_text="Album or track cover image"
+    )
+    genre = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Music Genre",
+        help_text="Genre of the music (e.g., rock, jazz)"
+    )
+    bpm = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Beats Per Minute",
+        help_text="Tempo of the music"
+    )
+    duration_seconds = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Duration (seconds)",
+        help_text="Length of the track in seconds"
+    )
+    instruments = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Instruments Used",
+        help_text="List of instruments featured"
+    )
+    lyrics = models.TextField(
+        blank=True,
+        verbose_name="Lyrics",
+        help_text="Song lyrics (if applicable)"
+    )
+    composer = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Composer",
+        help_text="Person who composed the music"
+    )
+    recording_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Recording Date",
+        help_text="When the track was recorded"
+    )
 
-    def save(self, *args, **kwargs):
-        self.category = 'music'
-        self.file_type = 'audio'
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f'{self.title} by {self.composer}'
+    class Meta:
+        verbose_name = 'Music Track'
+        verbose_name_plural = 'Music Tracks'
 
 
 class WritingModel(FileModel):
-    """Model for written works (essays, books, poetry, etc.)"""
-    word_count = models.PositiveIntegerField(null=True, blank=True)
-    language = models.CharField(max_length=100, blank=True)
-    genre = models.CharField(max_length=100, blank=True)
-    publication_date = models.DateField(null=True, blank=True)
-    publisher = models.CharField(max_length=100, blank=True)
+    word_count = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Word Count",
+        help_text="Approximate number of words"
+    )
+    language = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Language",
+        help_text="Language the work is written in"
+    )
+    genre = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Literary Genre",
+        help_text="Genre of the writing (e.g., fiction, poetry)"
+    )
+    publication_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Publication Date",
+        help_text="When the work was published"
+    )
+    publisher = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Publisher",
+        help_text="Publishing company or platform"
+    )
 
-    def save(self, *args, **kwargs):
-        self.category = 'writing'
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f'{self.title} by {self.author} ({self.publisher})'
+    class Meta:
+        verbose_name = 'Written Work'
+        verbose_name_plural = 'Written Works'
 
 
 class TheatreModel(FileModel):
-    """Model for theatre works (scripts, performances, etc.)"""
-    playwright = models.CharField(max_length=100, blank=True)
-    performance_date = models.DateField(null=True, blank=True)
-    duration_minutes = models.PositiveIntegerField(null=True, blank=True)
-    cast_size = models.PositiveIntegerField(null=True, blank=True)
-    genre = models.CharField(max_length=100, blank=True)
-    period = models.CharField(max_length=100, blank=True)
-    theme = models.CharField(max_length=100, blank=True)
+    playwright = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Playwright",
+        help_text="Author of the theatrical work"
+    )
+    performance_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Performance Date",
+        help_text="Date of the performance"
+    )
+    duration_minutes = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Duration (minutes)",
+        help_text="Length of the performance"
+    )
+    cast_size = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Cast Size",
+        help_text="Number of performers"
+    )
+    genre = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Theatrical Genre",
+        help_text="Genre of the performance"
+    )
+    period = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Historical Period",
+        help_text="Time period the work represents"
+    )
+    theme = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Theme",
+        help_text="Central theme or message"
+    )
 
-    def save(self, *args, **kwargs):
-        self.category = 'theatre'
-        super().save(*args, **kwargs)
-
-    def clean(self):
-        super().clean()
-        if self.file and not self.file.name.lower().endswith('.pdf'):
-            raise ValidationError("Theatre documents must be PDF files.")
-
-    def __str__(self):
-        return f'{self.title} by {self.playwright}'
+    class Meta:
+        verbose_name = 'Theatrical Work'
+        verbose_name_plural = 'Theatrical Works'
 
 
 class CraftsModel(FileModel):
-    """Model for crafts works (DIY instructions, patterns, etc.)"""
-    materials = models.TextField(blank=True)
-    difficulty_level = models.CharField(max_length=50, blank=True)
-    time_required = models.CharField(max_length=100, blank=True)
-    tools_required = models.TextField(blank=True)
-    instructions = models.TextField(blank=True)
+    DIFFICULTY = [
+        ('begginer', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('advanced', 'Advanced'),
+        ('master', 'Master'),
+    ]
 
-    def save(self, *args, **kwargs):
-        self.category = 'crafts'
-        super().save(*args, **kwargs)
+    materials = models.TextField(
+        blank=True,
+        verbose_name="Materials",
+        help_text="List of materials needed"
+    )
+    difficulty_level = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=DIFFICULTY,
+        verbose_name="Difficulty Level",
+        help_text="Beginner, Intermediate, or Advanced"
+    )
+    time_required = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Time Required",
+        help_text="Estimated time to complete"
+    )
+    tools_required = models.TextField(
+        blank=True,
+        verbose_name="Tools Required",
+        help_text="List of tools needed"
+    )
+    instructions = models.TextField(
+        blank=True,
+        verbose_name="Instructions",
+        help_text="Step-by-step instructions"
+    )
 
-    def __str__(self):
-        return f'{self.title} by {self.author.username}'
+    class Meta:
+        verbose_name = 'Craft Project'
+        verbose_name_plural = 'Craft Projects'
