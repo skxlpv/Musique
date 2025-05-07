@@ -1,13 +1,17 @@
 # views.py
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, filters, permissions
+from rest_framework import viewsets, filters, permissions, status
 from rest_framework.decorators import permission_classes, api_view, action
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
+from unicodedata import category
 
 from .models import (
     FileModel,
@@ -26,7 +30,7 @@ from .serializers import (
     CraftsSerializer
 )
 from ..api.serializers import FileSerializer
-
+user = get_user_model()
 
 class BaseFileViewSet(viewsets.ModelViewSet):
     """Base ViewSet for file operations"""
@@ -115,3 +119,60 @@ def get_user_files_by_username(request, username):
     files = FileModel.objects.filter(author=get_user_model().objects.get(username=username))
     serializer = FileSerializer(files, many=True)
     return Response(serializer.data)
+
+class FileUploadViewSet(ViewSet):
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        try:
+            file = request.data.get('file')
+            if not file:
+                raise ValidationError("No file was provided.")
+
+            ext = file.name.split('.')[-1].lower()
+            category = request.data.get('category', '').lower()
+
+            # Handle document types
+            if ext in ['doc', 'docx', 'rtf', 'txt']:
+                category = 'writing'  # Force writing category for these types
+                serializer_class = WritingSerializer
+            elif ext == 'pdf':
+                if category == 'theatre':
+                    serializer_class = TheatreSerializer
+                elif category == 'crafts':
+                    serializer_class = CraftsSerializer
+                else:
+                    category = 'writing'  # Default for PDFs
+                    serializer_class = WritingSerializer
+            elif ext in ['mp3', 'wav']:
+                category = 'music'
+                serializer_class = MusicSerializer
+                cover_art = request.data.get('cover_art')
+                if cover_art:
+                    request.data._mutable = True
+                    request.data['cover_art'] = cover_art
+                    request.data._mutable = False
+            elif ext in ['jpg', 'jpeg', 'png', 'gif']:
+                category = 'visual_art'
+                serializer_class = VisualArtSerializer
+            else:
+                category = 'other'
+                serializer_class = FileModelSerializer
+
+            # Create mutable copy of request data
+            data = request.data.copy()
+            data['category'] = category
+            data['author'] = request.user.id
+
+            serializer = serializer_class(data=data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except ValidationError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": "An error occurred", "details": str(e)},
+                          status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -18,7 +18,6 @@ export const Login = () => {
             const success = await login(data.username, data.password);
 
             if (success) {
-                // Use replace to avoid back button issues
                 navigate("/", { replace: true });
             } else {
                 setLoginError("Login failed. Please check your credentials.");
@@ -32,12 +31,12 @@ export const Login = () => {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6">
-            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Sign In</h2>
+        <div className="w-full max-w-md mx-auto bg-black rounded-xl shadow-lg overflow-hidden p-6">
+            <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
 
             <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
                 <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700" htmlFor="username">
+                    <label className="text-sm font-medium" htmlFor="username">
                         Username
                     </label>
                     <input
@@ -52,7 +51,7 @@ export const Login = () => {
                 </div>
 
                 <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700" htmlFor="password">
+                    <label className="text-sm font-medium" htmlFor="password">
                         Password
                     </label>
                     <input
@@ -73,7 +72,7 @@ export const Login = () => {
                             type="checkbox"
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
-                        <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                        <label htmlFor="remember-me" className="ml-2 block text-sm">
                             Remember me
                         </label>
                     </div>
@@ -107,7 +106,7 @@ export const Login = () => {
                     )}
                 </button>
 
-                <p className="text-center text-sm text-gray-500 mt-4">
+                <p className="text-center text-sm mt-4">
                     Don't have an account?{" "}
                     <a
                         href="/auth/register"

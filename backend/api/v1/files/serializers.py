@@ -20,7 +20,7 @@ class FileModelSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'file', 'file_url', 'title', 'description', 'category',
             'file_type', 'tags', 'tags_list', 'uploaded_at', 'is_downloadable',
-            'downloads_count', 'author', 'author_name', 'is_featured', 'slug',
+            'downloads_count', 'author', 'is_featured', 'slug',
             'field_labels'
         ]
         read_only_fields = ['downloads_count', 'uploaded_at']
@@ -67,12 +67,22 @@ class VisualArtSerializer(FileModelSerializer):
 
 
 class MusicSerializer(FileModelSerializer):
+    cover_art = serializers.ImageField(required=False, allow_null=True)
+
     class Meta(FileModelSerializer.Meta):
         model = MusicModel
         fields = FileModelSerializer.Meta.fields + [
             'cover_art', 'genre', 'bpm', 'duration_seconds', 'instruments',
             'lyrics', 'composer', 'recording_date'
         ]
+        extra_kwargs = {
+            'cover_art': {'required': False}
+        }
+
+    def validate_cover_art(self, value):
+        if value and not value.content_type.startswith('image'):
+            raise serializers.ValidationError("Only image files are allowed for cover art")
+        return value
 
 
 class WritingSerializer(FileModelSerializer):
@@ -83,6 +93,10 @@ class WritingSerializer(FileModelSerializer):
             'publication_date', 'publisher'
         ]
 
+    def create(self, validated_data):
+        validated_data['category'] = 'writing'
+        return super().create(validated_data)
+
 
 class TheatreSerializer(FileModelSerializer):
     class Meta(FileModelSerializer.Meta):
@@ -92,6 +106,9 @@ class TheatreSerializer(FileModelSerializer):
             'duration_minutes', 'cast_size', 'genre'
         ]
 
+    def create(self, validated_data):
+        validated_data['category'] = 'theatre'
+        return super().create(validated_data)
 
 class CraftsSerializer(FileModelSerializer):
     class Meta(FileModelSerializer.Meta):
@@ -100,3 +117,7 @@ class CraftsSerializer(FileModelSerializer):
             'materials', 'difficulty_level',
             'time_required', 'tools_required', 'instructions'
         ]
+
+    def create(self, validated_data):
+        validated_data['category'] = 'crafts'
+        return super().create(validated_data)

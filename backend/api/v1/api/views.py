@@ -117,10 +117,8 @@ def logout(request):
         res.delete_cookie('refresh_token', path='/', samesite='None')
         return res
     except Exception as e:
-        return Response({
-            'success': False,
-            'error': 'Logout failed'
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'success': False,'error': 'Logout failed'},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
