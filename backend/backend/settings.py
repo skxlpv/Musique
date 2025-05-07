@@ -192,30 +192,23 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Adjust CORS for development
 if DEBUG:
     CORS_ALLOWED_ORIGINS = [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-        'http://localhost:5173',  # Vite default
+        'http://localhost:5173',
         'http://127.0.0.1:5173',
-        'http://localhost:8080',  # Vue CLI default
-        'http://127.0.0.1:8080',
     ]
-    CORS_ORIGIN_ALLOW_ALL = True  # Use with caution in production
-    CORS_ORIGIN_WHITELIST = CORS_ALLOWED_ORIGINS
 else:
-    # Production: explicitly define allowed origins
     CORS_ALLOWED_ORIGINS = [
         'https://yourdomain.com',
         'https://www.yourdomain.com',
     ]
-    CORS_ORIGIN_ALLOW_ALL = False
 
 # CSRF Configuration
-CSRF_COOKIE_HTTPONLY = False  # Allow JS to read CSRF token
-CSRF_COOKIE_SECURE = DEBUG  # Only secure in production
-CSRF_COOKIE_SAMESITE = 'Lax' if not DEBUG else 'None'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SAMESITE = 'Lax' if DEBUG else 'None'
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -223,16 +216,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:5173',
 ]
 
-# Session Cookie Settings
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'Lax' if not DEBUG else 'None'
-
-# Additional Security Recommendations
-SECURE_SSL_REDIRECT = not DEBUG
-SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
-SECURE_HSTS_PRELOAD = not DEBUG
-
+SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SAMESITE = 'Lax' if DEBUG else 'None'
 JAZZMIN_SETTINGS = {
     "menu": [
         {

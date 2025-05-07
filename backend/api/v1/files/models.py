@@ -1,10 +1,13 @@
 import os
+import shutil
 from datetime import datetime
 
 from autoslug.fields import AutoSlugField
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 from django.db import models
+
+from backend import settings
 
 User = get_user_model()
 
@@ -178,35 +181,17 @@ class FileModel(models.Model):
         super().save(*args, **kwargs)
 
     def move_to_archive(self):
-        """
-        Move the file to an archive directory and manually delete from original location
-        Returns the archive path if successful, None otherwise
-        """
         if not self.file:
             return None
-
         try:
-            # Get the source file's path
             source_path = self.file.path
             source_name = self.file.name
-
-            # Only proceed if the file exists
             if not os.path.exists(source_path):
                 return None
-
-            # Create the archive path
             archive_path = get_archive_path(source_name)
-
-            # Get the full file system path for archive destination
             full_archive_path = os.path.join(settings.MEDIA_ROOT, archive_path)
-
-            # Create archive directory if it doesn't exist
             os.makedirs(os.path.dirname(full_archive_path), exist_ok=True)
-
-            # Copy the file to the archive
             shutil.copy2(source_path, full_archive_path)
-
-            # Manually delete the original file
             os.remove(source_path)
 
             return archive_path

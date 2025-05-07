@@ -1,6 +1,7 @@
 import django
 import os
 from django.conf import settings
+from django.utils.text import slugify  # <-- New import
 
 django.setup()
 
@@ -28,7 +29,6 @@ class Command(BaseCommand):
             }
         )
 
-        # Sample image directory (create this folder and add some test images)
         image_dir = "api/v1/files/management/commands/sample_images"
         if not os.path.exists(image_dir):
             os.makedirs(image_dir)
@@ -48,12 +48,24 @@ class Command(BaseCommand):
         styles = ['abstract', 'realism', 'impressionism', 'cubism', 'surrealism']
         mediums = ['oil', 'watercolor', 'digital', 'acrylic', 'pencil']
 
-        for i, img_name in enumerate(image_files[:20]):  # Limit to 20 images
+        for i, img_name in enumerate(image_files[:20]):
             img_path = os.path.join(image_dir, img_name)
 
             with open(img_path, 'rb') as img_file:
+                # Generate unique slug
+                title = fake.sentence(nb_words=3)
+                base_slug = slugify(title)
+                slug = base_slug
+                counter = 1
+
+                # Ensure slug uniqueness
+                while VisualArtModel.objects.filter(slug=slug).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+
                 art = VisualArtModel(
-                    title=fake.sentence(nb_words=3),
+                    title=title,
+                    slug=slug,  # <-- Add slug field
                     description=fake.paragraph(nb_sentences=3),
                     author=User,
                     style=random.choice(styles),
@@ -63,16 +75,16 @@ class Command(BaseCommand):
                     category='visual_art',
                 )
 
-                # Save the image file
                 art.file.save(img_name, File(img_file))
                 art.save()
 
             self.stdout.write(self.style.SUCCESS(
-                f"Created artwork: {art.title} (ID: {art.id})"
+                f"Created artwork: {art.title} (Slug: {art.slug})"
             ))
 
         self.stdout.write(self.style.SUCCESS(
             f"Successfully created {len(image_files)} image records!"
         ))
+
 
 Command().handle()

@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileTypes, getFileTypeFromExtension, isPdf, getFileUrl } from './FileTypes.jsx';
 import { FileIcon } from './FileIcon.jsx';
 import { PDFViewer } from './PDFViewer.jsx';
-import {DocViewer} from "./DocViewer.jsx";
+import { DocViewer } from "./DocViewer.jsx";
 import vinyl from "../../../assets/vinyl.png"
 import play from "../../../assets/play.png"
 
 export const FilePreview = ({ file, category }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [audioElement, setAudioElement] = useState(null);
+
     const fileType = getCategoryFileType(category) || getFileTypeFromExtension(file.file);
     const fileUrl = getFileUrl(file);
+
+    const handlePlayAudio = () => {
+        if (!audioElement) {
+            const audio = new Audio(fileUrl);
+            setAudioElement(audio);
+
+            audio.addEventListener('ended', () => {
+                setIsPlaying(false);
+            });
+
+            audio.play();
+            setIsPlaying(true);
+        } else {
+            if (isPlaying) {
+                audioElement.pause();
+                setIsPlaying(false);
+            } else {
+                audioElement.play();
+                setIsPlaying(true);
+            }
+        }
+    };
 
     if (fileType === FileTypes.DOCUMENT && isPdf(file)) {
         return <PDFViewer file={file} />;
@@ -39,31 +64,68 @@ export const FilePreview = ({ file, category }) => {
                     : `http://127.0.0.1:8000/${file.cover_art}`;
 
                 return (
-                    <div className="flex relative z-0 ml-10">
-                        <img
-                            src={vinyl}
-                            className="w-[8.5rem] h-fit absolute z-10 left-[calc(33.33%)] invert"
-                            alt="vinyl record"
-                            style={{
-                                transform: 'translateX(1rem)'
-                            }}
-                        />
-                        <img
-                            src={coverArtUrl}
-                            className="w-7/12 h-auto rounded-md z-20 relative"
-                            alt={file.cover_art}
-                        />
-                        <img
-                            src={play}
-                            className="w-10 h-10 absolute z-20 top-12 left-12 invert"
-                            alt="play-icon"
-                        />
+                    <div className="flex flex-col items-center">
+                        <div className="relative w-64 h-64 flex items-center justify-center">
+                            {/* Vinyl Record - behind the cover */}
+                            <img
+                                src={vinyl}
+                                className="absolute w-full h-full object-contain animate-spin"
+                                style={{
+                                    animationDuration: '3s',
+                                    animationPlayState: isPlaying ? 'running' : 'paused'
+                                }}
+                                alt="vinyl record"
+                            />
+
+                            {/* Cover Art - centered on top of vinyl */}
+                            <img
+                                src={coverArtUrl}
+                                className="w-3/5 h-3/5 rounded-md z-10 object-cover shadow-lg"
+                                alt={file.cover_art}
+                            />
+
+                            {/* Play Button - centered on top of cover */}
+                            <button
+                                onClick={handlePlayAudio}
+                                className="absolute z-20 w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-70 transition-all"
+                            >
+                                <img
+                                    src={play}
+                                    className={`w-6 h-6 invert ${isPlaying ? 'opacity-70' : ''}`}
+                                    alt="play-icon"
+                                />
+                            </button>
+                        </div>
+
+                        {/* Track info */}
+                        {isPlaying && (
+                            <div className="mt-4 text-center max-w-xs">
+                                <p className="text-sm font-medium truncate">{file.title || file.file.split('/').pop()}</p>
+                            </div>
+                        )}
                     </div>
                 );
             }
             return (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
-                    <FileIcon fileType={FileTypes.AUDIO} />
+                <div className="flex flex-col items-center">
+                    <div className="relative w-64 h-64 flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 rounded-full">
+                        <FileIcon fileType={FileTypes.AUDIO} className="w-16 h-16" />
+                        <button
+                            onClick={handlePlayAudio}
+                            className="absolute z-20 w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-70 transition-all"
+                        >
+                            <img
+                                src={play}
+                                className={`w-6 h-6 invert ${isPlaying ? 'opacity-70' : ''}`}
+                                alt="play-icon"
+                            />
+                        </button>
+                    </div>
+                    {isPlaying && (
+                        <div className="mt-4 text-center max-w-xs">
+                            <p className="text-sm font-medium truncate">{file.title || file.file.split('/').pop()}</p>
+                        </div>
+                    )}
                 </div>
             );
         default:

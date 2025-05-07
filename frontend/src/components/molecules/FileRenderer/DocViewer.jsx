@@ -51,13 +51,11 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
                     const text = await response.text();
                     contentHtml = he.encode(text).replace(/\n/g, '<br>');
                 }
-
                 const truncated = truncate(contentHtml, maxCharacters, {
                     ellipsis: '...',
                     keepWhitespace: false,
                     truncateLastWord: true
                 });
-
                 setContent(truncated);
 
             } catch (err) {

@@ -113,8 +113,8 @@ def register(request):
 def logout(request):
     try:
         res = Response({'success': True})
-        res.delete_cookie('access_token', path='/', samesite='Lax')
-        res.delete_cookie('refresh_token', path='/', samesite='Lax')
+        res.delete_cookie('access_token', path='/', samesite='None')
+        res.delete_cookie('refresh_token', path='/', samesite='None')
         return res
     except Exception as e:
         return Response({
@@ -123,7 +123,7 @@ def logout(request):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['HEAD'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def is_authenticated(request):
     return Response({'authenticated': True})

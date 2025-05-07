@@ -17,13 +17,6 @@ export const PDFViewer = ({ file, width = 280 }) => {
         setNumPages(numPages);
     };
 
-    // const changePage = (offset) => {
-    //     setPageNumber((prevPageNumber) => {
-    //         const newPageNumber = prevPageNumber + offset;
-    //         return Math.max(1, Math.min(numPages, newPageNumber));
-    //     });
-    // };
-
     return (
         <div className="h-full flex flex-col items-center justify-start">
             <Document
