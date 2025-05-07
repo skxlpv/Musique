@@ -11,14 +11,6 @@ export const FILES_URL = `${BASE_URL}api/v1/files/`
 export const MEDIA_ROOT = `${BASE_URL}media/`
 export const MEDIA_AVATARS = `${MEDIA_ROOT}users/avatars/`
 
-function getCsrfToken() {
-  const cookieValue = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('csrftoken='))
-    ?.split('=')[1];
-  return cookieValue;
-}
-
 const api = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
@@ -27,12 +19,6 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-  if (config.method !== 'get') {
-    const csrfToken = getCsrfToken();
-    if (csrfToken) {
-      config.headers['X-CSRFToken'] = csrfToken;
-    }
-  }
   return config;
 });
 
@@ -109,9 +95,14 @@ export const register_user = async (data) => {
 
 export const is_authenticated = async () => {
   try {
-    await api.head(AUTH_URL, {});
-    return true;
+    const response = await api.post(AUTH_URL, {});
+    console.log(response.data);
+    return response.data.authenticated === true;
   } catch (error) {
+    if (error.response?.status === 401) {
+      return false;
+    }
+    console.error("Auth check error:", error);
     return false;
   }
 };

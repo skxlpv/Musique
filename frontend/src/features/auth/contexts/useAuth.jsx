@@ -15,12 +15,19 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(authStatus);
 
             if (authStatus) {
-                const userInfo = await get_current_user();
-                setUserData(userInfo);
+                try {
+                    const userInfo = await get_current_user();
+                    setUserData(userInfo);
+                } catch (userError) {
+                    console.error("Failed to fetch user:", userError);
+                    setIsAuthenticated(false);
+                    setUserData(null);
+                }
             } else {
                 setUserData(null);
             }
-        } catch {
+        } catch (authError) {
+            console.error("Auth check failed:", authError);
             setIsAuthenticated(false);
             setUserData(null);
         } finally {

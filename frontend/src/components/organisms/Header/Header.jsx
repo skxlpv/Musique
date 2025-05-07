@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { headerPageNamesObject } from "../../../utils/subHeaderTextObjects"
-import { logout } from "../../../services/api";
+import api from "../../../services/api";
 import { useAuth } from "../../../features/auth/contexts/useAuth.jsx";
 import { BASE_URL } from "../../../services/api"
 import dropdown_vector from "../../../assets/dropdown-vector.svg"
@@ -15,16 +15,16 @@ const MemoizedCenterPanel = memo(CenterNavigation);
 const MemoizedRightPanel = memo(RightNavigation);
 
 export const Header = () => {
-    const nav = useNavigate();
-    const { loading, isAuthenticated, userData, refreshAuth } = useAuth();
+    const { loading, isAuthenticated, userData} = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const handleLogout = async () => {
-        const success = await logout();
-        if (success) {
-            refreshAuth();
-            nav("/auth/login", { replace: true });
+        try {
+            await api.post("api/v1/logout/", {});
+            window.location.href = "/auth/login";
+        } catch (error) {
+            console.error("Logout failed:", error);
         }
     };
 
