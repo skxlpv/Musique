@@ -1,140 +1,342 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
-import api from "../../../../services/api"
+import api from "../../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../../../routes/index.jsx";
 
+// Field configuration for each category
+const CATEGORY_FIELDS = {
+  music: {
+    title: "Music Details",
+    fields: [
+      { name: "genre", type: "text", placeholder: "Genre", required: true },
+      { name: "bpm", type: "number", placeholder: "BPM", required: false },
+      { name: "duration_seconds", type: "number", placeholder: "Duration (seconds)", required: false },
+      { name: "cover_art", type: "file", placeholder: "Cover Art", required: false }
+    ],
+    color: "purple"
+  },
+  visual_art: {
+    title: "Artwork Details",
+    fields: [
+      { name: "style", type: "text", placeholder: "Style", required: true },
+      { name: "medium", type: "text", placeholder: "Medium", required: true },
+      { name: "width_px", type: "number", placeholder: "Width (px)", required: true },
+      { name: "height_px", type: "number", placeholder: "Height (px)", required: true },
+      { name: "dimensions_physical", type: "text", placeholder: "Physical Dimensions", required: false }
+    ],
+    color: "pink"
+  },
+  writing: {
+    title: "Writing Information",
+    fields: [
+      { name: "word_count", type: "number", placeholder: "Word Count", required: true },
+      { name: "language", type: "text", placeholder: "Language", required: true },
+      { name: "writing_genre", type: "text", placeholder: "Genre", required: false },
+      { name: "publication_date", type: "date", placeholder: "Publication Date", required: false }
+    ],
+    color: "teal"
+  },
+  theatre: {
+    title: "Theatre Details",
+    fields: [
+      { name: "playwright", type: "text", placeholder: "Playwright", required: true },
+      { name: "duration_minutes", type: "number", placeholder: "Duration (minutes)", required: false },
+      { name: "cast_size", type: "number", placeholder: "Cast Size", required: false },
+      { name: "period", type: "text", placeholder: "Historical Period", required: false }
+    ],
+    color: "orange"
+  },
+  crafts: {
+    title: "Craft Details",
+    fields: [
+      { name: "materials", type: "text", placeholder: "Materials", required: true },
+      { name: "difficulty_level", type: "select", placeholder: "Difficulty Level",
+        options: ["beginner", "intermediate", "advanced", "master"], required: true },
+      { name: "time_required", type: "text", placeholder: "Time Required", required: false },
+      { name: "tools_required", type: "text", placeholder: "Tools Required", required: false }
+    ],
+    color: "amber"
+  }
+};
+
+// Common fields for all categories
+const COMMON_FIELDS = [
+  { name: "title", type: "text", placeholder: "Title", required: true },
+  { name: "description", type: "textarea", placeholder: "Description", required: false }
+];
+
 export const UploadFile = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch } = useForm();
   const [file, setFile] = useState(null);
-  const [fileType, setFileType] = useState(null);
+  const [fileExtension, setFileExtension] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const nav = useNavigate();
+
+  // Watch category changes
+  const formCategory = watch("category");
+
+  useEffect(() => {
+    // Update selectedCategory when formCategory changes
+    if (formCategory) {
+      setSelectedCategory(formCategory);
+    } else {
+      // Set default category based on file extension if no category selected
+      if (fileExtension) {
+        if (['mp3', 'wav'].includes(fileExtension)) {
+          setSelectedCategory('music');
+        } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+          setSelectedCategory('visual_art');
+        } else if (['doc', 'docx', 'rtf', 'txt'].includes(fileExtension)) {
+          setSelectedCategory('writing');
+        } else if (fileExtension === 'pdf') {
+          setSelectedCategory('undefined');
+        }
+      }
+    }
+  }, [formCategory, fileExtension]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
       const ext = selectedFile.name.split('.').pop().toLowerCase();
-      if (['mp3', 'wav',].includes(ext)) {
-        setFileType('audio');
-      } else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
-        setFileType('image');
-      } else if (['pdf', 'doc', 'docx'].includes(ext)) {
-        setFileType('document');
-      }
+      setFileExtension(ext);
     }
   };
 
+
   const submitHandler = async (data) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("category", data.category);
-    formData.append("is_downloadable", data.is_downloadable || false);
-
-    if (fileType === 'audio') {
-      formData.append("genre", data.genre);
-      formData.append("bpm", data.bpm);
-    } else if (fileType === 'image') {
-      formData.append("style", data.style);
-      formData.append("medium", data.medium);
-      formData.append("height_px", data.height_px);
-      formData.append("width_px", data.width_px);
-    } else if (fileType === 'document') {
-      formData.append("word_count", data.word_count);
-      formData.append("language", data.language);
-    }
-
     try {
-      await api.post("http://127.0.0.1:8000/api/v1/upload-file/", formData, {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Add common fields
+      COMMON_FIELDS.forEach(field => {
+        if (data[field.name] !== undefined) {
+          formData.append(field.name, data[field.name]);
+        }
+      });
+
+      // Add category-specific fields
+      if (selectedCategory && CATEGORY_FIELDS[selectedCategory]) {
+        CATEGORY_FIELDS[selectedCategory].fields.forEach(field => {
+          // Special handling for file inputs
+          if (field.type === "file") {
+            if (data[field.name] && data[field.name][0]) {
+              formData.append(field.name, data[field.name][0]);
+            }
+          } else if (data[field.name] !== undefined) {
+            formData.append(field.name, data[field.name]);
+          }
+        });
+      }
+
+      formData.append("is_downloadable", data.is_downloadable || false);
+
+      // Auto-set category based on file type if not provided
+      let category = data.category || selectedCategory;
+      if (!category) {
+        if (['mp3', 'wav'].includes(fileExtension)) category = 'music';
+        else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) category = 'visual_art';
+        else if (['doc', 'docx', 'rtf', 'txt'].includes(fileExtension)) category = 'writing';
+        else if (fileExtension === 'pdf') category = 'writing'; // Default for PDFs
+        else category = 'other';
+      }
+      formData.append("category", category);
+
+      await api.post("/api/v1/files/upload/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      if (fileType === "audio"){
-        nav(routes.musicians_page.url)
-      } else if (fileType === "image"){
-        nav(routes.artists_page.url)
-      } else if (fileType === "document"){
-        nav(routes.writers_page.url)
-      }
-
+      // ... rest of your navigation logic
     } catch (err) {
-      console.error(err);
-      alert("File upload failed");
+      console.error("Upload error:", err.response?.data || err.message);
+      alert(`Upload failed: ${err.response?.data?.error || err.message}`);
+    }
+  };
+
+  const renderField = (field) => {
+    const { name, type, placeholder, required, color = 'blue', options } = field;
+
+    const commonProps = {
+      name,
+      ...register(name),
+      placeholder,
+      required,
+      className: `border-b border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-${color}-500 text-white`
+    };
+
+    switch (type) {
+      case "textarea":
+        return (
+            <textarea
+                key={name}
+                {...commonProps}
+                className={`${commonProps.className} h-24 resize-none`}
+            />
+        );
+      case "select":
+        return (
+            <select key={name} {...commonProps}>
+              <option value="">Select {placeholder}</option>
+              {options.map(option => (
+                  <option key={option} value={option}>
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </option>
+              ))}
+            </select>
+        );
+      case "file":
+        return (
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-300 mb-1">{placeholder}</label>
+              <input
+                  key={name}
+                  type="file"
+                  {...register(name)}
+                  className="text-white text-sm"
+                  accept="image/*"
+              />
+            </div>
+        );
+      default:
+        return <input key={name} type={type} {...commonProps} />;
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col items-center w-full">
-      {!file ?
-      <div className="flex flex-col items-center m-5">
-        <label htmlFor="file-upload" className="medium-header pb-10 button-card-5xl outline-dashed outline-white">Upload</label>
-        <input
-          id="file-upload"
-          className="hidden"
-          type="file"
-          onChange={handleFileChange}
-          required
-        />
-      </div>
-      :
-      <div className="flex flex-col items-center m-5">
-        <label htmlFor="file-upload" className="button-card-5xl outline-dashed outline-white overflow-hidden">{file.name}</label>
-        <input
-          id="file-upload"
-          className="hidden"
-          type="file"
-          onChange={handleFileChange}
-          required
-        />
-      </div>
-      }
-      {file && (
-        <div className="flex flex-col px-20 w-1/2">
-          <h1 className="small-header !mt-2 !mb-4">General Information</h1>
-          <input {...register("title")} placeholder="Title" required />
-          <input {...register("description")} placeholder="Description" />
-          <input {...register("category")} placeholder="Category" required />
-          {fileType === 'audio' && (
-            <>
-              <h1 className="small-header !mt-2 !mb-4">Arrangement Details</h1>
-              <input {...register("genre")} placeholder="Genre" required />
-              <input {...register("bpm")} placeholder="BPM" required />
-            </>
+      <div className="min-h-screen bg-black text-white p-8">
+        <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col items-center w-full max-w-4xl mx-auto rounded-xl shadow-2xl p-6">
+          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+            File Upload
+          </h2>
+
+          {/* File Upload Section */}
+          {!file ? (
+              <div className="flex flex-col items-center m-5 w-full">
+                <label
+                    htmlFor="file-upload"
+                    className="w-full max-w-md h-64 flex items-center justify-center rounded-lg border-2 border-dashed border-violet-200 bg-white/10 hover:bg-gray-700 transition-all duration-300 cursor-pointer group"
+                >
+                  <div className="flex flex-col items-center">
+                    <svg className="w-16 h-16 text-white/50 group-hover:text-white mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                    <span className="text-xl font-medium text-white/80 group-hover:text-white">Upload your file</span>
+                    <span className="text-sm text-gray-400 mt-2">Click or drag and drop</span>
+                  </div>
+                </label>
+                <input
+                    id="file-upload"
+                    className="hidden"
+                    type="file"
+                    onChange={handleFileChange}
+                    required
+                />
+              </div>
+          ) : (
+              <div className="flex flex-col items-center m-5 w-full">
+                <label
+                    htmlFor="file-upload"
+                    className="w-full max-w-md py-6 px-4 flex items-center justify-center rounded-lg border-2 border-green-400 bg-gray-800 hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
+                >
+                  <div className="flex items-center">
+                    <svg className="w-8 h-8 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span className="text-lg font-medium text-green-400 truncate max-w-xs">{file.name}</span>
+                  </div>
+                </label>
+                <input
+                    id="file-upload"
+                    className="hidden"
+                    type="file"
+                    onChange={handleFileChange}
+                    required
+                />
+              </div>
           )}
 
-          {fileType === 'image' && (
-            <>
-              <h1 className="small-header !mt-2 !mb-4">Artwork Details</h1>
-              <input {...register("style")} placeholder="Style" required />
-              <input {...register("medium")} placeholder="Medium" required />
-              <input type="number" {...register("height_px")} placeholder="Height (px)" required />
-              <input type="number" {...register("width_px")} placeholder="Width (px)" required />
-            </>
-          )}
+          {file && (
+              <div className="flex flex-col w-full max-w-2xl mt-6 px-4">
+                {/* Common Fields */}
+                <div className="card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6">
+                  <h3 className="text-xl font-semibold mb-4 text-blue-400 p-2">General Information</h3>
+                  <div className="space-y-4">
+                    {COMMON_FIELDS.map(field => (
+                        <div className="flex flex-col" key={field.name}>
+                          {renderField(field)}
+                        </div>
+                    ))}
 
-          {fileType === 'document' && (
-            <>
-              <h1 className="small-header !pt-0 !mt-2 !mb-4">Writing Information</h1>
-              <input {...register("word_count")} placeholder="Word Count" required />
-              <input {...register("language")} placeholder="Language" required />
-            </>
+                    {/* Category Selection - always show for PDFs */}
+                    {fileExtension === 'pdf' && (
+                        <div className="flex flex-col">
+                          <select
+                              {...register("category", { required: true })}
+                              onChange={(e) => setSelectedCategory(e.target.value)}
+                              className="border-b border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                          >
+                            <option value="undefined">Select Category</option>
+                                <option value={"theatre"}>
+                                  Theatre
+                                </option>
+                                <option value={"writing"}>
+                                  Writings
+                                </option>
+                                <option value={"crafts"}>
+                                  Crafts
+                                </option>
+                          </select>
+                        </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Category-Specific Fields - now properly reactive */}
+                {selectedCategory && CATEGORY_FIELDS[selectedCategory] && (
+                    <div className={`card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6`}>
+                      <h3 className={`text-xl font-semibold mb-4 text-${CATEGORY_FIELDS[selectedCategory].color}-400 p-2`}>
+                        {CATEGORY_FIELDS[selectedCategory].title}
+                      </h3>
+                      <div className="space-y-4">
+                        {CATEGORY_FIELDS[selectedCategory].fields.map(field => (
+                            <div className="flex flex-col" key={field.name}>
+                              {renderField({ ...field, color: CATEGORY_FIELDS[selectedCategory].color })}
+                            </div>
+                        ))}
+                      </div>
+                    </div>
+                )}
+
+
+                {/* Downloadable Checkbox and Submit Button */}
+                <div className="flex flex-row justify-between items-center w-full mt-6 card-element outline outline-zinc-500 p-4 rounded-lg">
+                  <div className="flex items-center">
+                    <input
+                        id="is_downloadable"
+                        type="checkbox"
+                        {...register("is_downloadable")}
+                        className="w-5 h-5 rounded bg-gray-900 border-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-800"
+                    />
+                    <label htmlFor="is_downloadable" className="ml-2 text-sm font-medium text-gray-300">
+                      File Can Be Downloaded
+                    </label>
+                  </div>
+
+                  <button
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      type="submit"
+                  >
+                    Upload Now
+                  </button>
+                </div>
+              </div>
           )}
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row justify-between">
-              <input id="is_downloadable" type="checkbox" {...register("is_downloadable")}
-              className="checkbox"/>
-              <label htmlFor="is_downloadable">File Can Be Downloaded</label>
-            </div>
-            <div>
-              <button className="button-card" type="submit">Upload</button>
-            </div>
-          </div>
-        </div>
-      )}
-    </form>
+        </form>
+      </div>
   );
 };
