@@ -4,7 +4,6 @@ import api from "../../../../services/api";
 import { useNavigate } from "react-router-dom";
 import {routes} from "../../../../routes/index.jsx";
 
-// Field configuration for each category
 const CATEGORY_FIELDS = {
   music: {
     title: "Music Details",
@@ -61,11 +60,18 @@ const CATEGORY_FIELDS = {
   }
 };
 
-// Common fields for all categories
 const COMMON_FIELDS = [
   { name: "title", type: "text", placeholder: "Title", required: true },
   { name: "description", type: "textarea", placeholder: "Description", required: false }
 ];
+
+const colorMap = {
+  theatre: 'text-white',
+  writing: 'text-green-400',
+  crafts: 'text-yellow-400',
+  visual_art: 'text-pink-400',
+  music: 'text-purple-400',
+};
 
 export const UploadFile = () => {
   const { register, handleSubmit, watch } = useForm();
@@ -205,7 +211,7 @@ export const UploadFile = () => {
               <input
                   type="file"
                   {...commonProps}
-                  className="text-white text-sm"
+                  className="text-white text-sm remove-autocomplete-bg"
                   accept={name === 'cover_art' ? "image/*" : "*"}
               />
           ) : (
@@ -217,7 +223,7 @@ export const UploadFile = () => {
 
   return (
       <div className="min-h-screen bg-black text-white p-8">
-        <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col items-center w-full max-w-4xl mx-auto rounded-xl shadow-2xl p-6">
+        <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col items-center w-full max-w-6xl mx-auto rounded-xl shadow-2xl p-6">
           <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
             File Upload
           </h2>
@@ -239,7 +245,7 @@ export const UploadFile = () => {
                 </label>
                 <input
                     id="file-upload"
-                    className="hidden"
+                    className="absolute opacity-0 w-0 h-0"
                     type="file"
                     onChange={handleFileChange}
                     required
@@ -269,63 +275,78 @@ export const UploadFile = () => {
           )}
 
           {file && (
-              <div className="flex flex-col w-full max-w-2xl mt-6 px-4">
-                {/* Common Fields Section */}
-                <div className="card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6">
-                  <h3 className="text-xl font-semibold mb-4 text-blue-400 p-2">General Information</h3>
-                  <div className="space-y-4">
-                    {COMMON_FIELDS.map(field => renderField(field))}
-                  </div>
-                </div>
+              <div className="flex flex-col w-full max-w-6xl mt-6 px-4">
+                {/* Main content area with columns */}
+                <div className="flex flex-row gap-6 w-full">
+                  {/* Common Fields Section - now includes category selection */}
+                  <div className="card-element outline outline-zinc-500 p-6 rounded-lg shadow-md flex-1">
+                    <h3 className="text-xl font-semibold mb-4 text-blue-400 py-2">General Information</h3>
+                    <div className="space-y-4">
+                      {COMMON_FIELDS.map((field, index) => (
+                          <div key={index}>
+                            {renderField(field)}
+                            {(index + 1) % 3 === 0 && index !== COMMON_FIELDS.length - 1 && (
+                                <div className="column-break my-4 border-t border-gray-700"></div>
+                            )}
+                          </div>
+                      ))}
 
-                {/* Category Selection for PDFs */}
-                {fileExtension === 'pdf' && (
-                    <div className="card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6">
-                      <h3 className="text-xl font-semibold mb-4 text-blue-400 p-2">Category Selection</h3>
-                      {renderField({
-                        name: "category",
-                        type: "select",
-                        placeholder: "Category",
-                        required: true,
-                        options: ["theatre", "writing", "crafts"],
-                        color: "blue"
-                      })}
-                    </div>
-                )}
-
-                {/* Category-Specific Fields */}
-                {selectedCategory && CATEGORY_FIELDS[selectedCategory] && (
-                    <div className={`card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6`}>
-                      <h3 className={`text-xl font-semibold mb-4 text-${CATEGORY_FIELDS[selectedCategory].color}-400 p-2`}>
-                        {CATEGORY_FIELDS[selectedCategory].title}
-                      </h3>
-                      <div className="space-y-4">
-                        {CATEGORY_FIELDS[selectedCategory].fields.map(field =>
-                            renderField({
-                              ...field,
-                              color: CATEGORY_FIELDS[selectedCategory].color
-                            })
-                        )}
+                      {/* Add category selection field here if PDF */}
+                      {fileExtension === 'pdf' && (
+                          <>
+                            <div className="column-break my-4 border-t border-gray-700"></div>
+                            {renderField({
+                              name: "category",
+                              type: "select",
+                              placeholder: "Category",
+                              required: true,
+                              options: ["theatre", "writing", "crafts"],
+                              color: "blue"
+                            })}
+                          </>
+                      )}
+                      <div className="flex items-center mt-8">
+                        <input
+                            id="is_downloadable"
+                            type="checkbox"
+                            {...register("is_downloadable")}
+                            className="remove-autocomplete-bg w-5 h-5 rounded bg-gray-900 border-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-800"
+                        />
+                        <label htmlFor="is_downloadable" className="ml-2 text-sm font-medium text-gray-300">
+                          File Can Be Downloaded
+                        </label>
                       </div>
                     </div>
-                )}
 
-                {/* Downloadable Checkbox and Submit Button */}
-                <div className="flex flex-row justify-between items-center w-full mt-6 card-element outline outline-zinc-500 p-4 rounded-lg">
-                  <div className="flex items-center">
-                    <input
-                        id="is_downloadable"
-                        type="checkbox"
-                        {...register("is_downloadable")}
-                        className="w-5 h-5 rounded bg-gray-900 border-gray-700 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-800"
-                    />
-                    <label htmlFor="is_downloadable" className="ml-2 text-sm font-medium text-gray-300">
-                      File Can Be Downloaded
-                    </label>
                   </div>
 
+                  {/* Category-Specific Fields (only if category is selected) */}
+                  {selectedCategory && CATEGORY_FIELDS[selectedCategory] && (
+                      <div className={`card-element outline outline-zinc-500 p-6 rounded-lg shadow-md flex-1`}>
+                        <h3 className={`text-xl font-semibold mb-4 ${colorMap[selectedCategory]} py-2`}>
+                          {CATEGORY_FIELDS[selectedCategory].title}
+                        </h3>
+                        <div className="space-y-4">
+                          {CATEGORY_FIELDS[selectedCategory].fields.map((field, index) => (
+                              <div key={index}>
+                                {renderField({
+                                  ...field,
+                                  color: CATEGORY_FIELDS[selectedCategory].color
+                                })}
+                                {(index + 1) % 3 === 0 && index !== CATEGORY_FIELDS[selectedCategory].fields.length - 1 && (
+                                    <div className="column-break my-4 border-t border-gray-700"></div>
+                                )}
+                              </div>
+                          ))}
+                        </div>
+                      </div>
+                  )}
+                </div>
+
+                {/* Downloadable Checkbox and Submit Button */}
+                <div className="flex flex-row justify-end w-full mt-6 card-element outline outline-zinc-500 p-4 rounded-lg">
                   <button
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white font-medium py-2 px-6 rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       type="submit"
                   >
                     Upload Now
