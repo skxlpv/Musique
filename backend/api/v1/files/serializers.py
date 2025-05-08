@@ -90,7 +90,7 @@ class WritingSerializer(FileModelSerializer):
         model = WritingModel
         fields = FileModelSerializer.Meta.fields + [
             'word_count', 'language', 'genre',
-            'publication_date', 'publisher'
+            'publication_date', 'publisher', 'author_name'
         ]
 
     def create(self, validated_data):

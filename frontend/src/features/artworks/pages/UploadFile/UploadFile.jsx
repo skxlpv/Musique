@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
 import api from "../../../../services/api";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../../../../routes/index.jsx";
+import {routes} from "../../../../routes/index.jsx";
 
 // Field configuration for each category
 const CATEGORY_FIELDS = {
@@ -30,6 +30,7 @@ const CATEGORY_FIELDS = {
   writing: {
     title: "Writing Information",
     fields: [
+      { name: "author_name", type: "text", placeholder: "Author", required: true },
       { name: "word_count", type: "number", placeholder: "Word Count", required: true },
       { name: "language", type: "text", placeholder: "Language", required: true },
       { name: "writing_genre", type: "text", placeholder: "Genre", required: false },
@@ -111,17 +112,14 @@ export const UploadFile = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      // Add common fields
       COMMON_FIELDS.forEach(field => {
         if (data[field.name] !== undefined) {
           formData.append(field.name, data[field.name]);
         }
       });
 
-      // Add category-specific fields
       if (selectedCategory && CATEGORY_FIELDS[selectedCategory]) {
         CATEGORY_FIELDS[selectedCategory].fields.forEach(field => {
-          // Special handling for file inputs
           if (field.type === "file") {
             if (data[field.name] && data[field.name][0]) {
               formData.append(field.name, data[field.name][0]);
@@ -134,7 +132,6 @@ export const UploadFile = () => {
 
       formData.append("is_downloadable", data.is_downloadable || false);
 
-      // Auto-set category based on file type if not provided
       let category = data.category || selectedCategory;
       if (!category) {
         if (['mp3', 'wav'].includes(fileExtension)) category = 'music';
@@ -145,13 +142,28 @@ export const UploadFile = () => {
       }
       formData.append("category", category);
 
-      await api.post("/api/v1/files/upload/", formData, {
+      const response = await api.post("/api/v1/files/upload/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      // ... rest of your navigation logic
+      const navMap = {
+        'music': routes.musicians_page.url,
+        'visual_art': routes.artists_page.url,
+        'writing': routes.writers_page.url,
+        'theatre': routes.theatre_artists_page.url,
+        'crafts': routes.craftspeople_page.url,
+        'other': routes.home_page.url
+      };
+
+      // Redirect after successful upload
+      if (response.status >= 200 && response.status < 300) {
+        nav(navMap[category] || routes.home_page.url);
+      } else {
+        throw new Error("Upload failed with status: " + response.status);
+      }
+
     } catch (err) {
       console.error("Upload error:", err.response?.data || err.message);
       alert(`Upload failed: ${err.response?.data?.error || err.message}`);
@@ -163,48 +175,44 @@ export const UploadFile = () => {
 
     const commonProps = {
       name,
-      ...register(name),
+      ...register(name, { required }),
       placeholder,
-      required,
       className: `border-b border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-${color}-500 text-white`
     };
 
-    switch (type) {
-      case "textarea":
-        return (
-            <textarea
-                key={name}
-                {...commonProps}
-                className={`${commonProps.className} h-24 resize-none`}
-            />
-        );
-      case "select":
-        return (
-            <select key={name} {...commonProps}>
-              <option value="">Select {placeholder}</option>
-              {options.map(option => (
-                  <option key={option} value={option}>
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </option>
-              ))}
-            </select>
-        );
-      case "file":
-        return (
-            <div className="flex flex-col">
-              <label className="text-sm text-gray-300 mb-1">{placeholder}</label>
-              <input
-                  key={name}
-                  type="file"
-                  {...register(name)}
-                  className="text-white text-sm"
-                  accept="image/*"
+    return (
+        <div className="flex flex-col mb-4">
+          <label className="text-sm text-gray-300 mb-1 flex items-center">
+            {placeholder}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+
+          {type === "textarea" ? (
+              <textarea
+                  {...commonProps}
+                  className={`${commonProps.className} h-24 resize-none`}
               />
-            </div>
-        );
-      default:
-        return <input key={name} type={type} {...commonProps} />;
-    }
+          ) : type === "select" ? (
+              <select {...commonProps}>
+                <option value="">Select {placeholder}</option>
+                {options?.map(option => (
+                    <option key={option} value={option}>
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </option>
+                ))}
+              </select>
+          ) : type === "file" ? (
+              <input
+                  type="file"
+                  {...commonProps}
+                  className="text-white text-sm"
+                  accept={name === 'cover_art' ? "image/*" : "*"}
+              />
+          ) : (
+              <input type={type} {...commonProps} />
+          )}
+        </div>
+    );
   };
 
   return (
@@ -262,56 +270,45 @@ export const UploadFile = () => {
 
           {file && (
               <div className="flex flex-col w-full max-w-2xl mt-6 px-4">
-                {/* Common Fields */}
+                {/* Common Fields Section */}
                 <div className="card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6">
                   <h3 className="text-xl font-semibold mb-4 text-blue-400 p-2">General Information</h3>
                   <div className="space-y-4">
-                    {COMMON_FIELDS.map(field => (
-                        <div className="flex flex-col" key={field.name}>
-                          {renderField(field)}
-                        </div>
-                    ))}
-
-                    {/* Category Selection - always show for PDFs */}
-                    {fileExtension === 'pdf' && (
-                        <div className="flex flex-col">
-                          <select
-                              {...register("category", { required: true })}
-                              onChange={(e) => setSelectedCategory(e.target.value)}
-                              className="border-b border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                          >
-                            <option value="undefined">Select Category</option>
-                                <option value={"theatre"}>
-                                  Theatre
-                                </option>
-                                <option value={"writing"}>
-                                  Writings
-                                </option>
-                                <option value={"crafts"}>
-                                  Crafts
-                                </option>
-                          </select>
-                        </div>
-                    )}
+                    {COMMON_FIELDS.map(field => renderField(field))}
                   </div>
                 </div>
 
-                {/* Category-Specific Fields - now properly reactive */}
+                {/* Category Selection for PDFs */}
+                {fileExtension === 'pdf' && (
+                    <div className="card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6">
+                      <h3 className="text-xl font-semibold mb-4 text-blue-400 p-2">Category Selection</h3>
+                      {renderField({
+                        name: "category",
+                        type: "select",
+                        placeholder: "Category",
+                        required: true,
+                        options: ["theatre", "writing", "crafts"],
+                        color: "blue"
+                      })}
+                    </div>
+                )}
+
+                {/* Category-Specific Fields */}
                 {selectedCategory && CATEGORY_FIELDS[selectedCategory] && (
                     <div className={`card-element outline outline-zinc-500 p-6 rounded-lg shadow-md mb-6`}>
                       <h3 className={`text-xl font-semibold mb-4 text-${CATEGORY_FIELDS[selectedCategory].color}-400 p-2`}>
                         {CATEGORY_FIELDS[selectedCategory].title}
                       </h3>
                       <div className="space-y-4">
-                        {CATEGORY_FIELDS[selectedCategory].fields.map(field => (
-                            <div className="flex flex-col" key={field.name}>
-                              {renderField({ ...field, color: CATEGORY_FIELDS[selectedCategory].color })}
-                            </div>
-                        ))}
+                        {CATEGORY_FIELDS[selectedCategory].fields.map(field =>
+                            renderField({
+                              ...field,
+                              color: CATEGORY_FIELDS[selectedCategory].color
+                            })
+                        )}
                       </div>
                     </div>
                 )}
-
 
                 {/* Downloadable Checkbox and Submit Button */}
                 <div className="flex flex-row justify-between items-center w-full mt-6 card-element outline outline-zinc-500 p-4 rounded-lg">

@@ -135,7 +135,7 @@ class FileUploadViewSet(ViewSet):
 
             # Handle document types
             if ext in ['doc', 'docx', 'rtf', 'txt']:
-                category = 'writing'  # Force writing category for these types
+                category = 'writing'
                 serializer_class = WritingSerializer
             elif ext == 'pdf':
                 if category == 'theatre':
@@ -143,8 +143,8 @@ class FileUploadViewSet(ViewSet):
                 elif category == 'crafts':
                     serializer_class = CraftsSerializer
                 else:
-                    category = 'writing'  # Default for PDFs
-                    serializer_class = WritingSerializer
+                    category = 'undefined'
+                    serializer_class = FileModelSerializer
             elif ext in ['mp3', 'wav']:
                 category = 'music'
                 serializer_class = MusicSerializer
