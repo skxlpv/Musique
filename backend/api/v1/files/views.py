@@ -1,5 +1,6 @@
 # views.py
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, filters, permissions, status
 from rest_framework.decorators import permission_classes, api_view, action
 from rest_framework.exceptions import ValidationError
@@ -113,12 +114,40 @@ class CraftsViewSet(BaseFileViewSet):
     queryset = CraftsModel.objects.all()
     serializer_class = CraftsSerializer
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_files_by_username(request, username):
-    files = FileModel.objects.filter(author=get_user_model().objects.get(username=username))
-    serializer = FileSerializer(files, many=True)
-    return Response(serializer.data)
+    user = get_object_or_404(get_user_model(), username=username)
+
+    # Get base files and prefetch related music models
+    files = FileModel.objects.filter(author=user).prefetch_related('musicmodel')
+
+    serialized_data = []
+    for file in files:
+        # Get the specific subclass instance
+        try:
+            if file.category == 'music':
+                instance = file.musicmodel
+                serializer = MusicSerializer(instance, context={'request': request})
+            elif file.category == 'writing':
+                instance = file.writingmodel
+                serializer = WritingSerializer(instance, context={'request': request})
+            elif file.category == 'visual_art':
+                instance = file.visualartmodel
+                serializer = VisualArtSerializer(instance, context={'request': request})
+            else:
+                serializer = FileModelSerializer(file, context={'request': request})
+
+            serialized_data.append(serializer.data)
+
+        except ObjectDoesNotExist:
+            # Handle case where subclass doesn't exist
+            serializer = FileModelSerializer(file, context={'request': request})
+            serialized_data.append(serializer.data)
+
+    return Response(serialized_data)
+
 
 class FileUploadViewSet(ViewSet):
     parser_classes = [MultiPartParser, FormParser]
@@ -147,12 +176,12 @@ class FileUploadViewSet(ViewSet):
                     serializer_class = FileModelSerializer
             elif ext in ['mp3', 'wav']:
                 category = 'music'
-                serializer_class = MusicSerializer
-                cover_art = request.data.get('cover_art')
+                cover_art = request.FILES.get('cover_art')
                 if cover_art:
                     request.data._mutable = True
                     request.data['cover_art'] = cover_art
                     request.data._mutable = False
+                serializer_class = MusicSerializer
             elif ext in ['jpg', 'jpeg', 'png', 'gif']:
                 category = 'visual_art'
                 serializer_class = VisualArtSerializer
@@ -166,6 +195,7 @@ class FileUploadViewSet(ViewSet):
             data['author'] = request.user.id
 
             serializer = serializer_class(data=data, context={'request': request})
+            print(serializer.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 

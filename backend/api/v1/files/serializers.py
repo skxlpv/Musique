@@ -20,7 +20,7 @@ class FileModelSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'file', 'file_url', 'title', 'description', 'category',
             'file_type', 'tags', 'tags_list', 'uploaded_at', 'is_downloadable',
-            'downloads_count', 'author', 'is_featured', 'slug',
+            'downloads_count', 'author', 'author_name', 'is_featured', 'slug',
             'field_labels'
         ]
         read_only_fields = ['downloads_count', 'uploaded_at']
@@ -67,7 +67,7 @@ class VisualArtSerializer(FileModelSerializer):
 
 
 class MusicSerializer(FileModelSerializer):
-    cover_art = serializers.ImageField(required=False, allow_null=True)
+    cover_art = serializers.SerializerMethodField()
 
     class Meta(FileModelSerializer.Meta):
         model = MusicModel
@@ -75,14 +75,11 @@ class MusicSerializer(FileModelSerializer):
             'cover_art', 'genre', 'bpm', 'duration_seconds', 'instruments',
             'lyrics', 'composer', 'recording_date'
         ]
-        extra_kwargs = {
-            'cover_art': {'required': False}
-        }
 
-    def validate_cover_art(self, value):
-        if value and not value.content_type.startswith('image'):
-            raise serializers.ValidationError("Only image files are allowed for cover art")
-        return value
+    def get_cover_art(self, obj):
+        if obj.cover_art:
+            return self.context['request'].build_absolute_uri(obj.cover_art.url)
+        return None
 
 
 class WritingSerializer(FileModelSerializer):

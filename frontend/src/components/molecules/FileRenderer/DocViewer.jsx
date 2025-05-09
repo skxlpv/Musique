@@ -5,6 +5,7 @@ import truncate from "html-truncate";
 import {RTFJS} from 'rtf.js';
 import he from 'he';
 import HTMLRender from "../../atoms/HTMLRender/HTMLRender.jsx";
+import {getFileUrl} from "./FileTypes.jsx";
 
 export const DocViewer = ({data, maxCharacters = 1200}) => {
     const [content, setContent] = useState('');
@@ -15,7 +16,7 @@ export const DocViewer = ({data, maxCharacters = 1200}) => {
         const loadDocument = async () => {
             try {
                 setLoading(true);
-                const fileUrl = data.file;
+                const fileUrl = getFileUrl(data);
                 const fileName = data.file || fileUrl.split('/').pop();
                 const extension = fileName.split('.').pop().toLowerCase();
 
