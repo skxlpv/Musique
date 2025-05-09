@@ -200,9 +200,9 @@ export const UploadFile = () => {
               />
           ) : type === "select" ? (
               <select {...commonProps}>
-                <option value="">Select {placeholder}</option>
+                <option className="bg-black text-white" value="">Select {placeholder}</option>
                 {options?.map(option => (
-                    <option key={option} value={option}>
+                    <option className="bg-black text-white" key={option} value={option}>
                       {option.charAt(0).toUpperCase() + option.slice(1)}
                     </option>
                 ))}
