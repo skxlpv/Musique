@@ -127,4 +127,71 @@ export const get_user_files = async (username) => {
   }
 }
 
+// services/api.js
+
+export const create_subprofile = async (data) => {
+  try {
+    const profileType = data.profileType;
+
+    const payload = {
+      profile_type: profileType.toUpperCase(),
+      ...data
+    };
+
+    delete payload.profileType;
+
+    // Process ManyToMany fields by converting comma-separated strings to arrays
+    const processManyToManyFields = (fieldNames) => {
+      fieldNames.forEach(field => {
+        if (payload[field] && typeof payload[field] === 'string') {
+          payload[field] = payload[field].split(',').map(item => item.trim());
+        }
+      });
+    };
+
+    // Process fields based on profile type
+    switch (profileType) {
+      case 'musician':
+        processManyToManyFields(['instruments', 'genres', 'bands']);
+        break;
+      case 'artist':
+        processManyToManyFields(['styles', 'mediums']);
+        break;
+      case 'theatre':
+        processManyToManyFields(['current_projects', 'theatre_companies', 'preferred_genre']);
+        break;
+      case 'writer':
+        processManyToManyFields(['genres']);
+        break;
+      case 'craftsman':
+        processManyToManyFields(['materials']);
+        break;
+      default:
+        throw new Error('Invalid profile type');
+    }
+
+    console.log(payload)
+
+    const response = await api.post(`${BASE_URL}api/v1/user_profile/create_sub_profile`, payload);
+    console.log(response);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+
+      // Handle specific error cases
+      if (response.status === 400 && errorData.detail === "User already has this profile type") {
+        throw new Error('You already have a profile of this type');
+      }
+
+      throw new Error(errorData.detail || 'Failed to create subprofile');
+    }
+
+    return await response.json();
+
+  } catch (error) {
+    console.error('Error creating subprofile:', error);
+    throw error;
+  }
+};
+
 export default api;

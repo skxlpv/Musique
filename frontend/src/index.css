@@ -245,6 +245,10 @@
 }
 
 @layer utilities {
+  option {
+    @apply bg-black
+  }
+
   .remove-autocomplete-bg {
     &:-webkit-autofill,
     &:-webkit-autofill:hover,

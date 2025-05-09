@@ -13,11 +13,11 @@ export const TabsContainer = ({ object }) => {
 
     return (
         <div className="flex flex-col w-full navigation-container mb-4">
-            <ul className="text-small w-full flex flex-row justify-between items-center">
+            <ul className="text-small w-full flex flex-row justify-around items-center">
                 {Object.keys(object).map((tabKey) => (
                     <li
                         key={tabKey}
-                        className={`navigation-tab cursor-pointer w-52 flex justify-center ${
+                        className={`navigation-tab cursor-pointer w-52 flex justify-center w-full ${
                             focusedTab === object[tabKey] ? 'navigation-tab-focused' : ''
                         }`}
                         onClick={() => handleTabClick(object[tabKey])}

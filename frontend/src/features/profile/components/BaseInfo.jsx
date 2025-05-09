@@ -2,6 +2,7 @@ import React from 'react';
 import { Mail, Calendar } from 'lucide-react';
 import {Avatar} from "../../../components/atoms/Avatar/Avatar";
 import {useAuth} from "../../auth/contexts/useAuth.jsx";
+import {Link} from "react-router-dom";
 
 export const BaseInfo = () => {
     const {userData} = useAuth();
@@ -51,11 +52,11 @@ export const BaseInfo = () => {
             <div className="flex w-1/5 justify-between py-4">
                 <div className="border border-neutral-900 h-full"></div>
                 <ul className="flex flex-col items-end gap-3">
-                    <li>
+                    <Link to={"/profile/create-sub-profile/"}>
                         <button className="body-small btn-primary">
                             Create Sub Profile
                         </button>
-                    </li>
+                    </Link>
                     <li>
                         <button className="body-small btn-primary">
                             Edit profile

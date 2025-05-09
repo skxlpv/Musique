@@ -14,22 +14,22 @@ const profileTabs = {
         name: "Expertise",
         content: <ExpertiseTab/>,
     },
-    statistics: {
-        name: "Statistics",
-        content: <StatisticsTab/>,
-    },
-    activity: {
-        name: "Activity",
-        content: <ActivityTab/>,
-    },
-    friends_activity: {
-        name: "Friends",
-        content: <FriendsTab/>,
-    },
-    awards: {
-        name: "Awards",
-        content: <AwardsTab/>
-    }
+    // statistics: {
+    //     name: "Statistics",
+    //     content: <StatisticsTab/>,
+    // },
+    // activity: {
+    //     name: "Activity",
+    //     content: <ActivityTab/>,
+    // },
+    // friends_activity: {
+    //     name: "Friends",
+    //     content: <FriendsTab/>,
+    // },
+    // awards: {
+    //     name: "Awards",
+    //     content: <AwardsTab/>
+    // }
 };
 
 export const profileOptions = profileTabs;
