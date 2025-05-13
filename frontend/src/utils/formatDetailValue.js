@@ -3,8 +3,33 @@ export const formatValue = (key, value) => {
         return 'Not specified';
     }
 
-    if (key.includes('date') || key.includes('Date')) {
-        return new Date(value).toLocaleDateString();
+    if (key.includes('uploaded_at')) {
+        console.log(value);
+        try {
+            // Parse the date string
+            const date = new Date(value);
+
+            // Check if the date is valid
+            if (isNaN(date.getTime())) {
+                return value; // Return original if invalid
+            }
+
+            // Format options for toLocaleString
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            };
+
+            return date.toLocaleString(undefined, options);
+            // Example output: "May 6, 2025, 11:03 AM GMT"
+        } catch (e) {
+            console.error('Error formatting date:', e);
+            return value; // Return original value if formatting fails
+        }
     }
 
     if (typeof value === 'boolean') {

@@ -6,24 +6,24 @@ const dummyComments = [
     {
         id: 1,
         author: "Jane Cooper",
-        avatar: "/api/placeholder/40/40",
-        content: "This is really impressive work! I particularly like the attention to detail in the documentation.",
-        timestamp: new Date(2025, 3, 20),
+        avatar: "https://picsum.photos/200/295",
+        content: "This is really impressive work! I particularly like the attention to detail!",
+        timestamp: new Date(2025, 3, 22),
         likes: 12
     },
     {
         id: 2,
         author: "Robert Johnson",
-        avatar: "/api/placeholder/40/40",
-        content: "Great job! Have you considered adding more examples to showcase the functionality?",
-        timestamp: new Date(2025, 3, 22),
+        avatar: "https://picsum.photos/200/296",
+        content: "Great job! Are you available for art commission? =)",
+        timestamp: new Date(2025, 3, 23),
         likes: 8,
         replies: [
             {
                 id: 5,
                 author: "Alex Chen",
-                avatar: "/api/placeholder/40/40",
-                content: "I second this. Examples would be super helpful for newcomers.",
+                avatar: "https://picsum.photos/200/297",
+                content: "I second this! Let's start a project together!",
                 timestamp: new Date(2025, 3, 23),
                 likes: 3
             }
@@ -32,7 +32,7 @@ const dummyComments = [
     {
         id: 3,
         author: "Sarah Williams",
-        avatar: "/api/placeholder/40/40",
+        avatar: "https://picsum.photos/200/298",
         content: "I found a small issue with the implementation. When testing on mobile, the layout breaks at certain viewport widths.",
         timestamp: new Date(2025, 3, 25),
         likes: 5
@@ -40,7 +40,7 @@ const dummyComments = [
     {
         id: 4,
         author: "Michael Davis",
-        avatar: "/api/placeholder/40/40",
+        avatar: "https://picsum.photos/200/299",
         content: "This is exactly what I've been looking for! Saved me hours of work. Thanks for sharing.",
         timestamp: new Date(2025, 4, 26),
         likes: 15
@@ -137,16 +137,16 @@ export const DetailCommentsSection = () => {
             <form onSubmit={handleSubmitComment} className="mb-8">
                 <div className="flex items-start">
                     <img
-                        src="/api/placeholder/40/40"
+                        src="https://picsum.photos/200/300"
                         alt="Your avatar"
-                        className="rounded-full mr-4 w-10 h-10 border-2 border-violet-400"
+                        className="rounded-full mr-4 w-10 h-10 border-2 border-white"
                     />
                     <div className="flex-1">
                         <textarea
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                             placeholder="Add a comment..."
-                            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 text-gray-100 placeholder-gray-400"
+                            className="w-full px-3 py-2 bg-neutral-800 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 text-gray-100 placeholder-gray-400"
                             rows="3"
                         ></textarea>
                         <button
@@ -167,7 +167,7 @@ export const DetailCommentsSection = () => {
                             <img
                                 src={comment.avatar}
                                 alt={`${comment.author}'s avatar`}
-                                className="rounded-full mr-4 w-10 h-10 border-2 border-violet-400"
+                                className="rounded-full mr-4 w-10 h-10 border-2 border-white"
                             />
                             <div className="flex-1">
                                 <div className="flex items-center mb-1">
@@ -183,7 +183,7 @@ export const DetailCommentsSection = () => {
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                                         </svg>
-                                        <span className="text-violet-400">{comment.likes}</span>
+                                        <span className="text-violet-700">{comment.likes}</span>
                                     </button>
                                     <button
                                         onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
@@ -201,9 +201,9 @@ export const DetailCommentsSection = () => {
                                     <div className="mt-3 ml-8">
                                         <div className="flex items-start">
                                             <img
-                                                src="/api/placeholder/40/40"
+                                                src="https://picsum.photos/200/300"
                                                 alt="Your avatar"
-                                                className="rounded-full mr-3 w-8 h-8 border-2 border-violet-400"
+                                                className="rounded-full mr-3 w-8 h-8 border-2 border-white"
                                             />
                                             <div className="flex-1">
                                                 <textarea
@@ -241,7 +241,7 @@ export const DetailCommentsSection = () => {
                                                     <img
                                                         src={reply.avatar}
                                                         alt={`${reply.author}'s avatar`}
-                                                        className="rounded-full mr-3 w-8 h-8 border-2 border-violet-400"
+                                                        className="rounded-full mr-3 w-8 h-8 border-2 border-white"
                                                     />
                                                     <div className="flex-1">
                                                         <div className="flex items-center mb-1">
@@ -256,7 +256,7 @@ export const DetailCommentsSection = () => {
                                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                                                             </svg>
-                                                            <span className="text-violet-400">{reply.likes}</span>
+                                                            <span className="text-violet-700">{reply.likes}</span>
                                                         </button>
                                                     </div>
                                                 </div>

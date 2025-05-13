@@ -2,7 +2,7 @@ import dropdown_vector from "../../../assets/dropdown-vector.svg"
 
 export const AccordionItem = ({ title, content, isOpen, onClick, itemKey }) => {
     return (
-        <div className="accordion-item rounded-md mb-4 p-4 overflow-hidden card-gradient">
+        <div className="accordion-item rounded-md mb-4 p-0 overflow-hidden card-gradient">
             <button
                 onClick={onClick} id={`accordion-header-${itemKey}`}
                 className="flex justify-between cursor-pointer

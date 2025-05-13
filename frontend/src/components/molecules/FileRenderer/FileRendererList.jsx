@@ -139,7 +139,7 @@ export const FileRendererList = ({ file }) => {
                            transition-opacity duration-300 z-10
                            text-center
                            w-10 h-12
-                           py-1.5 bg-black text-violet-300 text-2xl rounded-full
+                           py-1.5 bg-black text-white text-2xl rounded-full
                            hover:bg-neutral-700 shadow-lg"
                             download
                         >

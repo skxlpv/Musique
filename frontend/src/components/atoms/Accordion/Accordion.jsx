@@ -3,7 +3,7 @@ import {AccordionItem} from "./AccordionItem";
 
 export const Accordion = ({
                               items = [],
-                              allowMultipleOpen = false,
+                              allowMultipleOpen = true,
                               defaultOpenId = null,
                               defaultOpenIds = [],
                           }) => {
@@ -33,7 +33,7 @@ export const Accordion = ({
     };
 
     return (
-        <div className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {items.map((item) => (
                 <AccordionItem
                     key={item.id}
