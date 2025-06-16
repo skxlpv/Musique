@@ -19,13 +19,13 @@ export const RightNavigation = ({
                 <li>
                     <a className="body-small btn-small" href={routes.upload_file.url}>Add Work</a>
                 </li>
-                <li>
-                    <a className="body-small btn-small" href={routes.home_page.url}>About</a>
-                </li>
-                <li>
-                    <a className="body-small btn-small" href={routes.home_page.url}>Contacts</a>
-                </li>
-                {/* Only show when NOT loading */}
+                {/*<li>*/}
+                {/*    <a className="body-small btn-small" href={routes.home_page.url}>About</a>*/}
+                {/*</li>*/}
+                {/*<li>*/}
+                {/*    <a className="body-small btn-small" href={routes.home_page.url}>Contacts</a>*/}
+                {/*</li>*/}
+                {/*/!* Only show when NOT loading *!/*/}
                 {!loading && <>
                     {isAuthenticated &&
                         <ProfileButton

@@ -18,7 +18,11 @@ const DetailImage = ({data}) => {
                 )}
                 {data.is_downloadable && (
                     <button className="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                        Download
+                        <a
+                            href={data.file}
+                        >
+                            Download
+                        </a>
                     </button>
                 )}
             </div>

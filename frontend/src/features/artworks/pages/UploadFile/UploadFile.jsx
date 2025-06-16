@@ -135,6 +135,7 @@ export const UploadFile = () => {
           }
         });
       }
+      console.log(formData);
 
       formData.append("is_downloadable", data.is_downloadable || false);
 

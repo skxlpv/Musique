@@ -66,7 +66,6 @@ export const FilePreview = ({ file, category }) => {
                 return (
                     <div className="flex flex-col items-center">
                         <div className="relative w-64 h-64 flex items-center justify-center">
-                            {/* Vinyl Record - behind the cover */}
                             <img
                                 src={vinyl}
                                 className="absolute w-full h-full object-contain animate-spin"
@@ -77,16 +76,18 @@ export const FilePreview = ({ file, category }) => {
                                 alt="vinyl record"
                             />
 
-                            {/* Cover Art - centered on top of vinyl */}
                             <img
                                 src={coverArtUrl}
                                 className="w-3/5 h-3/5 rounded-md z-10 object-cover shadow-lg"
                                 alt={file.cover_art}
                             />
 
-                            {/* Play Button - centered on top of cover */}
                             <button
-                                onClick={handlePlayAudio}
+                                onClick={(e) =>{
+                                    e.stopPropagation();
+                                    e.stopPropagation();
+                                    handlePlayAudio();
+                                }}
                                 className="absolute z-20 w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-70 transition-all"
                             >
                                 <img

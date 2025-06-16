@@ -52,21 +52,21 @@ export const BaseInfo = () => {
             <div className="flex w-1/5 justify-between py-4">
                 <div className="border border-neutral-900 h-full"></div>
                 <ul className="flex flex-col items-end gap-3">
-                    <Link to={"/profile/create-sub-profile/"}>
-                        <button className="body-small btn-primary">
-                            Create Sub Profile
-                        </button>
-                    </Link>
-                    <li>
-                        <button className="body-small btn-primary">
-                            Edit profile
-                        </button>
-                    </li>
-                    <li>
-                        <button className="body-small btn-primary">
-                            Settings
-                        </button>
-                    </li>
+                    {/*<Link to={"/profile/create-sub-profile/"}>*/}
+                    {/*    <button className="body-small btn-primary">*/}
+                    {/*        Create Sub Profile*/}
+                    {/*    </button>*/}
+                    {/*</Link>*/}
+                    {/*<li>*/}
+                    {/*    <button className="body-small btn-primary">*/}
+                    {/*        Edit profile*/}
+                    {/*    </button>*/}
+                    {/*</li>*/}
+                    {/*/!*<li>*!/*/}
+                    {/*    <button className="body-small btn-primary">*/}
+                    {/*        Settings*/}
+                    {/*    </button>*/}
+                    {/*</li>*/}
                 </ul>
             </div>
         </div>

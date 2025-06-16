@@ -23,12 +23,12 @@ export const ProfileDropdown = ({
                     <img src={profile_icon} alt={"profile-button"} className="w-4 h-4 mr-0.5"/>
                     Profile
             </Link>
-            {routes.settings && <Link to={routes.settings.url}
-                className="body-small btn-link flex text-center items-center"
-                onClick={() => setIsDropdownOpen(false)}>
-                    <img src={settings_icon} alt={"profile-button"} className="w-4 h-4 mr-0.5"/>
-                    Settings
-            </Link>}
+            {/*{routes.settings && <Link to={routes.settings.url}*/}
+            {/*    className="body-small btn-link flex text-center items-center"*/}
+            {/*    onClick={() => setIsDropdownOpen(false)}>*/}
+            {/*        <img src={settings_icon} alt={"profile-button"} className="w-4 h-4 mr-0.5"/>*/}
+            {/*        Settings*/}
+            {/*</Link>}*/}
             <button onClick={() => {
                 setIsDropdownOpen(false);
                 handleLogout();
