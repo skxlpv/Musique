@@ -131,21 +131,12 @@ export const ExpertiseTab = () => {
         content: renderContent(subProfile.content),
     })) || [];
 
-    const emptyStateStyle = {
-        textAlign: 'center',
-        padding: '2rem',
-        color: '#666',
-        backgroundColor: '#f9f9f9',
-        borderRadius: '8px',
-        marginTop: '1rem'
-    };
-
     return (
         <BaseTab>
             {accordionItems.length > 0 ? (
                 <Accordion items={accordionItems} />
             ) : (
-                <div style={emptyStateStyle}>
+                <div className="text-neutral-400 text-center mt-6">
                     No information available. Create new sub profile!
                 </div>
             )}

@@ -33,7 +33,9 @@ export const ArtworksTab = () => {
     return (
         <BaseTab tabTitle="Artworks">
             {files.length === 0 ? (
-                <p className="text-gray-500">No artworks found.</p>
+                <div className="text-neutral-400 text-center mt-6">
+                    No artworks found. Let's add some!
+                </div>
             ) : (
                 <FileList files={files} />
             )}
