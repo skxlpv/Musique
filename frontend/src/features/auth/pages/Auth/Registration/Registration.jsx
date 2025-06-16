@@ -14,6 +14,8 @@ export const Registration = () => {
         setRegistrationError("");
 
         try {
+            console.log("REGISTER DATA")
+            console.log(data)
             const response = await register_user(data);
             if (response) {
                 navigate('/auth/login');
@@ -32,6 +34,12 @@ export const Registration = () => {
         username: {
             required: "Username is required",
         },
+        first_name: {
+            required: "First name is required",
+        },
+        last_name: {
+            required: "Last name is required",
+        },
         email: {
             required: "Email is required",
             pattern: {
@@ -45,7 +53,7 @@ export const Registration = () => {
                 value: 8,
                 message: "Password must have at least 8 characters"
             }
-        }
+        },
     };
 
     return (
@@ -63,6 +71,36 @@ export const Registration = () => {
                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="Enter your username"
                         {...register('username', registerRequirements.username)}
+                        disabled={isLoading}
+                    />
+                    {errors?.username && <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>}
+                </div>
+
+                <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="first_name">
+                        First Name
+                    </label>
+                    <input
+                        id="first_name"
+                        type="text"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        placeholder="Enter your first name"
+                        {...register('first_name', registerRequirements.first_name)}
+                        disabled={isLoading}
+                    />
+                    {errors?.username && <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>}
+                </div>
+
+                <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="last_name">
+                        Last Name
+                    </label>
+                    <input
+                        id="last_name"
+                        type="text"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        placeholder="Enter your last name"
+                        {...register('last_name', registerRequirements.last_name)}
                         disabled={isLoading}
                     />
                     {errors?.username && <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>}
