@@ -195,7 +195,6 @@ class FileUploadViewSet(ViewSet):
             data['author'] = request.user.id
 
             serializer = serializer_class(data=data, context={'request': request})
-            print(serializer.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
