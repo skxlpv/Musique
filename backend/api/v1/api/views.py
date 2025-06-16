@@ -96,9 +96,13 @@ class CustomRefreshToken(TokenObtainPairView):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
+    print("REQUEST DATA:")
+    print(request.data)
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
+        print(user.first_name)
+        print(user.last_name)
         return Response({
             'success': True,
             'user_id': user.id

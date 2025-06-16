@@ -60,8 +60,8 @@ class UserProfileView(generics.GenericAPIView):
 
             response_data = {
                 'username': user_profile.user.username,
-                "first_name": user_profile.first_name,
-                "last_name": user_profile.last_name,
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
                 'email': user_profile.user.email,
                 'about': user_profile.about,
                 'quote': user_profile.quote,
